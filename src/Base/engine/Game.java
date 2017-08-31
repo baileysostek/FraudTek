@@ -55,12 +55,6 @@ import textures.MaterialManager;
 import world.Chunk;
 import world.World;
 
-
-
-/**
- *
- * @author Bailey
- */
 public class Game {
     
     public static int WIDTH = 1920;
@@ -119,7 +113,6 @@ public class Game {
     public static Entity player;
     
     private static Entity rotate;
-    private static World world;
             
     
     public static void main(String[] args){
@@ -239,12 +232,12 @@ public class Game {
           
         
 //        room = new Room("save.js");
-//        player = new EntityPlayer(new Vector3f(2,10,2));
-//        entityManager.addEntity(player);
+        player = new EntityPlayer(new Vector3f(2,10,2));
+        entityManager.addEntity(player);
 
 //        entityManager.addEntity(new EntityModel(ModelLoader.generateTerrain(120, 120, 240),  "brick", new Vector3f(0,0,0), 0,0,0,1));
-//        Entity water = new EntityModel(ModelLoader.generateQuad(120, 120),  "white", new Vector3f(0,-2 ,0), 90,0,0,1);
-//        entityManager.addEntity(water);
+        Entity water = new EntityModel(ModelLoader.generateQuad(12, 12),  "tree", new Vector3f(0,0 ,0), 90,0,0,1);
+        entityManager.addEntity(water);
 
         
 //        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(10, 10, 1), new Vector3f(0,6,0), 90,0,0,1));
@@ -254,7 +247,7 @@ public class Game {
         rotate = new EntityModel(ModelLoader.generateQuad(1, 1), "brick", new Vector3f(0, 1, 0), 0, 0, 0, 1);
         entityManager.addEntity(rotate);
         
-        world = new World(new Vector3f(0, 0, 0), "height");
+//        world = new World(new Vector3f(0, 0, 0), "height");
         
 //        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad(1, 1), "stone", new Vector3f(0,0,0), 90,0,0,1));
 //        entityManager.addEntity(new EntityModel(ModelLoader.loadModel("gem"), Game.spriteBinder.loadSprite("brick").getID(), new Vector3f(-3,-0f,-3), 0,45,0,1));
@@ -339,7 +332,7 @@ public class Game {
         shader.start();
         lightingEngine.loadLights(shader);
         shader.loadViewMatrix(cameraManager.getCam());
-        world.render(renderer, shader);
+//        world.render(renderer, shader);
         renderer.render(shader);
         shader.stop();
         glfwSwapBuffers(window);

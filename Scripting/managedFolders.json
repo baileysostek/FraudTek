@@ -1,0 +1,26 @@
+[
+  {
+    "name":"Images",
+    "description":"Put image source files in this directory."
+  },
+  {
+    "name":"Models",
+    "description":"Put .obj source files in this directory."
+  },
+  {
+    "name":"Sounds",
+    "description":"Put all sound files in this directory."
+  },
+  {
+    "name":"Shaders",
+    "description":"This is the directory where the engine compiles the shaders to."
+  },
+  {
+    "name":"Scripting",
+    "description":"This is the directory containing this game source file, as well as all other game sources."
+  },
+  {
+    "name":"res",
+    "description":"Resources Folder."
+  }
+]
