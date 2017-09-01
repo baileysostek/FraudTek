@@ -52,7 +52,6 @@ import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.ovr.OVRGL;
 import shaders.StaticShader;
 import textures.MaterialManager;
-import world.Chunk;
 import world.World;
 
 public class Game {
@@ -113,6 +112,8 @@ public class Game {
     public static Entity player;
     
     private static Entity rotate;
+
+    private static World world;
             
     
     public static void main(String[] args){
@@ -230,54 +231,21 @@ public class Game {
         }
 //        scriptingEngine.add(gson.fromJson(launchOptions.get("mainScript"), String.class));
           
-        
-//        room = new Room("save.js");
+
 //        player = new EntityPlayer(new Vector3f(2,10,2));
 //        entityManager.addEntity(player);
 
-//        entityManager.addEntity(new EntityModel(ModelLoader.generateTerrain(120, 120, 240),  "brick", new Vector3f(0,0,0), 0,0,0,1));
-        Entity water = new EntityModel(ModelLoader.generateQuad(10.5f, 36),  "forest", new Vector3f(0,0 ,0), 90,0,0,1);
-        entityManager.addEntity(water);
-
+//        rotate = new EntityModel(ModelLoader.loadModel("dragon"), "white", new Vector3f(0, 1, 0), 0, 0, 0, 1);
+//        entityManager.addEntity(rotate);
         
-//        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(10, 10, 1), new Vector3f(0,6,0), 90,0,0,1));
-//        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 10, 6), new Vector3f(5,3,0), 90,0,0,1));
-//        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 10, 6), new Vector3f(-5,3,0), 90,0,0,1));
-//        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(10, 1, 6), new Vector3f(0,3,5), 90,0,0,1));
-        rotate = new EntityModel(ModelLoader.generateQuad(1, 1), "front", new Vector3f(0, 1, 0), 0, 0, 0, 1);
-        entityManager.addEntity(rotate);
-        
-//        world = new World(new Vector3f(0, 0, 0), "height");
-        
-//        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad(1, 1), "stone", new Vector3f(0,0,0), 90,0,0,1));
-//        entityManager.addEntity(new EntityModel(ModelLoader.loadModel("gem"), Game.spriteBinder.loadSprite("brick").getID(), new Vector3f(-3,-0f,-3), 0,45,0,1));
-//        door = new EntityModel(ModelLoader.generateCube(10, 1, 6), new Vector3f(0,3,-5), 90,0,0,1);
-//        entityManager.addEntity(door);
 
-//
-//        int width = 160; 
-//        int height = 16;
-//        int deapth = 16;
-//
-//        for(int i = 0; i < width; i++){
-//           for(int j = 0; j < height; j++){
-//               for(int k = 0; k < deapth; k++){
-//                   entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 1, 1), "brick", new Vector3f(i, j, k), 0, 0, 0, 1));
-//               }   
-//            } 
-//        }
 
-//        lightingEngine.addLight(new Light(new Vector3f(-1, 0, -1), new Vector3f(1, 0, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
-//        lightingEngine.addLight(new Light(new Vector3f(1, 0, -1), new Vector3f(0, 1, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
-//        lightingEngine.addLight(new Light(new Vector3f(0, 0, 1), new Vector3f(0, 0, 1), new Vector3f(0.1f, 0.1f, 0.1f)));
-          lightingEngine.addLight(new Light(new Vector3f(0, 10, 0), new Vector3f(1, 1, 1)));
+        lightingEngine.addLight(new Light(new Vector3f(-1, 0, -1), new Vector3f(1, 0, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
+        lightingEngine.addLight(new Light(new Vector3f(1, 0, -1), new Vector3f(0, 1, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
+        lightingEngine.addLight(new Light(new Vector3f(0, 0, 1), new Vector3f(0, 0, 1), new Vector3f(0.1f, 0.1f, 0.1f)));
+        lightingEngine.addLight(new Light(new Vector3f(0, 10, 0), new Vector3f(1, 1, 1)));
 
-//        entityManager.addEntity(new EntityModel(new TexturedModel(OBJLoader.loadObjModel("mesh", loader), new Material(1)), new Vector3f(0,-8,0), 0,0,0,1));
-//        
-//        test = new EntityPanel(new Vector3f(0,1.2f,-2),3,3);
-//        entityManager.addEntity(test);
-
-//        build();
+        world = new World(8, 16, 4);
     }
     
     private static void run(){
@@ -304,7 +272,7 @@ public class Game {
 
         scriptingEngine.tick();
         
-        rotate.rotate(0.0f, 0.3f, 0.0f);
+//        rotate.rotate(0.0f, 0.3f, 0.0f);
         
         for(Engine e : engines.getCollection(Engine.class)){
             e.tick();
@@ -332,7 +300,7 @@ public class Game {
         shader.start();
         lightingEngine.loadLights(shader);
         shader.loadViewMatrix(cameraManager.getCam());
-//        world.render(renderer, shader);
+        world.render(renderer, shader);
         renderer.render(shader);
         shader.stop();
         glfwSwapBuffers(window);
