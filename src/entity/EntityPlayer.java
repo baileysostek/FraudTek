@@ -6,10 +6,7 @@
 package entity;
 
 import Base.engine.Game;
-import entity.component.ComponentCollision;
-import entity.component.ComponentController;
-import entity.component.ComponentFPSController;
-import entity.component.ComponentGravity;
+import entity.component.*;
 import graphics.Renderer;
 import models.ModelLoader;
 import org.joml.Vector3f;
@@ -22,11 +19,12 @@ import shaders.StaticShader;
 public class EntityPlayer extends Entity{
 
     public EntityPlayer(Vector3f position) {
-        super(EnumEntityType.PLAYER, ModelLoader.generateCube(1, 2, 1), "white", position, 0, 0, 0, 1);
+        super(EnumEntityType.PLAYER, ModelLoader.generateQuad(0.66f, 1), "front", position, 45, 0, 0, 1);
         super.addComponent(new ComponentGravity(this));
         super.addComponent(new ComponentController(this, 0));
         super.addComponent(new ComponentFPSController(this));
         super.addComponent(new ComponentCollision(this));
+
     }
 
     @Override

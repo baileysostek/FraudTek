@@ -17,10 +17,12 @@ import shaders.StaticShader;
 public abstract class Engine {
     
     private final String engineName;
+    private boolean initialized = false;
     
     public Engine(String engine){
         engineName = engine;
         Initialize();
+        initialized = true;
     }
     
     public void Initialize(){
@@ -33,7 +35,11 @@ public abstract class Engine {
             System.out.println("Failure.");
         }
     }
-    
+
+    public boolean isInitialized(){
+        return this.initialized;
+    }
+
     public String getName(){
         return this.engineName;
     }
@@ -43,4 +49,5 @@ public abstract class Engine {
     public abstract void render(Renderer renderer, StaticShader shader);
     public abstract void registerForScripting(ScriptEngine engine);
     public abstract void onShutdown();
+//    public abstract Engine getInstance();
 }

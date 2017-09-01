@@ -77,7 +77,7 @@ public class ComponentFPSController extends Component{
                 }
             }
         }
-        camera.setPosition(Maths.newInstance(e.getPosition()).add(e.getVelocity()).add(cameraOffset).sub(new Vector3f(Game.mouse.getCurrentRay()).mul(0)));
+        camera.setPosition(Maths.newInstance(e.getPosition()).add(e.getVelocity()).add(cameraOffset).sub(new Vector3f(Game.mouse.getCurrentRay()).mul(3)));
     }
 
     @Override

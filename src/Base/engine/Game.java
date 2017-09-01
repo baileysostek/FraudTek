@@ -232,11 +232,11 @@ public class Game {
           
         
 //        room = new Room("save.js");
-        player = new EntityPlayer(new Vector3f(2,10,2));
-        entityManager.addEntity(player);
+//        player = new EntityPlayer(new Vector3f(2,10,2));
+//        entityManager.addEntity(player);
 
 //        entityManager.addEntity(new EntityModel(ModelLoader.generateTerrain(120, 120, 240),  "brick", new Vector3f(0,0,0), 0,0,0,1));
-        Entity water = new EntityModel(ModelLoader.generateQuad(12, 12),  "tree", new Vector3f(0,0 ,0), 90,0,0,1);
+        Entity water = new EntityModel(ModelLoader.generateQuad(10.5f, 36),  "forest", new Vector3f(0,0 ,0), 90,0,0,1);
         entityManager.addEntity(water);
 
         
@@ -244,7 +244,7 @@ public class Game {
 //        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 10, 6), new Vector3f(5,3,0), 90,0,0,1));
 //        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 10, 6), new Vector3f(-5,3,0), 90,0,0,1));
 //        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(10, 1, 6), new Vector3f(0,3,5), 90,0,0,1));
-        rotate = new EntityModel(ModelLoader.generateQuad(1, 1), "brick", new Vector3f(0, 1, 0), 0, 0, 0, 1);
+        rotate = new EntityModel(ModelLoader.generateQuad(1, 1), "front", new Vector3f(0, 1, 0), 0, 0, 0, 1);
         entityManager.addEntity(rotate);
         
 //        world = new World(new Vector3f(0, 0, 0), "height");

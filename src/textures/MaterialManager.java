@@ -33,7 +33,9 @@ public class MaterialManager extends Engine{
         this.addMaterial(new Material("tree", Game.spriteBinder.loadSprite("tree").getID(), Game.spriteBinder.loadSprite("tree_normal").getID(), Game.spriteBinder.loadSprite("tree_specular").getID(), Game.spriteBinder.loadSprite("tree_reflect").getID()));
         this.addMaterial(new Material("hexStone", Game.spriteBinder.loadSprite("hexStone").getID(), Game.spriteBinder.loadSprite("hexStone_normal").getID(), Game.spriteBinder.loadSprite("hexStone_specular").getID(), Game.spriteBinder.loadSprite("hexStone_reflect").getID()));
         this.addMaterial(new Material("stone", Game.spriteBinder.loadSprite("stone").getID(), Game.spriteBinder.loadSprite("stone_normal").getID(), Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID()));
-    
+        this.addMaterial(new Material("forest", Game.spriteBinder.loadSprite("forest").getID(), Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID()));
+        this.addMaterial(new Material("front", Game.spriteBinder.loadSprite("front").getID(), Game.spriteBinder.loadSprite("front_normal").getID(), Game.spriteBinder.loadSprite("front_specular").getID(), Game.spriteBinder.loadSprite("front_reflect").getID()));
+
     }
 
     @Override

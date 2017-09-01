@@ -83,30 +83,37 @@ public class Renderer {
             for(Entity entity : e){
                 
                 //material stuff
-                Material material = entity.getMaterial();
-                
-                //bind textures from the material
-                if(material.getTextureID()>0){
-                    GL13.glActiveTexture(GL13.GL_TEXTURE0);
-                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getTextureID());
-                    shader.loadTexture(0);
+                if(entity.hasMaterial()) {
+                    Material material = entity.getMaterial();
+
+                    //bind textures from the material
+                    if (material.getTextureID() > 0) {
+                        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getTextureID());
+                        shader.loadTexture(0);
+                    }
+                    if (material.getNormalID() > 0) {
+                        GL13.glActiveTexture(GL13.GL_TEXTURE0 + 2);
+                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getNormalID());
+                        shader.loadNormal(2);
+                    }
+                    if (material.getSpecularID() > 0) {
+                        GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
+                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getSpecularID());
+                        shader.loadSpecular(4);
+                    }
+                    if (material.getRougnessID() > 0) {
+                        GL13.glActiveTexture(GL13.GL_TEXTURE0 + 6);
+                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getRougnessID());
+                        shader.loadRoughness(6);
+                    }
+                }else{
+                    if (entity.getTextureID() > 0) {
+                        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, entity.getTextureID());
+                        shader.loadTexture(0);
+                    }
                 }
-                if(material.getNormalID()>0){
-                    GL13.glActiveTexture(GL13.GL_TEXTURE0 + 2);
-                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getNormalID());
-                    shader.loadNormal(2);
-                }
-                if(material.getSpecularID()>0){
-                    GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
-                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getSpecularID());
-                    shader.loadSpecular(4);
-                }
-                if(material.getRougnessID()>0){
-                    GL13.glActiveTexture(GL13.GL_TEXTURE0 + 6);
-                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getRougnessID());
-                    shader.loadRoughness(6);
-                }
-                
                 //Load transform
                 Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
                 shader.loadTransformationMatrix(transformationMatrix);

@@ -41,6 +41,7 @@ public abstract class Entity {
     private String id;
     
     private String materialID = "";
+    private int textureID = 0;
     
     protected DynamicCollection<Attribute> attributes = new DynamicCollection<Attribute>() {
         @Override
@@ -207,9 +208,18 @@ public abstract class Entity {
     public void setMaterial(String materialID){
         this.materialID = materialID;
     }
+
+    public void setTexture(int textureID){
+        this.materialID = "null";
+        this.textureID = textureID;
+    }
     
     public Material getMaterial(){
         return Game.materialManager.getMaterial(this.materialID);
+    }
+
+    public boolean hasMaterial(){
+        return Game.materialManager.getMaterial(this.materialID)!=null;
     }
     
     public boolean collides(Entity other){
@@ -464,5 +474,9 @@ public abstract class Entity {
 
     public Vector3f getOffsetToLinked() {
         return this.offset;
+    }
+
+    public int getTextureID() {
+        return textureID;
     }
 }
