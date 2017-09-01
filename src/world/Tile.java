@@ -16,7 +16,7 @@ public class Tile {
     private Vector3f rotation = new Vector3f(90, 0, 0);
     private String model;
 
-    public Tile(int x, int y, int z){
+    public Tile(float x, float y, float z){
         position = new Vector3f(x, y, z);
         model = ModelLoader.generateQuad(1, 1);
     }

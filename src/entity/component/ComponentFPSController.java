@@ -54,14 +54,18 @@ public class ComponentFPSController extends Component{
     @Override
     public void tick() {
         if(controller.getData()!=null){
-            camera.getRotation().add(new Vector3f(controller.getData().getLeftThumbStick()).mul(2, 0, 0)).add(new Vector3f(controller.getData().getRightThumbStick()).mul(1, 1, 0));
+            camera.getRotation().set((Maths.inverseVector(new Vector3f(controller.getData().getRightThumbStick())).mul(45, 45, 0)).add(new Vector3f(180, 45, 0)));
             float travelSpeed = walkSpeed.getData();
             if(controller.getData().getLeftThumbStick().z>0){
                 travelSpeed = runSpeed.getData();
             }
             if(onGround.getData()){
-                Vector3f dir = Game.mouse.getCurrentRay();
-                e.addAcceleration(new Vector3f(dir).mul(travelSpeed, 0, travelSpeed).mul(-controller.getData().getLeftThumbStick().y));
+                e.addAcceleration(new Vector3f(-controller.getData().getLeftThumbStick().x, 0, -controller.getData().getLeftThumbStick().y).mul(travelSpeed, 0, travelSpeed));
+            }
+            if(onGround.getData()) {
+                if (controller.getData().getButton(EnumButtonType.A) > 0) {
+                    e.addAcceleration(new Vector3f(0, jumpVelocity.getData(), 0));
+                }
             }
         }else{
             camera.setPosition(Maths.newInstance(e.getPosition()).add(e.getVelocity()).add(cameraOffset).sub(new Vector3f(Game.mouse.getCurrentRay()).mul(3)));

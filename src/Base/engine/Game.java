@@ -232,8 +232,8 @@ public class Game {
 //        scriptingEngine.add(gson.fromJson(launchOptions.get("mainScript"), String.class));
           
 
-//        player = new EntityPlayer(new Vector3f(2,10,2));
-//        entityManager.addEntity(player);
+        player = new EntityPlayer(new Vector3f(2,10,2));
+        entityManager.addEntity(player);
 
 //        rotate = new EntityModel(ModelLoader.loadModel("dragon"), "white", new Vector3f(0, 1, 0), 0, 0, 0, 1);
 //        entityManager.addEntity(rotate);

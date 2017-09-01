@@ -1,6 +1,10 @@
 package world;
 
+import Base.engine.Game;
+import entity.EntityModel;
 import graphics.Renderer;
+import models.ModelLoader;
+import org.joml.Vector3f;
 import shaders.StaticShader;
 
 /**
@@ -21,17 +25,25 @@ public class World {
         for(int k = 0; k < height; k++){
             for(int j = 0; j < depth; j++){
                 for(int i = 0; i < width; i++){
-                    tiles[i+(j * width) + (k * width * depth)] = new Tile(i, j, k);
+                    if(j == 0){
+                        tiles[i+(j * width) + (k * width * depth)] = new Tile(((float)i)-(((float)width)/2.0f)+0.5f, j, ((float)k)-(((float)height)/2.0f)+0.5f);
+                    }else{
+                        tiles[i+(j * width) + (k * width * depth)] = null;
+                    }
                 }
             }
         }
+
+        Game.entityManager.addEntity(new EntityModel(ModelLoader.generateQuad(width, height), "white", new Vector3f(0, -0.001f, 0), 90, 0, 0, 1));
 
     }
 
     public void render(Renderer r, StaticShader s){
         //for now render all
         for(Tile t : tiles){
-            t.render(r, s);
+            if(t!=null) {
+                t.render(r, s);
+            }
         }
     }
 }
