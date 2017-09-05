@@ -5,7 +5,12 @@
  */
 package entity;
 
+import Base.util.Callback;
 import entity.Entity;
+import entity.component.ComponentCollision;
+import entity.component.ComponentMesh;
+import entity.component.ComponentRender;
+import entity.component.EnumComponentType;
 import graphics.Renderer;
 import org.joml.Vector3f;
 import shaders.StaticShader;
@@ -17,7 +22,11 @@ import shaders.StaticShader;
 public class EntityModel extends Entity {
 
     public EntityModel(String modelID, String materialID, Vector3f position, float rotx, float roty, float rotz, float scale) {
-        super(EnumEntityType.MODEL, modelID, materialID, position, rotx, roty, rotz, scale);
+        super(EnumEntityType.MODEL, materialID, position, rotx, roty, rotz, scale);
+        ComponentMesh mesh = new ComponentMesh(this, modelID);
+        super.addComponent(mesh);
+        super.addComponent(new ComponentCollision(this, mesh));
+        super.addComponent(new ComponentRender(this));
     }
 
     @Override

@@ -13,6 +13,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import java.awt.Graphics;
 import javax.script.ScriptEngine;
+
+import entity.component.ComponentMesh;
+import entity.component.EnumComponentType;
 import graphics.Renderer;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -32,12 +35,14 @@ public class EntityManager extends Engine{
         @Override
         public void onAdd(Entity entity) {
             entity.onAdded();
-            if(sorted.containsKey(entity.getModelID())){
-                sorted.get(entity.getModelID()).add(entity);
-            }else{
-                LinkedList<Entity> modelEntities = new LinkedList<Entity>();
-                modelEntities.add(entity);
-                sorted.put(entity.getModelID(), modelEntities);
+            if(entity.hasComponent(EnumComponentType.MESH)){
+                if(sorted.containsKey(((ComponentMesh)entity.getComponent(EnumComponentType.MESH)).getModelID())){
+                    sorted.get(((ComponentMesh)entity.getComponent(EnumComponentType.MESH)).getModelID()).add(entity);
+                }else{
+                    LinkedList<Entity> modelEntities = new LinkedList<Entity>();
+                    modelEntities.add(entity);
+                    sorted.put(((ComponentMesh)entity.getComponent(EnumComponentType.MESH)).getModelID(), modelEntities);
+                }
             }
         }
 

@@ -1,0 +1,29 @@
+<component name="ArtifactManager">
+  <artifact name="unnamed">
+    <output-path>$PROJECT_DIR$/out/artifacts/unnamed</output-path>
+    <root id="root">
+      <element id="artifact" artifact-name="Edaxerum:jar" />
+      <element id="directory" name="Scripting">
+        <element id="dir-copy" path="$PROJECT_DIR$/Scripting" />
+      </element>
+      <element id="directory" name="saves">
+        <element id="dir-copy" path="$PROJECT_DIR$/saves" />
+      </element>
+      <element id="directory" name="natives">
+        <element id="dir-copy" path="$PROJECT_DIR$/natives" />
+      </element>
+      <element id="directory" name="Shaders">
+        <element id="dir-copy" path="$PROJECT_DIR$/Shaders" />
+      </element>
+      <element id="directory" name="Sounds">
+        <element id="dir-copy" path="$PROJECT_DIR$/Sounds" />
+      </element>
+      <element id="directory" name="Models">
+        <element id="dir-copy" path="$PROJECT_DIR$/Models" />
+      </element>
+      <element id="directory" name="Images">
+        <element id="dir-copy" path="$PROJECT_DIR$/Images" />
+      </element>
+    </root>
+  </artifact>
+</component>

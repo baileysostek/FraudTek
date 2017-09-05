@@ -38,6 +38,14 @@ public class Attribute <var>{
     public void setIndex(int index){
         this.index = index+"";
     }
+
+    public int getIndex(){
+        if(index.isEmpty()) {
+            return 0;
+        }else{
+            return Integer.parseInt(index);
+        }
+    }
     
     public boolean setDataFromJson(JsonObject data){
         Gson gson = new Gson();

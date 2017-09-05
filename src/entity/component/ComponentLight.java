@@ -6,6 +6,7 @@
 package entity.component;
 
 import Base.engine.Game;
+import entity.Attribute;
 import entity.Entity;
 import graphics.Renderer;
 import lighting.Light;
@@ -19,10 +20,11 @@ import shaders.StaticShader;
 public class ComponentLight extends Component{
 
     private Light light;
+    private Attribute<Vector3f> lightColor;
     
-    public ComponentLight(Entity e) {
+    public ComponentLight(Entity e, Vector3f color) {
         super(EnumComponentType.LIGHT, e);
-        light = new Light(e.getPosition(), new Vector3f(1, 1, 1));
+        light = new Light(e.getPosition(), color, new Vector3f(0.01f, 0.01f, 0.01f));
     }
     
     @Override

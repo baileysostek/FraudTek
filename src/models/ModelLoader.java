@@ -73,8 +73,57 @@ public class ModelLoader {
         Game.modelManager.addModel(id, model);        
         return id;
     }
-    
-      public static String generateTerrain(float width, float height, int subDivisions){
+
+    public static String generateQuad45(float width, float height){
+        RawModel model;
+
+        String id = "quad45"+width+","+height;
+
+        if(Game.modelManager.hasModel(id)){
+            return id;
+        }
+
+        model = Game.loader.loadToVAO(
+                new float[]{
+                        -width/2, -height/2, width/2,
+                        width/2, -height/2,-width/2,
+                        -width/2, height/2, width/2,
+                        width/2, height/2, -width/2,
+                        -width/2, -height/2,width/2,
+                        width/2, -height/2, -width/2,
+                        -width/2, height/2, width/2,
+                        width/2, height/2, -width/2,
+                }, new float[]{
+                        0,1,
+                        1,1,
+                        0,0,
+                        1,0,
+                        1,1,
+                        0,1,
+                        1,0,
+                        0,0,
+                },
+                new float[]{
+                        0,0,-1,
+                        0,0,-1,
+                        0,0,-1,
+                        0,0,-1,
+                        0,0,1,
+                        0,0,1,
+                        0,0,1,
+                        0,0,1,
+                },
+                new int[]{
+                        2,1,0,
+                        3,1,2,
+                        4,5,6,
+                        6,5,7,
+                });
+
+        Game.modelManager.addModel(id, model);
+        return id;
+    }
+    public static String generateTerrain(float width, float height, int subDivisions){
         RawModel model;
         
         String id = "terrain"+width+","+height;
@@ -174,25 +223,25 @@ public class ModelLoader {
             width/2, -height/2, deapth/2,
 
         }, new float[]{
-            0,0,
-            1,1,
             0,1,
+            1,1,
+            0,0,
             1,0,
             
             1,1,
             0,1,
             1,0,
             0,0,
-            
+
             0,1,
-            0,0,
             1,1,
-            1,0,
-            
             0,0,
+            1,0,
+
             0,1,
-            1,0,
             1,1,
+            0,0,
+            1,0,
             
             0,1,
             1,1,

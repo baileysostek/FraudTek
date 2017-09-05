@@ -16,12 +16,16 @@ import shaders.StaticShader;
  * @author Bailey
  */
 public abstract class Component {
-    public final EnumComponentType type;
+    private final EnumComponentType type;
     protected Entity e;
 
     public Component(EnumComponentType type, Entity e){
         this.type = type;
         this.e = e;
+    }
+
+    public EnumComponentType getType(){
+        return type;
     }
     
     public void onAdd(){

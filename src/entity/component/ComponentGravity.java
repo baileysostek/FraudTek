@@ -39,17 +39,48 @@ public class ComponentGravity extends Component{
             for(Entity entity: Game.entityManager.getEntities()){
                 //Check that its not checking a collision with itself
                 //TODO replace this with refrence to collision checker broadfase SAP program
-                if(!e.equals(entity)){
-                    //Get velocity this entity is traveling at
-                    //TODO as well as other entity
-                    Vector3f dir = Maths.newInstance(e.getVelocity()).add(new Vector3f(0, gravity.getData(), 0));
-                    Vector3f hitPoint = new Vector3f(0,0,0);
-                    if(entity.rayHitsMesh(dir, Maths.newInstance(e.getPosition()).add(0, -e.getHeight()/2, 0), hitPoint)){
-                        e.setVelocity(0,0,0);
-                        e.setAcceleration(0,0,0);
-                        e.setPosition(hitPoint.add(0, e.getHeight()/2, 0));
-                        onGround.setData(true);
-                        break loop;   
+                if(entity.hasComponent(EnumComponentType.COLLIDER)) {
+                    if (!e.equals(entity)) {
+                        ComponentCollision collider = ((ComponentCollision) e.getComponent(EnumComponentType.COLLIDER));
+                        //Get velocity this entity is traveling at
+                        //TODO as well as other entity
+                        Vector3f dir = Maths.newInstance(e.getVelocity()).add(new Vector3f(0, gravity.getData(), 0)).add(e.getAcceleration()).mul(new Vector3f(0,1,0));
+                        Vector3f hitPoint = new Vector3f(0, 0, 0);
+                        if (((ComponentCollision) entity.getComponent(EnumComponentType.COLLIDER)).rayHitsMesh(dir, Maths.newInstance(e.getPosition()).add(0, -collider.getHeight() / 2, 0), hitPoint)) {
+                            e.setVelocity(0, 0, 0);
+                            e.setAcceleration(0, 0, 0);
+                            e.setPosition(hitPoint.add(0, collider.getHeight() / 2, 0));
+                            onGround.setData(true);
+                            break loop;
+                        }
+                        if (((ComponentCollision) entity.getComponent(EnumComponentType.COLLIDER)).rayHitsMesh(dir, Maths.newInstance(e.getPosition()).add(-collider.getWidth()/2, -collider.getHeight() / 2, -collider.getDepth()/2), hitPoint)) {
+                            e.setVelocity(0, 0, 0);
+                            e.setAcceleration(0, 0, 0);
+                            e.setPosition(hitPoint.add(collider.getWidth()/2, collider.getHeight() / 2, collider.getDepth()/2));
+                            onGround.setData(true);
+                            break loop;
+                        }
+                        if (((ComponentCollision) entity.getComponent(EnumComponentType.COLLIDER)).rayHitsMesh(dir, Maths.newInstance(e.getPosition()).add(collider.getWidth()/2, -collider.getHeight() / 2, -collider.getDepth()/2), hitPoint)) {
+                            e.setVelocity(0, 0, 0);
+                            e.setAcceleration(0, 0, 0);
+                            e.setPosition(hitPoint.add(-collider.getWidth()/2, collider.getHeight() / 2, collider.getDepth()/2));
+                            onGround.setData(true);
+                            break loop;
+                        }
+                        if (((ComponentCollision) entity.getComponent(EnumComponentType.COLLIDER)).rayHitsMesh(dir, Maths.newInstance(e.getPosition()).add(-collider.getWidth()/2, -collider.getHeight() / 2, collider.getDepth()/2), hitPoint)) {
+                            e.setVelocity(0, 0, 0);
+                            e.setAcceleration(0, 0, 0);
+                            e.setPosition(hitPoint.add(collider.getWidth()/2, collider.getHeight() / 2, -collider.getDepth()/2));
+                            onGround.setData(true);
+                            break loop;
+                        }
+                        if (((ComponentCollision) entity.getComponent(EnumComponentType.COLLIDER)).rayHitsMesh(dir, Maths.newInstance(e.getPosition()).add(collider.getWidth()/2, -collider.getHeight() / 2, collider.getDepth()/2), hitPoint)) {
+                            e.setVelocity(0, 0, 0);
+                            e.setAcceleration(0, 0, 0);
+                                    e.setPosition(hitPoint.add(-collider.getWidth()/2, collider.getHeight() / 2, -collider.getDepth()/2));
+                            onGround.setData(true);
+                            break loop;
+                        }
                     }
                 }
             }

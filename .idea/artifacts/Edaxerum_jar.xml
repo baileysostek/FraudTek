@@ -1,0 +1,101 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Edaxerum:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Edaxerum_jar</output-path>
+    <root id="archive" name="Edaxerum.jar">
+      <element id="module-output" name="Edaxerum" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/gson-2.8.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jxinput/jinput.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/joml-1.9.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-assimp.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-bgfx.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-egl.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-glfw.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-jawt.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-jemalloc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-lmdb.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-nanovg.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-nfd.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-nuklear.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-openal.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-opencl.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-opengl.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-opengles.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-openvr.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-ovr.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-par.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-sse.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-stb.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-tinyexr.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-tinyfd.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-vulkan.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-xxhash.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-yoga.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/steamworks4j-1.6.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-assimp-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-nfd-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-nuklear-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-bgfx-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-par-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-sse-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-nuklear-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-opengles-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-bgfx-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-lmdb-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-opengles-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-par-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-opengl-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-lmdb-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-assimp-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-glfw-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-par-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-openal-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-openal-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-nanovg-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-jemalloc-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-stb-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-openvr-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-nfd-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-opengl-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-nanovg-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-openvr-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-assimp-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-bgfx-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-nanovg-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-sse-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-glfw-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-tinyexr-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-glfw-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-openal-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-tinyexr-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-nuklear-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-lmdb-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-stb-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-sse-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-openvr-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-nfd-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-jemalloc-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-ovr-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-opengl-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-jemalloc-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-stb-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-opengles-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-tinyexr-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-tinyfd-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-tinyfd-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-tinyfd-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-xxhash-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-xxhash-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-xxhash-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-yoga-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-yoga-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/Downloads/lwjgl-release-3.1.2-custom/Classpath/lwjgl-yoga-natives-windows.jar" path-in-jar="/" />
+      <element id="directory" name="res">
+        <element id="dir-copy" path="$PROJECT_DIR$/res" />
+      </element>
+    </root>
+  </artifact>
+</component>

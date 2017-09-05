@@ -27,12 +27,12 @@ import shaders.StaticShader;
 public class ComponentFPSController extends Component{
 
     private Camera camera;
-    private Vector3f cameraOffset = new Vector3f(0, 0.75f ,0);
+    private Vector3f cameraOffset = new Vector3f(0, 0.35f ,0);
     
-    private Attribute<Float> walkSpeed = new Attribute<Float>("walkSpeed", 0.1f);
-    private Attribute<Float> runSpeed = new Attribute<Float>("runSpeed", 0.3f);
-    private Attribute<Float> jumpVelocity = new Attribute<Float>("jumpVelocity", 0.2f);
-    private Attribute<Boolean> onGround = new Attribute<Boolean>("onGround", false);
+    private Attribute<Float> walkSpeed = new Attribute<Float>("walkSpeed", 0.05f);
+    private Attribute<Float> runSpeed = new Attribute<Float>("runSpeed", 0.1f);
+    private Attribute<Float> jumpVelocity = new Attribute<Float>("jumpVelocity", 0.15f);
+    private Attribute<Boolean> onGround = new Attribute<Boolean>("onGround", true);
     
     private Attribute<JavaController> controller = new Attribute<JavaController>("controller:", null);
     
@@ -81,7 +81,8 @@ public class ComponentFPSController extends Component{
                 }
             }
         }
-        camera.setPosition(Maths.newInstance(e.getPosition()).add(e.getVelocity()).add(cameraOffset).sub(new Vector3f(Game.mouse.getCurrentRay()).mul(3)));
+        System.out.println(onGround.getData());
+        camera.setPosition(Maths.newInstance(e.getPosition()).add(e.getVelocity()).add(cameraOffset).sub(new Vector3f(Game.mouse.getCurrentRay()).mul(3 * ((1.0f - controller.getData().getButton(EnumButtonType.RIGHT_TRIGGER))/2.0f))));
     }
 
     @Override

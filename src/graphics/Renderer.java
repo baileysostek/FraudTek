@@ -80,47 +80,48 @@ public class Renderer {
             int batch = 0;
             
             //per entity
-            for(Entity entity : e){
-                
-                //material stuff
-                if(entity.hasMaterial()) {
-                    Material material = entity.getMaterial();
+            for(Entity entity : e) {
+                if(entity.hasAttribute("render")){
+                    //material stuff
+                    if (entity.hasMaterial()) {
+                        Material material = entity.getMaterial();
 
-                    //bind textures from the material
-                    if (material.getTextureID() > 0) {
-                        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getTextureID());
-                        shader.loadTexture(0);
+                        //bind textures from the material
+                        if (material.getTextureID() > 0) {
+                            GL13.glActiveTexture(GL13.GL_TEXTURE0);
+                            GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getTextureID());
+                            shader.loadTexture(0);
+                        }
+                        if (material.getNormalID() > 0) {
+                            GL13.glActiveTexture(GL13.GL_TEXTURE0 + 2);
+                            GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getNormalID());
+                            shader.loadNormal(2);
+                        }
+                        if (material.getSpecularID() > 0) {
+                            GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
+                            GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getSpecularID());
+                            shader.loadSpecular(4);
+                        }
+                        if (material.getRougnessID() > 0) {
+                            GL13.glActiveTexture(GL13.GL_TEXTURE0 + 6);
+                            GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getRougnessID());
+                            shader.loadRoughness(6);
+                        }
+                    } else {
+                        if (entity.getTextureID() > 0) {
+                            GL13.glActiveTexture(GL13.GL_TEXTURE0);
+                            GL11.glBindTexture(GL11.GL_TEXTURE_2D, entity.getTextureID());
+                            shader.loadTexture(0);
+                        }
                     }
-                    if (material.getNormalID() > 0) {
-                        GL13.glActiveTexture(GL13.GL_TEXTURE0 + 2);
-                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getNormalID());
-                        shader.loadNormal(2);
-                    }
-                    if (material.getSpecularID() > 0) {
-                        GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
-                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getSpecularID());
-                        shader.loadSpecular(4);
-                    }
-                    if (material.getRougnessID() > 0) {
-                        GL13.glActiveTexture(GL13.GL_TEXTURE0 + 6);
-                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getRougnessID());
-                        shader.loadRoughness(6);
-                    }
-                }else{
-                    if (entity.getTextureID() > 0) {
-                        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, entity.getTextureID());
-                        shader.loadTexture(0);
-                    }
+                    //Load transform
+                    Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
+                    shader.loadTransformationMatrix(transformationMatrix);
+
+                    //actual render
+                    GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+                    batch++;
                 }
-                //Load transform
-                Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
-                shader.loadTransformationMatrix(transformationMatrix);
-                
-                //actual render
-                GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-                batch++;
             }
             //unbind model
             GL20.glDisableVertexAttribArray(0);

@@ -11,7 +11,7 @@ import shaders.StaticShader;
  */
 public class Tile {
 
-    private String materialID = "brick";
+    private String materialID = "grass";
     private Vector3f position;
     private Vector3f rotation = new Vector3f(90, 0, 0);
     private String model;

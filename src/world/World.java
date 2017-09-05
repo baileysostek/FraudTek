@@ -34,7 +34,9 @@ public class World {
             }
         }
 
-        Game.entityManager.addEntity(new EntityModel(ModelLoader.generateQuad(width, height), "white", new Vector3f(0, -0.001f, 0), 90, 0, 0, 1));
+        EntityModel floor = new EntityModel(ModelLoader.generateQuad(width, height), "white", new Vector3f(0, 0f, 0), 90, 0, 0, 1);
+        floor.removeAttribute("render");
+        Game.entityManager.addEntity(floor);
 
     }
 

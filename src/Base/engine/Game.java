@@ -14,6 +14,7 @@ import Base.util.IncludeFolder;
 import Base.util.OBJLoader;
 import Base.util.StringUtils;
 import ScriptingEngine.ScriptingEngine;
+import entity.EntityPlayer;
 import steam.SteamManager;
 import camera.CameraManager;
 import com.google.gson.Gson;
@@ -22,8 +23,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import entity.Entity;
 import entity.EntityManager;
-import entity.EntityPlayer;
-import entity.EntityTable;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
@@ -232,18 +231,31 @@ public class Game {
 //        scriptingEngine.add(gson.fromJson(launchOptions.get("mainScript"), String.class));
           
 
-        player = new EntityPlayer(new Vector3f(2,10,2));
+        player = new EntityPlayer(new Vector3f(0,3.5f,0));
         entityManager.addEntity(player);
 
-//        rotate = new EntityModel(ModelLoader.loadModel("dragon"), "white", new Vector3f(0, 1, 0), 0, 0, 0, 1);
+        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(0, 0.5f, 4), 90, 0, 0, 1));
+        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(2, 1.5f, 4), 90, 0, 0, 1));
+        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(2, 2.5f, 6), 90, 0, 0, 1));
+        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(0, 3.5f, 6), 90, 0, 0, 1));
+
+        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad45(1, 1), "brick", new Vector3f(1.5f, 0.5f, 2.5f), 0, 0, 0, 1));
+        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad45(1, 1), "brick", new Vector3f(3.5f, 0.5f, 0.5f), 0, 0, 0, 1));
+        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad45(1, 1), "brick", new Vector3f(1.5f, 1.5f, 2.5f), 0, 0, 0, 1));
+        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad45(1, 1), "brick", new Vector3f(2.5f, 1.5f, 1.5f), 0, 0, 0, 1));
+        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad45(1, 1), "brick", new Vector3f(3.5f, 1.5f, 0.5f), 0, 0, 0, 1));
+        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad(1, 8), "white", new Vector3f(-1, 4f, 2.5f), 90, 0, 0, 1));
+        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad(1, 6), "white", new Vector3f(-1, 0.5f, -4), 66, 0, 0, 1));
+//
+//        rotate = new EntityModel(ModelLoader.loadModel("dragon"), "white", new Vector3f(0, 1, 0), 0, 0, 0, 0.14f);
 //        entityManager.addEntity(rotate);
         
 
 
-        lightingEngine.addLight(new Light(new Vector3f(-1, 0, -1), new Vector3f(1, 0, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
-        lightingEngine.addLight(new Light(new Vector3f(1, 0, -1), new Vector3f(0, 1, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
-        lightingEngine.addLight(new Light(new Vector3f(0, 0, 1), new Vector3f(0, 0, 1), new Vector3f(0.1f, 0.1f, 0.1f)));
-        lightingEngine.addLight(new Light(new Vector3f(0, 10, 0), new Vector3f(1, 1, 1)));
+//        lightingEngine.addLight(new Light(new Vector3f(-1, 0, -1), new Vector3f(1, 0, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
+//        lightingEngine.addLight(new Light(new Vector3f(1, 0, -1), new Vector3f(0, 1, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
+//        lightingEngine.addLight(new Light(new Vector3f(0, 0, 1), new Vector3f(0, 0, 1), new Vector3f(0.1f, 0.1f, 0.1f)));
+        lightingEngine.addLight(new Light(new Vector3f(0, 0, 0), new Vector3f(1, 1, 1)));
 
         world = new World(8, 16, 4);
     }
@@ -301,6 +313,7 @@ public class Game {
         lightingEngine.loadLights(shader);
         shader.loadViewMatrix(cameraManager.getCam());
         world.render(renderer, shader);
+        entityManager.render(renderer, shader);
         renderer.render(shader);
         shader.stop();
         glfwSwapBuffers(window);

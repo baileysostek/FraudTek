@@ -18,6 +18,8 @@ public enum EnumComponentType {
     LIGHT(),
     CONTROLLER(),
     ANIMATION(),
+    RENDER(),
+    MESH(),
     ;
     
     public void generate(EnumComponentType component){
