@@ -9,6 +9,7 @@ import Base.Controller.EnumButtonType;
 import Base.Controller.JavaController;
 import Base.engine.Game;
 import camera.Camera;
+import camera.DynamicCamera;
 import camera.FPSCamera;
 import entity.Attribute;
 import entity.Entity;
@@ -38,7 +39,7 @@ public class ComponentFPSController extends Component{
     
     public ComponentFPSController(Entity e) {
         super(EnumComponentType.FPS_CONTROLLER, e);
-        camera = new FPSCamera();
+        camera = new DynamicCamera();
         walkSpeed = super.addAttribute(walkSpeed);
         runSpeed = super.addAttribute(runSpeed);
         jumpVelocity = super.addAttribute(jumpVelocity);
@@ -54,13 +55,13 @@ public class ComponentFPSController extends Component{
     @Override
     public void tick() {
         if(controller.getData()!=null){
-            camera.getRotation().set((Maths.inverseVector(new Vector3f(controller.getData().getRightThumbStick())).mul(45, 45, 0)).add(new Vector3f(180, 45, 0)));
+            camera.getRotation().set((Maths.inverseVector(new Vector3f(controller.getData().getRightThumbStick())).mul(45, 45, 0)).add(new Vector3f(0, 45, 0)));
             float travelSpeed = walkSpeed.getData();
             if(controller.getData().getLeftThumbStick().z>0){
                 travelSpeed = runSpeed.getData();
             }
             if(onGround.getData()){
-                e.addAcceleration(new Vector3f(-controller.getData().getLeftThumbStick().x, 0, -controller.getData().getLeftThumbStick().y).mul(travelSpeed, 0, travelSpeed));
+                e.addAcceleration(new Vector3f(controller.getData().getLeftThumbStick().x, 0, controller.getData().getLeftThumbStick().y).mul(travelSpeed, 0, travelSpeed));
             }
             if(onGround.getData()) {
                 if (controller.getData().getButton(EnumButtonType.A) > 0) {
@@ -81,8 +82,8 @@ public class ComponentFPSController extends Component{
                 }
             }
         }
-        System.out.println(onGround.getData());
-        camera.setPosition(Maths.newInstance(e.getPosition()).add(e.getVelocity()).add(cameraOffset).sub(new Vector3f(Game.mouse.getCurrentRay()).mul(3 * ((1.0f - controller.getData().getButton(EnumButtonType.RIGHT_TRIGGER))/2.0f))));
+        //((1.0f - controller.getData().getButton(EnumButtonType.RIGHT_TRIGGER))/2.0f)
+        camera.setPosition(Maths.newInstance(e.getPosition()).add(e.getVelocity()).add(cameraOffset).sub(new Vector3f(Game.mouse.getCurrentRay()).mul(3 * 1)));
     }
 
     @Override

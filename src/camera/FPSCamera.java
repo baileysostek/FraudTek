@@ -54,30 +54,30 @@ public class FPSCamera extends Camera{
             prevY = newY;
 
             glfwSetCursorPos(Game.getWindowPointer(), (WIDTH/2), (HEIGHT/2));
-            
+
             super.setRotation(super.getRotation().add(new Vector3f((float)(deltaX/30),(float)(deltaY/30),0)));
 //        }
-        
-        if(Keyboard.isKeyDown(KeyEvent.VK_W)){
-            this.position.add(Game.mouse.getCurrentRay().mul(speed, speed, speed));
-        }
-        if(Keyboard.isKeyDown(KeyEvent.VK_S)){
-            this.position.add(Game.mouse.getCurrentRay().mul(-speed, -speed, -speed));
-        }
-        if(Keyboard.isKeyDown(KeyEvent.VK_A)){
-            super.position.z-=((float)Math.cos(Math.toRadians(rotation.x-90)))*speed;
-            super.position.x-=((float)Math.sin(Math.toRadians(rotation.x-90)))*speed*-1;
-        }
-        if(Keyboard.isKeyDown(KeyEvent.VK_D)){
-            super.position.z-=((float)Math.cos(Math.toRadians(rotation.x+90)))*speed;
-            super.position.x-=((float)Math.sin(Math.toRadians(rotation.x+90)))*speed*-1;
-        }
-        if(Keyboard.isKeyDown(KeyEvent.VK_E)){
-            super.position.y+=speed;
-        }
-        if(Keyboard.isKeyDown(KeyEvent.VK_Q)){
-            super.position.y-=speed;
-        }
+//
+//        if(Keyboard.isKeyDown(KeyEvent.VK_W)){
+//            this.position.add(Game.mouse.getCurrentRay().mul(speed, speed, speed));
+//        }
+//        if(Keyboard.isKeyDown(KeyEvent.VK_S)){
+//            this.position.add(Game.mouse.getCurrentRay().mul(-speed, -speed, -speed));
+//        }
+//        if(Keyboard.isKeyDown(KeyEvent.VK_A)){
+//            super.position.z-=((float)Math.cos(Math.toRadians(rotation.x-90)))*speed;
+//            super.position.x-=((float)Math.sin(Math.toRadians(rotation.x-90)))*speed*-1;
+//        }
+//        if(Keyboard.isKeyDown(KeyEvent.VK_D)){
+//            super.position.z-=((float)Math.cos(Math.toRadians(rotation.x+90)))*speed;
+//            super.position.x-=((float)Math.sin(Math.toRadians(rotation.x+90)))*speed*-1;
+//        }
+//        if(Keyboard.isKeyDown(KeyEvent.VK_E)){
+//            super.position.y+=speed;
+//        }
+//        if(Keyboard.isKeyDown(KeyEvent.VK_Q)){
+//            super.position.y-=speed;
+//        }
     }
 
     @Override

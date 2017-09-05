@@ -26,13 +26,18 @@ import shaders.StaticShader;
 public class CameraManager extends Engine{
 
     private Camera camera;
-    private Light light;
+
+    private boolean isTransitioning = false;
+    private Vector3f initial_pos;
+    private Vector3f initial_rot;
+    private Camera target = null;
+    private Camera lastCam = null;
+    private int targetTicks = 0;
+    private int currentTicks = 0;
     
     public CameraManager() {
         super("CameraManager");
         this.camera = new FPSCamera();
-        light = new Light(new Vector3f(camera.getPosition()), new Vector3f(1,1, 1), new Vector3f(0.1f, 0.1f, 0.1f));
-        Game.lightingEngine.addLight(light);
     }
 
     @Override
@@ -43,10 +48,20 @@ public class CameraManager extends Engine{
     @Override
     public void tick() {
         if(camera!=null){
-            camera.tick();
-            if(Keyboard.isKeyDown(KeyEvent.VK_L)){
-                light.setPosition(new Vector3f(camera.getPosition()));
+            if(isTransitioning){
+                if(currentTicks < targetTicks){
+                    Vector3f pos_dif = new Vector3f(target.getPosition()).sub(initial_pos).mul((float)currentTicks / (float)targetTicks);
+                    Vector3f rot_dif = new Vector3f(target.getRotation()).sub(initial_rot).mul((float)currentTicks / (float)targetTicks);
+                    camera.setPosition(new Vector3f(initial_pos).add(pos_dif));
+                    camera.setRotation(new Vector3f(initial_rot).add(rot_dif));
+                    currentTicks++;
+                }else{
+                    //Transition has ended, so turn of transition flag
+                    this.isTransitioning = false;
+                    this.camera = lastCam;
+                }
             }
+            camera.tick();
         }
     }
 
@@ -63,6 +78,20 @@ public class CameraManager extends Engine{
     @Override
     public void onShutdown() {
 
+    }
+
+    public void transition(Camera target, int frames){
+        if(isTransitioning){
+            return;
+        }
+        this.target = target;
+        this.initial_pos = new Vector3f(camera.getPosition());
+        this.initial_rot = new Vector3f(camera.getRotation());
+        this.targetTicks = frames;
+        this.currentTicks = 0;
+        this.lastCam = this.camera;
+        this.camera = new DynamicCamera();
+        isTransitioning = true;
     }
     
     public void setCamera(Camera camera){

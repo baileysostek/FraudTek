@@ -7,6 +7,7 @@ package math;
 
 import camera.Camera;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 /**
@@ -14,6 +15,15 @@ import org.joml.Vector3f;
  * @author Bailey
  */
 public class Maths {
+
+    public static Matrix4f createTransformationMatrix(Vector2f translation, float ry, Vector2f scale) {
+        Matrix4f matrix = new Matrix4f();
+        matrix.translate(translation.x, translation.y, 0);
+        matrix.scale(scale.x, scale.y, 0);
+        matrix.rotateY((float) Math.toRadians(ry));
+        return matrix;
+    }
+
     public static Matrix4f createTransformationMatrix(Vector3f translation, float rx, float ry, float rz, float scale){
         Matrix4f matrix = new Matrix4f();
                 matrix.translate(translation);

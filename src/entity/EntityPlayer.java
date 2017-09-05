@@ -30,7 +30,7 @@ public class EntityPlayer extends Entity{
         super.addComponent(new ComponentCollision(this, mesh));
         super.addComponent(new ComponentRender(this));
         super.addComponent(new ComponentFPSController(this));
-        super.addComponent(new ComponentLight(this, new Vector3f(1, 0, 0)));
+//        super.addComponent(new ComponentLight(this, new Vector3f(1, 0, 0)));
 
         model = Game.modelManager.getModel(ModelLoader.generateQuad(0.66f, 1));
     }
@@ -42,7 +42,7 @@ public class EntityPlayer extends Entity{
 
     @Override
     public void render(Renderer r, StaticShader shader) {
-        r.render(model, Game.materialManager.getMaterial("front"), super.getPosition(), new Vector3f(super.getRotX()+45, super.getRotY(), super.getRotZ()), super.getScale(), shader);
+        r.render(model, Game.materialManager.getMaterial("front"), super.getPosition(), new Vector3f(super.getRotX()-45, super.getRotY(), super.getRotZ()), super.getScale(), shader);
 //        r.render(Game.modelManager.getModel(ModelLoader.generateCube(0.66f, 1, 0.66f)), Game.materialManager.getMaterial("front"), super.getPosition(), new Vector3f(super.getRotX(), super.getRotY(), super.getRotZ()), super.getScale(), shader);
     }
     

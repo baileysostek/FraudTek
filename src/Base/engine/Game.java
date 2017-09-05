@@ -6,15 +6,18 @@
 package Base.engine;
 
 import Base.Controller.ControllerManager;
+import camera.DynamicCamera;
 import entity.EntityModel;
 import Base.util.Debouncer;
 import Base.util.DynamicCollection;
 import Base.util.Engine;
 import Base.util.IncludeFolder;
-import Base.util.OBJLoader;
 import Base.util.StringUtils;
 import ScriptingEngine.ScriptingEngine;
 import entity.EntityPlayer;
+import graphics.gui.GuiRenderer;
+import graphics.gui.Gui;
+import org.joml.Vector2f;
 import steam.SteamManager;
 import camera.CameraManager;
 import com.google.gson.Gson;
@@ -43,12 +46,14 @@ import input.Keyboard;
 import input.Mouse;
 import input.MousePicker;
 import java.util.HashMap;
+import java.util.LinkedList;
+
 import lighting.Light;
 import models.ModelManager;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import static org.lwjgl.opengl.GL11.*;
-import org.lwjgl.ovr.OVRGL;
+
 import shaders.StaticShader;
 import textures.MaterialManager;
 import world.World;
@@ -107,7 +112,11 @@ public class Game {
     public static MaterialManager materialManager;
     public static ControllerManager controllerManager;
     //VR Headsets
-    
+
+    //tmp
+    static GuiRenderer uiRenderer;
+    static LinkedList<Gui> textures = new LinkedList<Gui>();
+
     public static Entity player;
     
     private static Entity rotate;
@@ -221,7 +230,7 @@ public class Game {
         engines.add(materialManager);
         controllerManager = new ControllerManager();
         engines.add(controllerManager);
-        
+
         engines.synch();
         scriptingEngine = new ScriptingEngine();
         //Register for scripting
@@ -234,18 +243,9 @@ public class Game {
         player = new EntityPlayer(new Vector3f(0,3.5f,0));
         entityManager.addEntity(player);
 
-        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(0, 0.5f, 4), 90, 0, 0, 1));
-        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(2, 1.5f, 4), 90, 0, 0, 1));
-        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(2, 2.5f, 6), 90, 0, 0, 1));
-        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(0, 3.5f, 6), 90, 0, 0, 1));
+        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(1, 0f, -8), 90, 0, 0, 1));
 
-        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad45(1, 1), "brick", new Vector3f(1.5f, 0.5f, 2.5f), 0, 0, 0, 1));
-        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad45(1, 1), "brick", new Vector3f(3.5f, 0.5f, 0.5f), 0, 0, 0, 1));
-        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad45(1, 1), "brick", new Vector3f(1.5f, 1.5f, 2.5f), 0, 0, 0, 1));
-        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad45(1, 1), "brick", new Vector3f(2.5f, 1.5f, 1.5f), 0, 0, 0, 1));
-        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad45(1, 1), "brick", new Vector3f(3.5f, 1.5f, 0.5f), 0, 0, 0, 1));
-        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad(1, 8), "white", new Vector3f(-1, 4f, 2.5f), 90, 0, 0, 1));
-        entityManager.addEntity(new EntityModel(ModelLoader.generateQuad(1, 6), "white", new Vector3f(-1, 0.5f, -4), 66, 0, 0, 1));
+
 //
 //        rotate = new EntityModel(ModelLoader.loadModel("dragon"), "white", new Vector3f(0, 1, 0), 0, 0, 0, 0.14f);
 //        entityManager.addEntity(rotate);
@@ -257,7 +257,13 @@ public class Game {
 //        lightingEngine.addLight(new Light(new Vector3f(0, 0, 1), new Vector3f(0, 0, 1), new Vector3f(0.1f, 0.1f, 0.1f)));
         lightingEngine.addLight(new Light(new Vector3f(0, 0, 0), new Vector3f(1, 1, 1)));
 
-        world = new World(8, 16, 4);
+        world = new World("save");
+
+        cameraManager.transition(new DynamicCamera(new Vector3f(-4, 5, -12), new Vector3f(90, 90, 0)), 300);
+
+        uiRenderer = new GuiRenderer(loader);
+        textures.add(new Gui(spriteBinder.loadSprite("edaxerum").textureID, new Vector2f(0.0f, 0.0f), new Vector2f(1f, 1f)));
+
     }
     
     private static void run(){
@@ -316,6 +322,7 @@ public class Game {
         entityManager.render(renderer, shader);
         renderer.render(shader);
         shader.stop();
+        uiRenderer.render(textures);
         glfwSwapBuffers(window);
     }
     
@@ -327,6 +334,7 @@ public class Game {
     
     private static void cleanUp(){
         shader.cleanUp();
+        uiRenderer.cleanUp();
         loader.cleanUp();
     }
     

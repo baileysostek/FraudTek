@@ -7,6 +7,7 @@ package entity;
 
 import Base.util.DynamicCollection;
 import Base.util.Engine;
+import Base.util.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -149,6 +150,14 @@ public class EntityManager extends Engine{
 
     public HashMap<String, LinkedList<Entity>> getSortedEntities(){
         return this.sorted;
+    }
+
+    public void generateSave(String path){
+        String[] data = new String[]{};
+        for(Entity e : getEntities()){
+
+        }
+        StringUtils.saveData(path, data);
     }
     
 }

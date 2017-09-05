@@ -314,4 +314,10 @@ public abstract class Entity {
     public int getTextureID() {
         return textureID;
     }
+
+    public String[] generateSaveData(){
+        //First generate all components
+        //then add all attributes
+        return new String[]{};
+    }
 }

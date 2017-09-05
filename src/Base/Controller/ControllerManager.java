@@ -73,7 +73,8 @@ public class ControllerManager extends Engine{
         Controller[] ca;
         ca = ControllerEnvironment.getDefaultEnvironment().getControllers();
         for (Controller ca1 : ca) {
-            if (ca1.getType().equals(Controller.Type.STICK)) {
+//            System.out.println("Connected device:"+ca1.getName()+" type:"+ca1.getType());
+            if (ca1.getType().equals(Controller.Type.STICK)||ca1.getType().equals(Controller.Type.GAMEPAD)) {
                 loop:
                 {
                     boolean canAdd = true;
