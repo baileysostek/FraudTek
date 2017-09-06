@@ -24,7 +24,7 @@ public class ComponentLight extends Component{
     
     public ComponentLight(Entity e, Vector3f color) {
         super(EnumComponentType.LIGHT, e);
-        light = new Light(e.getPosition(), color, new Vector3f(0.01f, 0.01f, 0.01f));
+        light = new Light(e.getPosition(), color, new Vector3f(0.1f, 0.1f, 0.1f));
     }
     
     @Override

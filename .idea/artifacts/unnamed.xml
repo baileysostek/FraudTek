@@ -24,6 +24,9 @@
       <element id="directory" name="Images">
         <element id="dir-copy" path="$PROJECT_DIR$/Images" />
       </element>
+      <element id="directory" name="res">
+        <element id="dir-copy" path="$PROJECT_DIR$/res" />
+      </element>
     </root>
   </artifact>
 </component>

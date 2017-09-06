@@ -30,7 +30,7 @@ public class EntityPlayer extends Entity{
         super.addComponent(new ComponentCollision(this, mesh));
         super.addComponent(new ComponentRender(this));
         super.addComponent(new ComponentFPSController(this));
-//        super.addComponent(new ComponentLight(this, new Vector3f(1, 0, 0)));
+        super.addComponent(new ComponentLight(this, new Vector3f(1, 1, 1)));
 
         model = Game.modelManager.getModel(ModelLoader.generateQuad(0.66f, 1));
     }

@@ -15,6 +15,9 @@ import Base.util.IncludeFolder;
 import Base.util.StringUtils;
 import ScriptingEngine.ScriptingEngine;
 import entity.EntityPlayer;
+import entity.component.ComponentCollision;
+import entity.component.ComponentGravity;
+import entity.component.ComponentMesh;
 import graphics.gui.GuiRenderer;
 import graphics.gui.Gui;
 import org.joml.Vector2f;
@@ -121,7 +124,7 @@ public class Game {
     
     private static Entity rotate;
 
-    private static World world;
+    public static World worldManager;
             
     
     public static void main(String[] args){
@@ -240,10 +243,16 @@ public class Game {
 //        scriptingEngine.add(gson.fromJson(launchOptions.get("mainScript"), String.class));
           
 
-        player = new EntityPlayer(new Vector3f(0,3.5f,0));
+        player = new EntityPlayer(new Vector3f(0,1.5f,0));
         entityManager.addEntity(player);
 
-        entityManager.addEntity(new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(1, 0f, -8), 90, 0, 0, 1));
+//        EntityModel e = new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(0, 2f, 0), 0, 0, 0, 1);
+//        e.addComponent(new ComponentGravity(e));
+//        ComponentMesh mesh = new ComponentMesh(e, ModelLoader.generateCube(1, 1, 1));
+//        e.addComponent(new ComponentCollision(e, mesh));
+//        e.addAcceleration(0.1f, 0.3f, 0);
+//
+//        entityManager.addEntity(e);
 
 
 //
@@ -255,9 +264,9 @@ public class Game {
 //        lightingEngine.addLight(new Light(new Vector3f(-1, 0, -1), new Vector3f(1, 0, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
 //        lightingEngine.addLight(new Light(new Vector3f(1, 0, -1), new Vector3f(0, 1, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
 //        lightingEngine.addLight(new Light(new Vector3f(0, 0, 1), new Vector3f(0, 0, 1), new Vector3f(0.1f, 0.1f, 0.1f)));
-        lightingEngine.addLight(new Light(new Vector3f(0, 0, 0), new Vector3f(1, 1, 1)));
+//        lightingEngine.addLight(new Light(new Vector3f(0, 0, 0), new Vector3f(1, 1, 1)));
 
-        world = new World("save");
+        worldManager = new World("save");
 
         cameraManager.transition(new DynamicCamera(new Vector3f(-4, 5, -12), new Vector3f(90, 90, 0)), 300);
 
@@ -318,7 +327,7 @@ public class Game {
         shader.start();
         lightingEngine.loadLights(shader);
         shader.loadViewMatrix(cameraManager.getCam());
-        world.render(renderer, shader);
+        worldManager.render(renderer, shader);
         entityManager.render(renderer, shader);
         renderer.render(shader);
         shader.stop();

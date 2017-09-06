@@ -80,6 +80,10 @@ public class CameraManager extends Engine{
 
     }
 
+    public boolean isTransitioning(){
+        return this.isTransitioning;
+    }
+
     public void transition(Camera target, int frames){
         if(isTransitioning){
             return;
