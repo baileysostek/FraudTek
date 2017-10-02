@@ -67,8 +67,9 @@ public class StringUtils {
                 }
                 p2.close();
             }catch(Exception e2){
-//                e2.printStackTrace();
+                e2.printStackTrace();
             }
+            e.printStackTrace();
         }
     }
     

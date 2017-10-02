@@ -35,7 +35,7 @@ public class ComponentFPSController extends Component{
     private Attribute<Float> jumpVelocity = new Attribute<Float>("jumpVelocity", 0.15f);
     private Attribute<Boolean> onGround = new Attribute<Boolean>("onGround", true);
     
-    private Attribute<JavaController> controller = new Attribute<JavaController>("controller:", null);
+    private Attribute<JavaController> controller = new Attribute<JavaController>("controller", null);
     
     public ComponentFPSController(Entity e) {
         super(EnumComponentType.FPS_CONTROLLER, e);

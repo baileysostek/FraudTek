@@ -6,10 +6,15 @@
 package graphics;
 
 import Base.engine.Game;
+import Base.util.DistanceCalculator;
 import input.Keyboard;
 import entity.Entity;
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
+
+import lighting.Light;
 import math.Maths;
 import models.RawModel;
 import org.joml.Matrix4f;
@@ -82,6 +87,15 @@ public class Renderer {
             //per entity
             for(Entity entity : e) {
                 if(entity.hasAttribute("render")){
+                    //Lighting calculations
+                    Light[] sortedLights = Game.lightingEngine.getLights();
+                    Arrays.sort(sortedLights, new Comparator<Light>(){
+                        @Override
+                        public int compare(Light light1, Light light2){
+                            return (int)(DistanceCalculator.distance(entity.getPosition(), light1.getPosition())- DistanceCalculator.distance(entity.getPosition(), light2.getPosition()));
+                        }
+                    });
+                    shader.loadLights(sortedLights);
                     //material stuff
                     if (entity.hasMaterial()) {
                         Material material = entity.getMaterial();
@@ -143,7 +157,15 @@ public class Renderer {
             GL20.glEnableVertexAttribArray(2);
             GL20.glEnableVertexAttribArray(3);
             GL20.glEnableVertexAttribArray(4);
-            //per entity
+            //Lighting calculations
+            Light[] sortedLights = Game.lightingEngine.getLights();
+            Arrays.sort(sortedLights, new Comparator<Light>(){
+                @Override
+                public int compare(Light light1, Light light2){
+                    return (int)(DistanceCalculator.distance(pos, light1.getPosition())- DistanceCalculator.distance(pos, light2.getPosition()));
+                }
+            });
+            shader.loadLights(sortedLights);
             //bind textures from the material
             if(material.getTextureID()>0){
                 GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -180,6 +202,65 @@ public class Renderer {
             GL20.glDisableVertexAttribArray(3);
             GL20.glDisableVertexAttribArray(4);
             GL30.glBindVertexArray(0);
+    }
+
+    public void render(RawModel model, String sprite, Vector3f pos, Vector3f rot, float scale, StaticShader shader){
+        //bind model
+        GL30.glBindVertexArray(model.getVaoID());
+        GL20.glEnableVertexAttribArray(0);
+        GL20.glEnableVertexAttribArray(1);
+        //Normal, Tangent, Bitangent
+        GL20.glEnableVertexAttribArray(2);
+        GL20.glEnableVertexAttribArray(3);
+        GL20.glEnableVertexAttribArray(4);
+        //Lighting calculations
+        Light[] sortedLights = Game.lightingEngine.getLights();
+        Arrays.sort(sortedLights, new Comparator<Light>(){
+            @Override
+            public int compare(Light light1, Light light2){
+                return (int)(DistanceCalculator.distance(pos, light1.getPosition())- DistanceCalculator.distance(pos, light2.getPosition()));
+            }
+        });
+        shader.loadLights(sortedLights);
+        //bind textures from the material
+        if(Game.spriteBinder.loadSprite(sprite).getID()>0){
+            GL13.glActiveTexture(GL13.GL_TEXTURE0);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, Game.spriteBinder.loadSprite(sprite).getID());
+            shader.loadTexture(0);
+        }
+
+        Material material = Game.materialManager.getMaterial("white");
+
+        if(material.getNormalID()>0){
+            GL13.glActiveTexture(GL13.GL_TEXTURE0 + 2);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getNormalID());
+            shader.loadNormal(2);
+        }
+        if(material.getSpecularID()>0){
+            GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getSpecularID());
+            shader.loadSpecular(4);
+        }
+        if(material.getRougnessID()>0){
+            GL13.glActiveTexture(GL13.GL_TEXTURE0 + 6);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.getRougnessID());
+            shader.loadRoughness(6);
+        }
+
+        //Load transform
+        Matrix4f transformationMatrix = Maths.createTransformationMatrix(pos, rot.x, rot.y, rot.z, scale);
+        shader.loadTransformationMatrix(transformationMatrix);
+
+        //actual render
+        GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+
+        //unbind model
+        GL20.glDisableVertexAttribArray(0);
+        GL20.glDisableVertexAttribArray(1);
+        GL20.glDisableVertexAttribArray(2);
+        GL20.glDisableVertexAttribArray(3);
+        GL20.glDisableVertexAttribArray(4);
+        GL30.glBindVertexArray(0);
     }
     
     private void createProjectionMatrix(){

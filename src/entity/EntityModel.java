@@ -5,8 +5,6 @@
  */
 package entity;
 
-import Base.util.Callback;
-import entity.Entity;
 import entity.component.ComponentCollision;
 import entity.component.ComponentMesh;
 import entity.component.ComponentRender;
@@ -26,12 +24,7 @@ public class EntityModel extends Entity {
         ComponentMesh mesh = new ComponentMesh(this, modelID);
         super.addComponent(mesh);
         super.addComponent(new ComponentCollision(this, mesh));
-        super.addComponent(new ComponentRender(this));
-    }
-
-    @Override
-    public void update() {
-//        super.rotate(0.1f, 0.1f, 0.1f);
+        super.addComponent(new ComponentRender(this, null));
     }
 
     @Override

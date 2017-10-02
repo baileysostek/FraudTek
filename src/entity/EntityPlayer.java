@@ -28,16 +28,11 @@ public class EntityPlayer extends Entity{
         super.addComponent(new ComponentController(this, 0));
         ComponentMesh mesh = new ComponentMesh(this, ModelLoader.generateCube(0.66f, 1, 0.66f));
         super.addComponent(new ComponentCollision(this, mesh));
-        super.addComponent(new ComponentRender(this));
+        super.addComponent(new ComponentRender(this, null));
         super.addComponent(new ComponentFPSController(this));
-        super.addComponent(new ComponentLight(this, new Vector3f(1, 1, 1)));
+        super.addComponent(new ComponentLight(this, new Vector3f(0, 0, 1)));
 
         model = Game.modelManager.getModel(ModelLoader.generateQuad(0.66f, 1));
-    }
-
-    @Override
-    public void update() {
-
     }
 
     @Override

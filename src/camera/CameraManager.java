@@ -58,11 +58,15 @@ public class CameraManager extends Engine{
                 }else{
                     //Transition has ended, so turn of transition flag
                     this.isTransitioning = false;
-                    this.camera = lastCam;
                 }
             }
             camera.tick();
         }
+    }
+
+    public void lastCam(int time){
+        transition(lastCam, time);
+        lastCam.setPosition(Game.player.getPosition());
     }
 
     @Override
@@ -94,7 +98,7 @@ public class CameraManager extends Engine{
         this.targetTicks = frames;
         this.currentTicks = 0;
         this.lastCam = this.camera;
-        this.camera = new DynamicCamera();
+        this.camera = new DynamicCamera(initial_pos, initial_rot);
         isTransitioning = true;
     }
     

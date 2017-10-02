@@ -10,20 +10,26 @@ package entity.component;
  * @author Bailey
  */
 public enum EnumComponentType {
-    MOVEMENT(),
-    GRAVITY(),
-    COLLIDER(),
-    FPS_CONTROLLER(),
-    NODE(),
-    LIGHT(),
-    CONTROLLER(),
-    ANIMATION(),
-    RENDER(),
-    MESH(),
+    MOVEMENT(Component.class),
+    GRAVITY(ComponentGravity.class),
+    COLLIDER(ComponentCollision.class),
+    FPS_CONTROLLER(ComponentFPSController.class),
+    NODE(Component.class),
+    LIGHT(ComponentLight.class),
+    CONTROLLER(ComponentController.class),
+    ANIMATION(Component.class),
+    RENDER(ComponentRender.class),
+    MESH(ComponentMesh.class),
+    SCRIPT(ComponentScript.class),
+    INTERACT(ComponentInteract.class),
     ;
-    
-    public void generate(EnumComponentType component){
-        
+
+    protected Class refrence;
+    EnumComponentType(Class refrence){
+        this.refrence = refrence;
+    }
+    public Class getRefrence(){
+        return this.refrence;
     }
     
 }

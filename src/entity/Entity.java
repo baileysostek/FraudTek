@@ -8,9 +8,11 @@ package entity;
 import Base.engine.Game;
 import Base.util.DistanceCalculator;
 import Base.util.DynamicCollection;
+import ScriptingEngine.Script;
 import com.google.gson.JsonObject;
 import entity.component.Component;
 import entity.component.EnumComponentType;
+import entity.component.Function;
 import org.joml.Vector3f;
 import graphics.Renderer;
 import graphics.Sprite;
@@ -25,7 +27,7 @@ import textures.Material;
  *
  * @author Bailey
  */
-public abstract class Entity {
+public class Entity{
 
     private Vector3f position;
     private Vector3f velocity = new Vector3f(0,0,0);;
@@ -108,8 +110,7 @@ public abstract class Entity {
             
             this.setPosition(p);
         }
-        
-        update();
+
         
         //reset acceleration
         this.acceleration.x = 0;
@@ -124,9 +125,12 @@ public abstract class Entity {
     public void setOffsetToLinked(Vector3f offset){
         this.offset = offset;
     }
-    
-    public abstract void update();
-    public abstract void render(Renderer r, StaticShader shader);
+
+    public void render(Renderer r, StaticShader shader){
+        for(Component c : components.getCollection(Component.class)){
+            c.render(r, shader);
+        }
+    };
     
     public void onAdded(){
         return;
@@ -222,7 +226,11 @@ public abstract class Entity {
         }
         return false;
     }
-    
+
+    public Attribute[] getAttributes(){
+        return this.attributes.getCollection(Attribute.class);
+    }
+
     public Attribute getAttribute(String id){
         for(Attribute a: this.attributes.getCollection(Attribute.class)){
             if(a.getID().equals(id)){
@@ -230,6 +238,18 @@ public abstract class Entity {
             }
         }
         return null;
+    }
+
+    public void setScript(Script script){
+        int index = 0;
+        for(Component c : components.getCollection(Component.class)){
+            for(Function f : c.getFunctions()){
+                index ++;
+                f.setScript(script);
+                System.out.println("Function Pointer on Set."+f);
+            }
+        }
+        System.out.println("entity "+this+" has "+index+" function(s).");
     }
     
     public void addAttribute(Attribute attribute){
@@ -266,7 +286,11 @@ public abstract class Entity {
         }
         return null;
     }
-    
+
+    public Component[] getComponents(){
+        return this.components.getCollection(Component.class);
+    }
+
     public void addAcceleration(float x, float y, float z){
         this.acceleration.x += x;
         this.acceleration.y += y;

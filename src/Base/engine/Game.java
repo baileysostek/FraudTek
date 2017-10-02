@@ -7,14 +7,13 @@ package Base.engine;
 
 import Base.Controller.ControllerManager;
 import camera.DynamicCamera;
-import entity.EntityModel;
+import entity.*;
 import Base.util.Debouncer;
 import Base.util.DynamicCollection;
 import Base.util.Engine;
 import Base.util.IncludeFolder;
 import Base.util.StringUtils;
 import ScriptingEngine.ScriptingEngine;
-import entity.EntityPlayer;
 import entity.component.ComponentCollision;
 import entity.component.ComponentGravity;
 import entity.component.ComponentMesh;
@@ -27,8 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import entity.Entity;
-import entity.EntityManager;
+
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
@@ -89,7 +87,7 @@ public class Game {
     
     private static Debouncer mouseClick = new Debouncer(false);
     
-    private static ScriptingEngine scriptingEngine;
+    public static ScriptingEngine scriptingEngine;
     
     //Engines
     private static DynamicCollection<Engine> engines = new DynamicCollection<Engine>() {
@@ -235,16 +233,34 @@ public class Game {
         engines.add(controllerManager);
 
         engines.synch();
+
         scriptingEngine = new ScriptingEngine();
         //Register for scripting
         for(Engine e : engines.getCollection(Engine.class)){
-            e.registerForScripting(scriptingEngine.getEngine());
+//            e.registerForScripting(scriptingEngine.getEngine());
         }
 //        scriptingEngine.add(gson.fromJson(launchOptions.get("mainScript"), String.class));
           
 
         player = new EntityPlayer(new Vector3f(0,1.5f,0));
         entityManager.addEntity(player);
+
+
+//        entityManager.addEntity(new EntityItem("item_torch", new Vector3f(0, 3, 0)));
+
+//       for(int i = 0; i < 16; i++){
+//           for(int j = 0; j < 16; j++){
+//               for(int k = 0; k < 16; k++){
+//                   entityManager.addEntity("chest", new Vector3f(i, j, k));
+//               }
+//           }
+//       }
+
+        entityManager.addEntity("chest", new Vector3f(-2f, 0.5f, 0));
+
+        entityManager.addEntity("chest", new Vector3f(2f, 0.5f, 0));
+
+        entityManager.addEntity("door", new Vector3f(-0.5f, 0.5f, 0.5f));
 
 //        EntityModel e = new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(0, 2f, 0), 0, 0, 0, 1);
 //        e.addComponent(new ComponentGravity(e));
@@ -264,14 +280,14 @@ public class Game {
 //        lightingEngine.addLight(new Light(new Vector3f(-1, 0, -1), new Vector3f(1, 0, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
 //        lightingEngine.addLight(new Light(new Vector3f(1, 0, -1), new Vector3f(0, 1, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
 //        lightingEngine.addLight(new Light(new Vector3f(0, 0, 1), new Vector3f(0, 0, 1), new Vector3f(0.1f, 0.1f, 0.1f)));
-//        lightingEngine.addLight(new Light(new Vector3f(0, 0, 0), new Vector3f(1, 1, 1)));
+        lightingEngine.addLight(new Light(new Vector3f(0, 0, 0), new Vector3f(1, 1, 1)));
 
         worldManager = new World("save");
 
-        cameraManager.transition(new DynamicCamera(new Vector3f(-4, 5, -12), new Vector3f(90, 90, 0)), 300);
+//        cameraManager.transition(new DynamicCamera(new Vector3f(-4, 5, -12), new Vector3f(90, 90, 0)), 300);
 
         uiRenderer = new GuiRenderer(loader);
-        textures.add(new Gui(spriteBinder.loadSprite("edaxerum").textureID, new Vector2f(0.0f, 0.0f), new Vector2f(1f, 1f)));
+//        textures.add(new Gui(spriteBinder.loadSprite("edaxerum").textureID, new Vector2f(0.0f, 0.0f), new Vector2f(1f, 1f)));
 
     }
     
@@ -296,6 +312,8 @@ public class Game {
     private static void tick(){
         engines.synch();
         mouse.tick();
+
+        worldManager.tick();
 
         scriptingEngine.tick();
         
@@ -325,7 +343,6 @@ public class Game {
     private static void render(){
         renderer.prepare();
         shader.start();
-        lightingEngine.loadLights(shader);
         shader.loadViewMatrix(cameraManager.getCam());
         worldManager.render(renderer, shader);
         entityManager.render(renderer, shader);
@@ -339,6 +356,7 @@ public class Game {
         for(Engine e : engines.getCollection(Engine.class)){
             e.onShutdown();
         }
+        worldManager.save("test");
     }
     
     private static void cleanUp(){

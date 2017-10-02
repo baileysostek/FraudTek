@@ -6,13 +6,13 @@
 package entity.component;
 
 import Base.engine.Game;
-import Base.util.Callback;
 import Base.util.DistanceCalculator;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import entity.Attribute;
 import entity.Entity;
 import graphics.Renderer;
 import math.Maths;
-import models.RawModel;
 import org.joml.Intersectionf;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -25,19 +25,32 @@ import shaders.StaticShader;
 public class ComponentCollision extends Component{
 
     private ComponentMesh mesh;
-    private Attribute<Callback> callbackAttribute = new Attribute<>("callback", null);
+    private Function function = new Function("onCollide");
     private Attribute<Boolean> onGround = new Attribute<Boolean>("onGround", false);
+
+    //This is a vector buffer, holding the normal of the list triangle hit with the call to rayHitsMesh();
+    private Vector3f buffer_tangent = new Vector3f();
+    private Vector3f buffer_bitangent = new Vector3f();
+    private Vector3f buffer_normal = new Vector3f();
 
     public ComponentCollision(Entity e, ComponentMesh mesh) {
         super(EnumComponentType.COLLIDER, e);
         this.onGround = super.addAttribute(onGround);
-        this.callbackAttribute = super.addAttribute(callbackAttribute);
-        this.callbackAttribute.setIndex(this.callbackAttribute.getIndex()+1);
         this.mesh = mesh;
+        super.addFunction(function);
     }
 
-    public void setCallback(Callback callback){
-        this.callbackAttribute.setData(callback);
+    public ComponentCollision(Entity e, JsonObject data) {
+        super(EnumComponentType.COLLIDER, e);
+        this.onGround = super.addAttribute(onGround);
+        super.addFunction(function);
+        Gson gson = new Gson();
+        //Set the mesh from the data
+        if(data.has("link")){
+            if(e.hasAttribute(gson.fromJson(data.get("link"), String.class))){
+                this.mesh = (ComponentMesh) e.getAttribute(gson.fromJson(data.get("link"), String.class)).getData();
+            }
+        }
     }
     
     @Override
@@ -147,6 +160,9 @@ public class ComponentCollision extends Component{
 
     public boolean rayHitsMesh(Vector3f ray, Vector3f origin, Vector3f pos){
         float[] positions = Game.modelManager.getModel(mesh.getModelID()).getPositions();
+        float[] tangents = Game.modelManager.getModel(mesh.getModelID()).getTangents();
+        float[] bitangnets = Game.modelManager.getModel(mesh.getModelID()).getBitangents();
+        float[] normals = Game.modelManager.getModel(mesh.getModelID()).getNormals();
         int[] indicies = Game.modelManager.getModel(mesh.getModelID()).getIndicies();
 
         Matrix4f projections = Maths.createTransformationMatrix(new Vector3f(0,0,0), e.getRotX(), e.getRotY(), e.getRotZ(), e.getScale());
@@ -168,6 +184,10 @@ public class ComponentCollision extends Component{
                 p1.add(translation);
                 p2.add(translation);
                 p3.add(translation);
+
+                buffer_tangent   = new Vector3f((tangents[(i * 3) + 0]), (tangents[(i * 3) + 1]), (tangents[(i * 3) + 2]));
+                buffer_bitangent = new Vector3f((bitangnets[(i * 3) + 0]), (bitangnets[(i * 3) + 1]), (bitangnets[(i * 3) + 2]));
+                buffer_normal    = new Vector3f((normals[(i * 3) + 0]), (normals[(i * 3) + 1]), (normals[(i * 3) + 2]));
 
                 if(Intersectionf.intersectLineSegmentTriangle(origin, new Vector3f(origin).add(ray), p1, p2, p3, 0.000001f, pos)){
                     return true;
@@ -229,6 +249,24 @@ public class ComponentCollision extends Component{
     public float getDepth(){
         Vector3f[] size = this.getAABB();
         return size[1].z - size[0].z;
+    }
+
+    public Vector3f getBufferTangent(){
+        return this.buffer_tangent;
+    }
+
+    public Vector3f getBufferBitangent(){
+        return this.buffer_bitangent;
+    }
+
+    public Vector3f getBufferNormal(){
+        return this.buffer_normal;
+    }
+
+    public void runCollisionCallback(){
+        if(function.getScript()!=null) {
+            function.run();
+        }
     }
     
 }

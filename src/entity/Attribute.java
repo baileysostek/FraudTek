@@ -18,6 +18,8 @@ public class Attribute <var>{
     private String index = "";
     private Object dataType;
 
+    private boolean isPrivate = false;
+
     public Attribute(String preface, var inData){
         dataType = inData;
         this.id = preface;
@@ -28,7 +30,11 @@ public class Attribute <var>{
     }
     
     public void setData(var i){
-        this.dataType = i;
+        if(((var)dataType) instanceof Float){
+            this.dataType = Float.parseFloat(i+"");
+        }else {
+            this.dataType = i;
+        }
     }
     
     public String getID(){
@@ -46,7 +52,15 @@ public class Attribute <var>{
             return Integer.parseInt(index);
         }
     }
-    
+
+    public void setPrivate(boolean isPrivate){
+        this.isPrivate = isPrivate;
+    }
+
+    public boolean isPrivate(){
+        return this.isPrivate;
+    }
+
     public boolean setDataFromJson(JsonObject data){
         Gson gson = new Gson();
         if(data.has(this.id+index)){

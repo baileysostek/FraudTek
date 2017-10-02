@@ -7,6 +7,7 @@ package entity.component;
 
 import Base.engine.Game;
 import Base.util.DistanceCalculator;
+import com.google.gson.JsonObject;
 import entity.Attribute;
 import entity.Entity;
 import graphics.Renderer;
@@ -32,6 +33,12 @@ public class ComponentGravity extends Component{
         onGround = super.addAttribute(onGround);
     }
 
+    public ComponentGravity(Entity e, JsonObject object) {
+        super(EnumComponentType.GRAVITY, e);
+        gravity = super.addAttribute(gravity);
+        onGround = super.addAttribute(onGround);
+    }
+
     @Override
     public void tick() {
         //Check if gravity would put player into floor, if would, test n times for new vector
@@ -48,6 +55,9 @@ public class ComponentGravity extends Component{
                         e.setAcceleration(0, 0, 0);
                         e.setPosition(hitPoint.add(0, collider.getHeight() / 2, 0));
                         onGround.setData(true);
+                        //Send collision Events to both Objects
+                        collider.runCollisionCallback();
+                        entity.runCollisionCallback();
                         break loop;
                     }
                 }

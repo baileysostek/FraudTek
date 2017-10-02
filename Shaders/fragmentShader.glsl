@@ -51,5 +51,5 @@ void main(void){
         discard;
     }
 
-    out_Color = (vec4(totalDiffuse, 1.0) * textureColor);
+    out_Color = (vec4(totalDiffuse, 1.0) * textureColor) ;
 }

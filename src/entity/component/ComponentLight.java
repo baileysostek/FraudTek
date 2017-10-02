@@ -20,11 +20,14 @@ import shaders.StaticShader;
 public class ComponentLight extends Component{
 
     private Light light;
-    private Attribute<Vector3f> lightColor;
+    private Attribute<Vector3f> lightColor = new Attribute<Vector3f>("lightColor", new Vector3f(1, 1, 1));
     
     public ComponentLight(Entity e, Vector3f color) {
         super(EnumComponentType.LIGHT, e);
-        light = new Light(e.getPosition(), color, new Vector3f(0.1f, 0.1f, 0.1f));
+        lightColor.setData(color);
+        lightColor = super.addAttribute(lightColor);
+        this.lightColor.setIndex(this.lightColor.getIndex()+1);
+        light = new Light(e.getPosition(), lightColor.getData(), new Vector3f(0.1f, 0.1f, 0.1f));
     }
     
     @Override
@@ -39,6 +42,7 @@ public class ComponentLight extends Component{
 
     @Override
     public void tick() {
+        light.setColor(lightColor.getData());
         light.setPosition(e.getPosition());
     }
 

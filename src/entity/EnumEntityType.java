@@ -12,7 +12,7 @@ package entity;
 public enum EnumEntityType {
     MODEL,
     PLAYER,
-    LIGHT,
-    TABLE,
+    CUSTOM,
+    ITEM,
     ;
 }

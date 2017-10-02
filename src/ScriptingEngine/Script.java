@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 /**
@@ -18,22 +19,34 @@ import javax.script.ScriptException;
  * @author Bailey
  */
 public class Script {
+
     private String filePath;
+    private final ScriptEngineManager manager = new ScriptEngineManager();
+    private final ScriptEngine engine = manager.getEngineByName("JavaScript");
+    private final Invocable inv = (Invocable) engine;
     
-    public Script(ScriptEngine e, String filePath) throws ScriptException, IOException{
+    public Script(String filePath) throws ScriptException, IOException{
         this.filePath = filePath;
-        e.eval(Files.newBufferedReader(Paths.get(filePath.replaceFirst("/", "")), StandardCharsets.UTF_8));
+        engine.eval(Files.newBufferedReader(Paths.get(filePath.replaceFirst("/", "")), StandardCharsets.UTF_8));
     }
     
     public String getFilePath(){
         return this.filePath;
     }
     
-    public void init(Invocable  inv) throws ScriptException, NoSuchMethodException{
-        inv.invokeFunction("init");
+    public void init(Object... pars) throws ScriptException, NoSuchMethodException{
+        inv.invokeFunction("init", pars);
     }
     
-    public void tick(Invocable  inv) throws ScriptException, NoSuchMethodException{
+    public void tick() throws ScriptException, NoSuchMethodException{
         inv.invokeFunction("tick");
+    }
+
+    public void run(String method, Object... args) throws ScriptException, NoSuchMethodException{
+        inv.invokeFunction(method, args);
+    }
+
+    public void put(String name, Object object){
+        engine.put(name, object);
     }
 }

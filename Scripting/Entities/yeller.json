@@ -1,0 +1,29 @@
+{
+  "type":"Yeller",
+  "positionOffset":{
+    "x":0,
+    "y":0,
+    "z":0
+  },
+  "rotation":{
+    "x":0,
+    "y":0,
+    "z":0
+  },
+  "scale":1.0,
+  "Components": {
+    "ComponentTexture":{
+      "texture":"white"
+    },
+    "ComponentMesh":{
+      "model":"file_cabinet_metal.obj",
+      "x":1,
+      "y":1,
+      "z":1
+    },
+    "ComponentRender":{},
+    "ComponentScript": {
+      "filename": "Entities/yeller.js"
+    }
+  }
+}

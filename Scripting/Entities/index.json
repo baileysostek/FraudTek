@@ -1,0 +1,21 @@
+{
+  "entities":[
+    {
+      "name":"chest",
+      "file":"chest.json"
+    },
+    {
+      "name":"door",
+      "file":"door.json"
+    },
+    {
+      "name":"yeller",
+      "file":"yeller.json"
+    },
+    {
+      "name":"monster",
+      "child":["skeleton", "zombie"],
+      "file":"monster.json"
+    }
+  ]
+}

@@ -15,7 +15,7 @@ import shaders.StaticShader;
  * @author Bailey
  */
 public abstract class Engine {
-    
+
     private final String engineName;
     private boolean initialized = false;
     
@@ -43,7 +43,7 @@ public abstract class Engine {
     public String getName(){
         return this.engineName;
     }
-    
+
     public abstract void init();
     public abstract void tick();
     public abstract void render(Renderer renderer, StaticShader shader);

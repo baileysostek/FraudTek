@@ -1,0 +1,35 @@
+{
+  "type":"Chest",
+  "positionOffset":{
+    "x":0,
+    "y":10,
+    "z":0
+  },
+  "rotation":{
+    "x":0,
+    "y":0,
+    "z":0
+  },
+  "scale":0.3,
+  "Components": {
+    "ComponentMesh": {
+      "link": "mesh1",
+      "model":"chest",
+      "x":1,
+      "y":1,
+      "z":1
+    },
+    "ComponentCollision": {
+      "link":"mesh1"
+    },
+    "ComponentRender": {},
+    "ComponentInteract": {},
+    "ComponentGravity": {},
+    "ComponentController": {
+      "controllerIndex": 0
+    },
+    "ComponentScript": {
+      "filename": "Entities/chest.js"
+    }
+  }
+}

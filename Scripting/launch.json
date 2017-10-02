@@ -1,7 +1,7 @@
 {
   "width":1920,
   "height":1080,
-  "fullscreen":true
+  "fullscreen":false
 ,
   "name":"Game",
   "mainScript":"main.js",

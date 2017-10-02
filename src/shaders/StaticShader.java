@@ -10,8 +10,6 @@ import lighting.Light;
 import math.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import Base.engine.Game;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL33;
 
 /**

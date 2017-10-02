@@ -1,6 +1,10 @@
 package world;
 
 import Base.engine.Game;
+import entity.EntityModel;
+import entity.component.ComponentCollision;
+import entity.component.ComponentMesh;
+import entity.component.EnumComponentType;
 import graphics.Renderer;
 import models.ModelLoader;
 import org.joml.Vector3f;
@@ -16,10 +20,15 @@ public class Tile {
     private Vector3f position;
     private Vector3f rotation = new Vector3f(90, 0, 0);
     private String model;
+    private EntityModel entity;
+    private ComponentMesh mesh;
 
     public Tile(float x, float y, float z){
         position = new Vector3f(x, y, z);
         model = ModelLoader.generateQuad(1, 1);
+        entity = new EntityModel(model, materialID, position, rotation.x, rotation.y, rotation.z, 1);
+        mesh = new ComponentMesh(entity, model);
+        entity.addComponent(mesh);
     }
 
     public void render(Renderer r, StaticShader s){
@@ -34,6 +43,11 @@ public class Tile {
             this.model = ModelLoader.generateQuad45(1, 1);
             this.rotation.x = 0;
         }
+        mesh.setMesh(this.model);
+    }
+
+    public ComponentCollision getCollision(){
+        return (ComponentCollision)entity.getComponent(EnumComponentType.COLLIDER);
     }
 
     public void setMaterial(String material){
@@ -50,6 +64,17 @@ public class Tile {
 
     public String getModel(){
         return model;
+    }
+
+    public String getTextualModel(){
+        String model = getModel();
+        if(model.contains("quad")){
+            return "flat";
+        }
+        if(model.contains("cube")){
+            return "cube";
+        }
+        return getModel();
     }
 
     public String getMaterialID(){

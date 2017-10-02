@@ -11,6 +11,8 @@ import entity.Entity;
 import graphics.Renderer;
 import shaders.StaticShader;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author Bailey
@@ -18,6 +20,8 @@ import shaders.StaticShader;
 public abstract class Component {
     private final EnumComponentType type;
     protected Entity e;
+
+    private LinkedList<Function> functions = new LinkedList<Function>();
 
     public Component(EnumComponentType type, Entity e){
         this.type = type;
@@ -42,7 +46,15 @@ public abstract class Component {
     public String getSaveData(){
         return"";
     }
-    
+
+    public void addFunction(Function f) {
+        this.functions.add(f);
+    }
+
+    public LinkedList<Function> getFunctions(){
+        return this.functions;
+    }
+
     public Attribute addAttribute(Attribute a){
         if(!e.hasAttribute(a.getID())){
                 e.addAttribute(a);
