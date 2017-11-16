@@ -22,5 +22,13 @@
   {
     "name":"res",
     "description":"Resources Folder."
+  },
+  {
+    "name":"Web",
+    "description":"Auto-Generated Web portfolio for your game."
+  },
+  {
+    "name":"Documentation",
+    "description":"All Auto-Generated Documentation goes here, compatible with JavaDocs formatting."
   }
 ]

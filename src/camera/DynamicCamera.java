@@ -36,24 +36,6 @@ public class DynamicCamera extends Camera{
     @Override
     public void tick() {
 
-        DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
-        DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
-
-        glfwGetCursorPos(Game.getWindowPointer(), x, y);
-        x.rewind();
-        y.rewind();
-
-        double newX = x.get();
-        double newY = y.get();
-
-        Game.MouseX = (float) newX;
-        Game.MouseY = (float) newY;
-
-        double deltaX = newX - (WIDTH/2);
-        double deltaY = newY - (HEIGHT/2);
-
-        glfwSetCursorPos(Game.getWindowPointer(), (WIDTH/2), (HEIGHT/2));
-        super.setRotation(super.getRotation().add(new Vector3f((float)(deltaX/30),(float)(deltaY/30),0)));
     }
 
     @Override

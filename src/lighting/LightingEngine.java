@@ -9,6 +9,7 @@ import Base.util.DynamicCollection;
 import Base.util.Engine;
 import javax.script.ScriptEngine;
 import graphics.Renderer;
+import org.joml.Vector3f;
 import shaders.StaticShader;
 
 /**
@@ -60,6 +61,10 @@ public class LightingEngine extends Engine{
     
     public void addLight(Light light){
         this.lights.add(light);
+    }
+
+    public void addLight(Vector3f pos, Vector3f color){
+        this.lights.add(new Light(pos, color, new Vector3f(0.1f, 0.1f, 0.1f)));
     }
     
     public void removeLight(Light light){

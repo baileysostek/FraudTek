@@ -22,11 +22,11 @@ public class IncludeFolder {
     
     public void generateFolder(){
         File directoryName = new File(Game.Path+this.name);
-        System.err.println("Looking for Image Folder:"+Game.Path+this.name);
+        System.out.println("Looking for "+ this.name + " Folder:"+Game.Path+this.name);
         
         if(!directoryName.exists()){
             boolean result = false;
-                System.err.println("Cannot find Image folder... Creating:"+Game.Path+this.name);
+                System.err.println("Cannot find "+ this.name + " folder... Creating:"+Game.Path+this.name);
             try{
                 directoryName.mkdir();
                 result = true;
@@ -36,7 +36,7 @@ public class IncludeFolder {
                 System.err.println("File Permissions do not allow the directory:"+Game.Path+this.name+" to be created."); 
             }        
             if(result) {    
-                System.err.println("Success...");  
+                System.out.println("Success...");
             }
         }
     }

@@ -12,13 +12,17 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.glfw.GLFW;
+
+import java.nio.DoubleBuffer;
 
 /**
  *
  * @author Bailey
  */
 public class MousePicker {
-    
+
     private Vector3f currentRay;
     
     private Matrix4f projectionMatrix;
@@ -37,8 +41,21 @@ public class MousePicker {
         this.viewMatrix = Maths.createViewMatrix(Game.cameraManager.getCam());
         currentRay = calculateMouseRay();
     }
-    
-    private Vector3f calculateMouseRay() {
+
+    public boolean isPressed(EnumMouseButton index){
+        return Mouse.pressed(index);
+    }
+
+    //Return Vector3f in ScreenSpace
+    public Vector3f getMouseCoords(){
+        DoubleBuffer posX = BufferUtils.createDoubleBuffer(1);
+        DoubleBuffer posY = BufferUtils.createDoubleBuffer(1);
+        GLFW.glfwGetCursorPos(Game.getWindowPointer(), posX, posY);
+
+        return new Vector3f(((float) posX.get(0) - Game.WIDTH/2) * 2, (Game.HEIGHT - (float) posY.get(0) - Game.HEIGHT/2) * 2, 0);
+    }
+
+    public Vector3f calculateMouseRay() {
         float mouseX = Game.MouseX;
         float mouseY = Game.MouseY;
         Vector2f normalizedCoords = getNormalisedDeviceCoordinates(mouseX, mouseY);
@@ -72,4 +89,6 @@ public class MousePicker {
         float y = (2.0f * mouseY) / Game.HEIGHT - 1f;
         return new Vector2f(x, y);
     }
+
+
 }

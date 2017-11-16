@@ -11,7 +11,6 @@ var controller;
 
 var Debouncer = Java.type("Base.util.Debouncer");
 var EnumButtonType = Java.type("Base.Controller.EnumButtonType");
-var Vector3f = Java.type("org.joml.Vector3f");
 
 var open;
 

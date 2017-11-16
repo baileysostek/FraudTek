@@ -24,7 +24,6 @@
     },
     "ComponentRender": {},
     "ComponentInteract": {},
-    "ComponentGravity": {},
     "ComponentController": {
       "controllerIndex": 0
     },

@@ -49,4 +49,12 @@ public class Script {
     public void put(String name, Object object){
         engine.put(name, object);
     }
+
+    public void addClass(Class c){
+        try {
+            engine.eval("var "+c.getSimpleName()+" = Java.type(\""+c.getCanonicalName()+"\");");
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+    }
 }

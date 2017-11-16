@@ -1,5 +1,6 @@
 package graphics.gui;
 
+import Base.engine.Game;
 import org.joml.Vector2f;
 
 /**
@@ -26,5 +27,21 @@ public class Gui {
 
     public Vector2f getScale() {
         return scale;
+    }
+
+    //in GL space -1 to 1 xy
+    public void setPosition(Vector2f pos){
+        this.position = pos;
+    }
+
+    //Input Vector in GL Space
+    public boolean pointInside(Vector2f pt){
+        Vector2f newpt = new Vector2f(pt);
+        if(newpt.x() >= (position.x() - scale.x()) && (newpt.x()) <= (position.x() + scale.x())){
+            if(newpt.y() <= (position.y() + scale.y()) && newpt.y() >= (position.y() - scale.y())){
+                return true;
+            }
+        }
+        return false;
     }
 }

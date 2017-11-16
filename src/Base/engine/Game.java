@@ -6,7 +6,6 @@
 package Base.engine;
 
 import Base.Controller.ControllerManager;
-import camera.DynamicCamera;
 import entity.*;
 import Base.util.Debouncer;
 import Base.util.DynamicCollection;
@@ -14,12 +13,11 @@ import Base.util.Engine;
 import Base.util.IncludeFolder;
 import Base.util.StringUtils;
 import ScriptingEngine.ScriptingEngine;
-import entity.component.ComponentCollision;
-import entity.component.ComponentGravity;
-import entity.component.ComponentMesh;
 import graphics.gui.GuiRenderer;
 import graphics.gui.Gui;
+import models.ModelLoader;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 import steam.SteamManager;
 import camera.CameraManager;
 import com.google.gson.Gson;
@@ -32,8 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import lighting.LightingEngine;
-import models.ModelLoader;
-import org.joml.Vector3f;
+
 import static org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -49,7 +46,6 @@ import input.MousePicker;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import lighting.Light;
 import models.ModelManager;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
@@ -116,15 +112,11 @@ public class Game {
 
     //tmp
     static GuiRenderer uiRenderer;
-    static LinkedList<Gui> textures = new LinkedList<Gui>();
+    static LinkedList<Gui> guis = new LinkedList<Gui>();
 
     public static Entity player;
-    
-    private static Entity rotate;
-
     public static World worldManager;
-            
-    
+
     public static void main(String[] args){
         init();
         run();
@@ -197,7 +189,7 @@ public class Game {
         GL.createCapabilities();
         
         //init folder
-        System.out.println("SourceFolders");
+        System.out.println("Looking for Source Folders...");
         JsonArray jsonArray = gson.fromJson(StringUtils.unify(StringUtils.loadData(Game.Path+"/Scripting/managedFolders.json")), JsonArray.class);
         for(JsonElement element : jsonArray){
             JsonObject object = element.getAsJsonObject();
@@ -208,7 +200,7 @@ public class Game {
                 srcFolders.put(name, src);
             }
         }
-        
+        System.out.println("Done");
         loader = new Loader();
         shader = new StaticShader(Path);
         renderer = new Renderer(shader);
@@ -231,63 +223,26 @@ public class Game {
         engines.add(materialManager);
         controllerManager = new ControllerManager();
         engines.add(controllerManager);
-
+        uiRenderer = new GuiRenderer(loader);
         engines.synch();
 
-        scriptingEngine = new ScriptingEngine();
+        scriptingEngine = new ScriptingEngine(engines);
         //Register for scripting
-        for(Engine e : engines.getCollection(Engine.class)){
-//            e.registerForScripting(scriptingEngine.getEngine());
-        }
-//        scriptingEngine.add(gson.fromJson(launchOptions.get("mainScript"), String.class));
-          
 
-        player = new EntityPlayer(new Vector3f(0,1.5f,0));
-        entityManager.addEntity(player);
+        scriptingEngine.addRefrence("guis", guis);
+        scriptingEngine.addRefrence("Mouse", mouse);
+        scriptingEngine.addRefrence("Camera", cameraManager.getCam());
 
+        //Last addition
+        scriptingEngine.addRefrence("ScriptingEngine", scriptingEngine);
 
-//        entityManager.addEntity(new EntityItem("item_torch", new Vector3f(0, 3, 0)));
-
-//       for(int i = 0; i < 16; i++){
-//           for(int j = 0; j < 16; j++){
-//               for(int k = 0; k < 16; k++){
-//                   entityManager.addEntity("chest", new Vector3f(i, j, k));
-//               }
-//           }
-//       }
-
-        entityManager.addEntity("chest", new Vector3f(-2f, 0.5f, 0));
-
-        entityManager.addEntity("chest", new Vector3f(2f, 0.5f, 0));
-
-        entityManager.addEntity("door", new Vector3f(-0.5f, 0.5f, 0.5f));
-
-//        EntityModel e = new EntityModel(ModelLoader.generateCube(1, 1, 1), "white", new Vector3f(0, 2f, 0), 0, 0, 0, 1);
-//        e.addComponent(new ComponentGravity(e));
-//        ComponentMesh mesh = new ComponentMesh(e, ModelLoader.generateCube(1, 1, 1));
-//        e.addComponent(new ComponentCollision(e, mesh));
-//        e.addAcceleration(0.1f, 0.3f, 0);
-//
-//        entityManager.addEntity(e);
+        scriptingEngine.add(gson.fromJson(launchOptions.get("mainScript"), String.class));
 
 
-//
-//        rotate = new EntityModel(ModelLoader.loadModel("dragon"), "white", new Vector3f(0, 1, 0), 0, 0, 0, 0.14f);
-//        entityManager.addEntity(rotate);
-        
-
-
-//        lightingEngine.addLight(new Light(new Vector3f(-1, 0, -1), new Vector3f(1, 0, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
-//        lightingEngine.addLight(new Light(new Vector3f(1, 0, -1), new Vector3f(0, 1, 0), new Vector3f(0.1f, 0.1f, 0.1f)));
-//        lightingEngine.addLight(new Light(new Vector3f(0, 0, 1), new Vector3f(0, 0, 1), new Vector3f(0.1f, 0.1f, 0.1f)));
-        lightingEngine.addLight(new Light(new Vector3f(0, 0, 0), new Vector3f(1, 1, 1)));
-
-        worldManager = new World("save");
-
+        entityManager.addEntity(new EntityModel(ModelLoader.loadModel("dragon"), "white", new Vector3f(0, 1, 0), 0, 0, 0, 1f));
 //        cameraManager.transition(new DynamicCamera(new Vector3f(-4, 5, -12), new Vector3f(90, 90, 0)), 300);
 
-        uiRenderer = new GuiRenderer(loader);
-//        textures.add(new Gui(spriteBinder.loadSprite("edaxerum").textureID, new Vector2f(0.0f, 0.0f), new Vector2f(1f, 1f)));
+//        guis.add(new Gui(spriteBinder.loadSprite("DRENCHED").textureID, new Vector2f(0.0f, 0.0f), new Vector2f(1f, 1f)));
 
     }
     
@@ -313,7 +268,7 @@ public class Game {
         engines.synch();
         mouse.tick();
 
-        worldManager.tick();
+//        worldManager.tick();
 
         scriptingEngine.tick();
         
@@ -344,11 +299,11 @@ public class Game {
         renderer.prepare();
         shader.start();
         shader.loadViewMatrix(cameraManager.getCam());
-        worldManager.render(renderer, shader);
+//        worldManager.render(renderer, shader);
         entityManager.render(renderer, shader);
         renderer.render(shader);
         shader.stop();
-        uiRenderer.render(textures);
+        uiRenderer.render(guis);
         glfwSwapBuffers(window);
     }
     
@@ -356,7 +311,7 @@ public class Game {
         for(Engine e : engines.getCollection(Engine.class)){
             e.onShutdown();
         }
-        worldManager.save("test");
+//        worldManager.save("test");
     }
     
     private static void cleanUp(){

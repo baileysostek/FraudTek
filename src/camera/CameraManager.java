@@ -37,7 +37,7 @@ public class CameraManager extends Engine{
     
     public CameraManager() {
         super("CameraManager");
-        this.camera = new FPSCamera();
+        this.camera = new DynamicCamera();
     }
 
     @Override
