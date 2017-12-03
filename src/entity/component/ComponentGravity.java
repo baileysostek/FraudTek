@@ -41,7 +41,7 @@ public class ComponentGravity extends Component{
 
     @Override
     public void tick() {
-        //Check if gravity would put player into floor, if would, test n times for new vector
+        //Check if gravity would put player into floor, if would, editor n times for new vector
         loop:{
             ComponentCollision collider = ((ComponentCollision) e.getComponent(EnumComponentType.COLLIDER));
             for(ComponentCollision entity: Game.worldManager.getLocalizedCollisions(e.getPosition())){

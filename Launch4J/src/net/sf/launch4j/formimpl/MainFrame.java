@@ -309,7 +309,7 @@ public class MainFrame extends JFrame {
 				Builder b = new Builder(log);
 				_outfile = b.build();
 				setRunEnabled(ConfigPersister.getInstance().getConfig().isGuiApplication()
-						// TODO fix console app test
+						// TODO fix console app editor
 						&& (Util.WINDOWS_OS || !ConfigPersister.getInstance()
 												.getConfig().isDontWrapJar()));
 			} catch (InvariantViolationException ex) {

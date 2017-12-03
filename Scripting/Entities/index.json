@@ -13,6 +13,10 @@
       "file":"yeller.json"
     },
     {
+      "name":"lamp",
+      "file":"lamp.json"
+    },
+    {
       "name":"monster",
       "child":["skeleton", "zombie"],
       "file":"monster.json"

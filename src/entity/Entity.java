@@ -169,6 +169,12 @@ public class Entity{
         this.position = position;
     }
 
+    public void setRotation(Vector3f rotation){
+        this.rotX = -rotation.y();
+        this.rotY = -rotation.x();
+        this.rotZ = -rotation.z();
+    }
+
     public float getRotX() {
         return rotX;
     }

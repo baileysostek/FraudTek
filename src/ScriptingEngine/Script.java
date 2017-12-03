@@ -42,6 +42,10 @@ public class Script {
         inv.invokeFunction("tick");
     }
 
+    public void render() throws ScriptException, NoSuchMethodException{
+        inv.invokeFunction("render");
+    }
+
     public void run(String method, Object... args) throws ScriptException, NoSuchMethodException{
         inv.invokeFunction(method, args);
     }

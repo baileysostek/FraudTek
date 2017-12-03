@@ -6,6 +6,7 @@
 package Base.engine;
 
 import Base.Controller.ControllerManager;
+import editor.IntellisenseEngine;
 import entity.*;
 import Base.util.Debouncer;
 import Base.util.DynamicCollection;
@@ -13,11 +14,13 @@ import Base.util.Engine;
 import Base.util.IncludeFolder;
 import Base.util.StringUtils;
 import ScriptingEngine.ScriptingEngine;
+import graphics.*;
 import graphics.gui.GuiRenderer;
 import graphics.gui.Gui;
 import models.ModelLoader;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.opengl.EXTFramebufferObject;
 import steam.SteamManager;
 import camera.CameraManager;
 import com.google.gson.Gson;
@@ -35,10 +38,6 @@ import static org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import graphics.Loader;
-import graphics.Renderer;
-import graphics.SpriteBinder;
-import graphics.TextureManager;
 import input.EnumMouseButton;
 import input.Keyboard;
 import input.Mouse;
@@ -184,7 +183,7 @@ public class Game {
         glfwSetKeyCallback(window, keyCallback = new Keyboard());
         
         GLFW.glfwSetMouseButtonCallback(window, mouseButtonCallback = new Mouse());
-        
+
         //Initialize OpenGL
         GL.createCapabilities();
         
@@ -203,14 +202,14 @@ public class Game {
         System.out.println("Done");
         loader = new Loader();
         shader = new StaticShader(Path);
+        textureManager = new TextureManager();
+        engines.add(textureManager);
         renderer = new Renderer(shader);
         lightingEngine = new LightingEngine();
         engines.add(lightingEngine);
         cameraManager = new CameraManager();
         engines.add(cameraManager);
         mouse = new MousePicker(renderer.getProjectionMatrix());
-        textureManager = new TextureManager();
-        engines.add(textureManager);
         entityManager = new EntityManager();
         engines.add(entityManager);
         steamManager = new SteamManager();
@@ -232,6 +231,8 @@ public class Game {
         scriptingEngine.addRefrence("guis", guis);
         scriptingEngine.addRefrence("Mouse", mouse);
         scriptingEngine.addRefrence("Camera", cameraManager.getCam());
+        scriptingEngine.addRefrence("Renderer", renderer);
+        scriptingEngine.addRefrence("GameShader", shader);
 
         //Last addition
         scriptingEngine.addRefrence("ScriptingEngine", scriptingEngine);
@@ -239,13 +240,15 @@ public class Game {
         scriptingEngine.add(gson.fromJson(launchOptions.get("mainScript"), String.class));
 
 
-        entityManager.addEntity(new EntityModel(ModelLoader.loadModel("dragon"), "white", new Vector3f(0, 1, 0), 0, 0, 0, 1f));
+//        entityManager.addEntity(new EntityModel(ModelLoader.loadModel("dragon"), "white", new Vector3f(0, 1, 0), 0, 0, 0, 1f));
 //        cameraManager.transition(new DynamicCamera(new Vector3f(-4, 5, -12), new Vector3f(90, 90, 0)), 300);
 
 //        guis.add(new Gui(spriteBinder.loadSprite("DRENCHED").textureID, new Vector2f(0.0f, 0.0f), new Vector2f(1f, 1f)));
 
+
+        IntellisenseEngine.cacheFile(EntityManager.class);
+
     }
-    
     private static void run(){
         //Game Loop
         long last = System.currentTimeMillis();
@@ -261,7 +264,7 @@ public class Game {
             if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GL_TRUE){
                 glfwSetWindowShouldClose(window, true);
             }
-        }	
+        }
     }
     
     private static void tick(){
@@ -299,9 +302,12 @@ public class Game {
         renderer.prepare();
         shader.start();
         shader.loadViewMatrix(cameraManager.getCam());
-//        worldManager.render(renderer, shader);
+
+        scriptingEngine.render();
+
         entityManager.render(renderer, shader);
         renderer.render(shader);
+
         shader.stop();
         uiRenderer.render(guis);
         glfwSwapBuffers(window);
@@ -311,10 +317,11 @@ public class Game {
         for(Engine e : engines.getCollection(Engine.class)){
             e.onShutdown();
         }
-//        worldManager.save("test");
+//        worldManager.save("editor");
     }
     
     private static void cleanUp(){
+        renderer.getFBO().cleanUp();
         shader.cleanUp();
         uiRenderer.cleanUp();
         loader.cleanUp();

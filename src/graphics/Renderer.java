@@ -19,13 +19,10 @@ import math.Maths;
 import models.RawModel;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.*;
+
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL33;
+
 import shaders.StaticShader;
 import textures.Material;
 
@@ -40,6 +37,8 @@ public class Renderer {
     private static final float  FAR_PLANE = 1000;
     
     private Matrix4f projectionMatrix;
+
+    private FBO fbo;
     
     public Renderer(StaticShader shader){
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -48,14 +47,16 @@ public class Renderer {
         shader.start();
         shader.loadProjectionMatrix(projectionMatrix);
         shader.stop();
-        boolean FBOEnabled = GL.getCapabilities().GL_EXT_framebuffer_object;
+
+        fbo = new FBO();
+
     }
     
     public void prepare(){
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
         GL11.glClear(GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);    
-                
+
         if (Keyboard.isKeyDown(KeyEvent.VK_R)) {
             GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -67,7 +68,7 @@ public class Renderer {
         }
 
     }
-    
+
     public void render(StaticShader shader){
         int index = 0;
         for(LinkedList<Entity> e : Game.entityManager.getSortedEntities().values()){
@@ -278,7 +279,11 @@ public class Renderer {
         );
 
     }
-    
+
+    public FBO getFBO(){
+        return fbo;
+    }
+
     public Matrix4f getProjectionMatrix(){
         return this.projectionMatrix;
     }

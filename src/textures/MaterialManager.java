@@ -71,7 +71,11 @@ public class MaterialManager extends Engine{
     }
     
     public Material getMaterial(String id){
-        return this.loadedMaterials.get(id);
+        if(loadedMaterials.containsKey(id)) {
+            return this.loadedMaterials.get(id);
+        }else{
+            return new Material("custom", Integer.parseInt(id), Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID());
+        }
     }
     
 }

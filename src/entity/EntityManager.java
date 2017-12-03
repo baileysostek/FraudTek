@@ -106,8 +106,8 @@ public class EntityManager extends Engine{
         
     }
 
-    public void addEntity(String e, Vector3f position){
-        if(entity_index.containsKey(e)){
+    public Entity generateEntity(String e, Vector3f position){
+        if(entity_index.containsKey(e)) {
             Gson gson = new Gson();
             Entity add = new Entity(EnumEntityType.CUSTOM, "white", position, 0, 0, 0, 1);
 
@@ -118,29 +118,38 @@ public class EntityManager extends Engine{
 
             JsonObject data = entity_index.get(e);
 
-            if(data.has("positionOffset")){
+            if (data.has("positionOffset")) {
                 add.setPosition(new Vector3f(
                         add.getPosition().x() + gson.fromJson(data.get("positionOffset").getAsJsonObject().get("x"), Float.class),
                         add.getPosition().y() + gson.fromJson(data.get("positionOffset").getAsJsonObject().get("y"), Float.class),
                         add.getPosition().z() + gson.fromJson(data.get("positionOffset").getAsJsonObject().get("z"), Float.class)));
             }
 
-            if(data.has("rotation")){
+            if (data.has("rotation")) {
                 add.setRotX(gson.fromJson(data.get("rotation").getAsJsonObject().get("x"), Float.class));
                 add.setRotY(gson.fromJson(data.get("rotation").getAsJsonObject().get("y"), Float.class));
                 add.setRotZ(gson.fromJson(data.get("rotation").getAsJsonObject().get("z"), Float.class));
             }
-            if(data.has("scale")){
+            if (data.has("scale")) {
                 add.setScale(gson.fromJson(data.get("scale"), Float.class));
             }
-            if(data.has("Components")) {
+            if (data.has("Components")) {
                 Set<Map.Entry<String, JsonElement>> components = data.get("Components").getAsJsonObject().entrySet();
-                for (Map.Entry<String, JsonElement> component: components) {
+                for (Map.Entry<String, JsonElement> component : components) {
                     Component component_to_add = ComponentUtils.buildComponent(add, component.getKey(), data.get("Components").getAsJsonObject().get(component.getKey()).getAsJsonObject());
                     add.addComponent(component_to_add);
                 }
             }
-            this.entities.add(add);
+            return add;
+        }
+        System.err.println("Entity:"+e+" is not a defined entity type. Check index.json for a list of entities.");
+        return null;
+    }
+
+    public void addEntity(String e, Vector3f position){
+        if(entity_index.containsKey(e)){
+            Entity entity = generateEntity(e, position);
+            this.entities.add(entity);
         }
     }
     
@@ -150,6 +159,10 @@ public class EntityManager extends Engine{
     
     public void remove(Entity e){
         this.entities.remove(e);
+    }
+
+    public void synch(){
+        entities.synch();
     }
     
     public int getLength(){

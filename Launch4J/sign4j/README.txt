@@ -9,7 +9,7 @@ This manipulation must be done atomically with the signing process, because doin
 
 Any signing tool can be used, as long as the name of the output file can be recognized among its parameters. This is currently done by either using an -out option if present, or taking the last filename with an exe suffix after all supplied options.
 
-If the involved tool is able to remove a previous signature before adding the new one (as is normally the case) the initial test can be performed on the target executable itself, avoiding the creation of a temporary file. You can use the option --onthespot to signal that to sign4j.
+If the involved tool is able to remove a previous signature before adding the new one (as is normally the case) the initial editor can be performed on the target executable itself, avoiding the creation of a temporary file. You can use the option --onthespot to signal that to sign4j.
 
 The option --strict can be used to suppress the use of double quotes around parameters that strictly don't need them. The option --verbose shows diagnostics about intermediary steps of the process.
 

@@ -9,11 +9,15 @@ import Base.engine.Game;
 import Base.util.Debouncer;
 import Base.util.DynamicCollection;
 import Base.util.Engine;
+import camera.DynamicCamera;
 import camera.FPSCamera;
+import entity.EntityModel;
 import graphics.gui.Gui;
 import input.EnumMouseButton;
+import models.ModelLoader;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import shaders.Shader;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -63,8 +67,12 @@ public class ScriptingEngine {
         addClass(Gui.class);
         addClass(Debouncer.class);
         addClass(EnumMouseButton.class);
+        addClass(EntityModel.class);
+        addClass(ModelLoader.class);
+        addClass(Shader.class);
             //Camera classes
             addClass(FPSCamera.class);
+            addClass(DynamicCamera.class);
     }
 
     public void put(String name, Object object){
@@ -83,7 +91,19 @@ public class ScriptingEngine {
             }
         }
     }
-    
+
+    public void render(){
+        for(Script script : scripts.getCollection(Script.class)){
+            try {
+                script.render();
+            } catch (ScriptException | NoSuchMethodException ex) {
+                ex.printStackTrace();
+                remove(script);
+            }
+        }
+    }
+
+
     public void remove(Script object){
         scripts.remove(object);
         scripts.synch();
