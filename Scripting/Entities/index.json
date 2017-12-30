@@ -20,6 +20,10 @@
       "name":"monster",
       "child":["skeleton", "zombie"],
       "file":"monster.json"
+    },
+    {
+      "name":"room",
+      "file":"room.json"
     }
   ]
 }

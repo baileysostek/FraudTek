@@ -25,7 +25,7 @@ public class EntityPlayer extends Entity{
     public EntityPlayer(Vector3f position) {
         super(EnumEntityType.PLAYER, "front", position, 0, 0, 0, 1);
         super.addComponent(new ComponentGravity(this));
-        super.addComponent(new ComponentController(this, 0));
+//        super.addComponent(new ComponentController(this, 0));
         ComponentMesh mesh = new ComponentMesh(this, ModelLoader.generateCube(0.66f, 1, 0.66f));
         super.addComponent(new ComponentCollision(this, mesh));
         super.addComponent(new ComponentRender(this, null));

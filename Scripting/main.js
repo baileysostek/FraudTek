@@ -32,9 +32,9 @@ function init(){
 
     quad = new EntityModel(ModelLoader.generateQuad(x * 1, x * (9/16)), Renderer.getFBO().getTextureID(), new Vector3f(1.5, 1, -0.5), 0, 0, 0, 1);
 
-    LightingEngine.addLight(new Vector3f(12, 2, 4), new Vector3f(1, 1, 1));
+    LightingEngine.addLight(new Vector3f(12, 5, 4), new Vector3f(1, 1, 1));
 
-    dragon = new EntityModel(ModelLoader.loadModel("dragon"), "white", new Vector3f(12, 0, 4), 0, 0, 0, 0.25);
+    dragon = new EntityModel(ModelLoader.loadModel("robot"), "cobblestone", new Vector3f(12, 3, 4), 0, 0, 0, 1);
     EntityManager.addEntity(dragon);
     EntityManager.addEntity(quad);
 
@@ -44,7 +44,7 @@ function init(){
 
 //Tick function is called (Game.FPS) times per second.
 function tick(){
-    dragon.rotate(0, 1, 0);
+    dragon.rotate(0, 0.1, 0);
     var mouse3D = Mouse.getMouseCoords();
     if(mouse_button.risingAction(Mouse.isPressed(EnumMouseButton.LEFT))){
         if(play.pointInside(new Vector2f(mouse3D.x()/WIDTH, mouse3D.y()/HEIGHT))){

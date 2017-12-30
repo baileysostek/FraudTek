@@ -37,7 +37,7 @@ public class Shader{
         System.out.println("Is Valid:"+isValid+" Data:"+data);
 
         if(isValid) {
-            program = new JsonShader(shaderName);
+            program = new JsonShader(shaderName, data);
         }else{
             //Auto Generate the file
             if(!vertex.exists()){
@@ -169,7 +169,7 @@ public class Shader{
         lines.addLast("");
         lines.addLast("}");
 
-        //Synch the lines to out
+        //Sync the lines to out
         int index = 0;
         for(String s : lines){
             out = StringUtils.addLine(out, lines.get(index));

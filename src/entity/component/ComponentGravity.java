@@ -44,21 +44,24 @@ public class ComponentGravity extends Component{
         //Check if gravity would put player into floor, if would, editor n times for new vector
         loop:{
             ComponentCollision collider = ((ComponentCollision) e.getComponent(EnumComponentType.COLLIDER));
-            for(ComponentCollision entity: Game.worldManager.getLocalizedCollisions(e.getPosition())){
-                if (!e.equals(entity)) {
-                    //Get velocity this entity is traveling at
-                    //TODO as well as other entity
-                    Vector3f dir = Maths.newInstance(e.getVelocity()).add(new Vector3f(0, gravity.getData(), 0)).add(e.getAcceleration()).mul(new Vector3f(0,1,0));
-                    Vector3f hitPoint = new Vector3f(0, 0, 0);
-                    if (entity.rayHitsMesh(dir, Maths.newInstance(e.getPosition()).add(0, -collider.getHeight() / 2, 0), hitPoint)) {
-                        e.setVelocity(0, 0, 0);
-                        e.setAcceleration(0, 0, 0);
-                        e.setPosition(hitPoint.add(0, collider.getHeight() / 2, 0));
-                        onGround.setData(true);
-                        //Send collision Events to both Objects
-                        collider.runCollisionCallback();
-                        entity.runCollisionCallback();
-                        break loop;
+            for(Entity entity: Game.entityManager.getEntities()){
+                if(entity.hasComponent(EnumComponentType.COLLIDER)) {
+                    ComponentCollision entityCollision = (ComponentCollision)entity.getComponent(EnumComponentType.COLLIDER);
+                    if (!e.equals(entityCollision)) {
+                        //Get velocity this entity is traveling at
+                        //TODO as well as other entity
+                        Vector3f dir = Maths.newInstance(e.getVelocity()).add(new Vector3f(0, gravity.getData(), 0)).add(e.getAcceleration()).mul(new Vector3f(0, 1, 0));
+                        Vector3f hitPoint = new Vector3f(0, 0, 0);
+                        if (entityCollision.rayHitsMesh(dir, Maths.newInstance(e.getPosition()).add(0, -collider.getHeight() / 2, 0), hitPoint)) {
+                            e.setVelocity(0, 0, 0);
+                            e.setAcceleration(0, 0, 0);
+                            e.setPosition(hitPoint.add(0, collider.getHeight() / 2, 0));
+                            onGround.setData(true);
+                            //Send collision Events to both Objects
+                            collider.runCollisionCallback();
+                            entityCollision.runCollisionCallback();
+                            break loop;
+                        }
                     }
                 }
             }

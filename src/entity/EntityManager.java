@@ -106,7 +106,7 @@ public class EntityManager extends Engine{
         
     }
 
-    public Entity generateEntity(String e, Vector3f position){
+    public Entity generate(Vector3f position, String e){
         if(entity_index.containsKey(e)) {
             Gson gson = new Gson();
             Entity add = new Entity(EnumEntityType.CUSTOM, "white", position, 0, 0, 0, 1);
@@ -148,7 +148,7 @@ public class EntityManager extends Engine{
 
     public void addEntity(String e, Vector3f position){
         if(entity_index.containsKey(e)){
-            Entity entity = generateEntity(e, position);
+            Entity entity = generate(position, e);
             this.entities.add(entity);
         }
     }

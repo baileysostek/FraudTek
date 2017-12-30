@@ -350,4 +350,16 @@ public class Entity{
         //then add all attributes
         return new String[]{};
     }
+
+    public float x(){
+        return this.position.x();
+    }
+
+    public float y(){
+        return this.position.y();
+    }
+
+    public float z(){
+        return this.position.z();
+    }
 }

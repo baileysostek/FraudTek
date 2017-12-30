@@ -27,7 +27,14 @@ public class FPSCamera extends Camera{
     private double prevX = 0;
     private double prevY = 0;
     private Debouncer mouseRight = new Debouncer(false);
-    
+
+    public FPSCamera(){}
+
+    public FPSCamera(Vector3f position, Vector3f rotation){
+        this.setPosition(position);
+        this.setRotation(rotation);
+    }
+
     @Override
     public void tick() {
 //        if(!mouseRight.risingAction(Mouse.pressed(EnumMouseButton.RIGHT))){

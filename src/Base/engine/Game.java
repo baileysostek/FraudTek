@@ -21,6 +21,7 @@ import models.ModelLoader;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.EXTFramebufferObject;
+import org.lwjgl.opengl.GL11;
 import steam.SteamManager;
 import camera.CameraManager;
 import com.google.gson.Gson;
@@ -234,6 +235,7 @@ public class Game {
         scriptingEngine.addRefrence("Renderer", renderer);
         scriptingEngine.addRefrence("GameShader", shader);
 
+
         //Last addition
         scriptingEngine.addRefrence("ScriptingEngine", scriptingEngine);
 
@@ -246,8 +248,8 @@ public class Game {
 //        guis.add(new Gui(spriteBinder.loadSprite("DRENCHED").textureID, new Vector2f(0.0f, 0.0f), new Vector2f(1f, 1f)));
 
 
-        IntellisenseEngine.cacheFile(EntityManager.class);
-
+//        IntellisenseEngine.cacheFile(EntityManager.class);
+        renderer.getFBO().unbindFrameBuffer();
     }
     private static void run(){
         //Game Loop

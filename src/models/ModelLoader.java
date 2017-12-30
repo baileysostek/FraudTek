@@ -7,6 +7,7 @@ package models;
 
 import Base.engine.Game;
 import Base.util.OBJLoader;
+import org.joml.Vector3f;
 
 /**
  *
@@ -71,6 +72,36 @@ public class ModelLoader {
         });
 
         Game.modelManager.addModel(id, model);        
+        return id;
+    }
+
+    public static String generateLine(Vector3f end){
+        RawModel model;
+
+        String id = "line"+""+end.hashCode();
+
+        if(Game.modelManager.hasModel(id)){
+            return id;
+        }
+
+        model = Game.loader.loadToVAO(
+                new float[]{
+                        0, 0, 0,
+                        end.x(), end.y(), end.z()
+
+                }, new float[]{
+                        0,0,
+                        1,1
+                },
+                new float[]{
+                        0,0,-1,
+                        0,0,-1
+                },
+                new int[]{
+                        0,1
+                });
+
+        Game.modelManager.addModel(id, model);
         return id;
     }
 

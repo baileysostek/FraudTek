@@ -29,7 +29,7 @@ public class EntityModel extends Entity {
 
     @Override
     public void render(Renderer r, StaticShader shader) {
-        
+
     }
     
 }

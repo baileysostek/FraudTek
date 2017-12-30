@@ -12,6 +12,8 @@ import Base.util.Engine;
 import camera.DynamicCamera;
 import camera.FPSCamera;
 import entity.EntityModel;
+import entity.EntityPlayer;
+import entity.EntitySprite;
 import graphics.gui.Gui;
 import input.EnumMouseButton;
 import models.ModelLoader;
@@ -68,6 +70,8 @@ public class ScriptingEngine {
         addClass(Debouncer.class);
         addClass(EnumMouseButton.class);
         addClass(EntityModel.class);
+        addClass(EntityPlayer.class);
+        addClass(EntitySprite.class);
         addClass(ModelLoader.class);
         addClass(Shader.class);
             //Camera classes
@@ -97,6 +101,7 @@ public class ScriptingEngine {
             try {
                 script.render();
             } catch (ScriptException | NoSuchMethodException ex) {
+                System.err.println("Script:"+script.getFilePath()+" has no member 'render()'");
                 ex.printStackTrace();
                 remove(script);
             }
@@ -111,6 +116,7 @@ public class ScriptingEngine {
     
     public void add(Script object){
         if(object!=null){
+            object.put("self", object);
             scripts.add(object);
             scripts.synch();
         }
@@ -120,6 +126,7 @@ public class ScriptingEngine {
         Script script;
         try {
             script = new Script(Game.Path+"/Scripting/"+name);
+            script.put("self", script);
             scripts.add(script);
             if(pars.length > 0) {
                 System.out.println(script + " " + pars[0]);

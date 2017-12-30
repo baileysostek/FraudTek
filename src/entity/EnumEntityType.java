@@ -14,5 +14,6 @@ public enum EnumEntityType {
     PLAYER,
     CUSTOM,
     ITEM,
+    SPRITE,
     ;
 }

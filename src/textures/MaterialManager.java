@@ -29,7 +29,7 @@ public class MaterialManager extends Engine{
 //
 //        this.addMaterial(new Material("brick", Game.spriteBinder.loadSprite("brick").getID(), Game.spriteBinder.loadSprite("brick_normal").getID(), Game.spriteBinder.loadSprite("brick_specular").getID(), Game.spriteBinder.loadSprite("brick_reflect").getID()));
         this.addMaterial(new Material("cobblestone", Game.spriteBinder.loadSprite("cobblestone").getID(), Game.spriteBinder.loadSprite("cobblestone_normal").getID(), Game.spriteBinder.loadSprite("cobblestone_specular").getID(), Game.spriteBinder.loadSprite("cobblestone_reflect").getID()));
-        this.addMaterial(new Material("white", Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID()));
+        this.addMaterial(new Material("white", Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white_normal").getID(), Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID()));
 //        this.addMaterial(new Material("tree", Game.spriteBinder.loadSprite("tree").getID(), Game.spriteBinder.loadSprite("tree_normal").getID(), Game.spriteBinder.loadSprite("tree_specular").getID(), Game.spriteBinder.loadSprite("tree_reflect").getID()));
 //        this.addMaterial(new Material("hexStone", Game.spriteBinder.loadSprite("hexStone").getID(), Game.spriteBinder.loadSprite("hexStone_normal").getID(), Game.spriteBinder.loadSprite("hexStone_specular").getID(), Game.spriteBinder.loadSprite("hexStone_reflect").getID()));
 //        this.addMaterial(new Material("stone", Game.spriteBinder.loadSprite("stone").getID(), Game.spriteBinder.loadSprite("stone_normal").getID(), Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID()));
@@ -74,7 +74,7 @@ public class MaterialManager extends Engine{
         if(loadedMaterials.containsKey(id)) {
             return this.loadedMaterials.get(id);
         }else{
-            return new Material("custom", Integer.parseInt(id), Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID());
+            return new Material("custom", Integer.parseInt(id), Game.spriteBinder.loadSprite("white_normal").getID(), Game.spriteBinder.loadSprite("white").getID(), Game.spriteBinder.loadSprite("white").getID());
         }
     }
     

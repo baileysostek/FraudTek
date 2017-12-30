@@ -11,7 +11,7 @@ import shaders.StaticShader;
  */
 public class ComponentRender extends Component{
 
-    Attribute<Boolean> shouldRender = new Attribute<Boolean>("render", true);
+    Attribute<Boolean> shouldRender = new Attribute<Boolean>("shouldRender", true);
 
     public ComponentRender(Entity e, JsonObject object) {
         super(EnumComponentType.RENDER, e);

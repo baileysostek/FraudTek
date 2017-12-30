@@ -102,6 +102,11 @@ public class ComponentScript extends Component{
         lines.addLast("");
         lines.addLast("}");
         lines.addLast("");
+        lines.addLast("//Render function is called (Game.FPS) times per second.");
+        lines.addLast("function render(){");
+        lines.addLast("");
+        lines.addLast("}");
+        lines.addLast("");
         lines.addLast("//Functions");
         for(Component component : e.getComponents()){
             for(Function function : component.getFunctions()){

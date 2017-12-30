@@ -3,8 +3,8 @@
   "height":1080,
   "fullscreen":false
 ,
-  "name":"Game",
-  "mainScript":"main.js",
+  "name":"Murder Train",
+  "mainScript":"YoutubeTest.js",
   "aspectRatios":[
     {
       "width":720,

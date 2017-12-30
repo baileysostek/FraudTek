@@ -41,17 +41,16 @@ public class JsonShader extends ShaderProgram{
     //how reflective the material is
     private int location_roughness;
 
-    public JsonShader(String shaderName){
+    private JsonObject data;
+
+    public JsonShader(String shaderName, JsonObject data){
         super(Game.Path+"/Shaders/"+shaderName+"vertexShader.glsl", Game.Path+"/Shaders/"+shaderName+"fragmentShader.glsl");
+        this.data = data;
     }
 
     @Override
     protected void bindAttributes() {
-        super.bindAttribute(0, "position");
-        super.bindAttribute(1, "textureCoords");
-        super.bindAttribute(2, "normal");
-        super.bindAttribute(3, "tangent");
-        super.bindAttribute(4, "bitangent");
+
     }
 
     @Override
