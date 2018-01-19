@@ -5,7 +5,6 @@
  */
 package entity.component;
 
-import Base.util.DynamicCollection;
 import entity.Attribute;
 import entity.Entity;
 import graphics.Renderer;

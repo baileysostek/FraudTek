@@ -5,19 +5,15 @@
  */
 package graphics;
 
-import Base.engine.Game;
-import Base.util.Engine;
+import base.engine.Game;
+import base.engine.Engine;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
-import java.util.LinkedList;
 import javax.script.ScriptEngine;
 import javax.swing.ImageIcon;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
+
 import shaders.StaticShader;
 
 /**

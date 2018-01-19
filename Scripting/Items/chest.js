@@ -10,8 +10,8 @@ var controllerIndex;
 var controller;
 
 var Camera = Java.type("camera.DynamicCamera");
-var Debouncer = Java.type("Base.util.Debouncer");
-var Game = Java.type("Base.engine.Game");
+var Debouncer = Java.type("base.util.Debouncer");
+var Game = Java.type("base.engine.Game");
 
 var Vector3f = Java.type("org.joml.Vector3f");
 
@@ -35,13 +35,13 @@ function init(reference){
 function onIteract(){
      if(!Game.cameraManager.isTransitioning()) {
          if (!zoomed) {
-             if (interact.risingAction(controller.getData().getButton(Java.type("Base.Controller.EnumButtonType").X) > 0)) {
+             if (interact.risingAction(controller.getData().getButton(Java.type("base.controller.EnumButtonType").X) > 0)) {
                  var transitionCam = new Camera(new Vector3f(entity.getPosition()).add(0, 1, 0), new Vector3f(0, 90, 0));
                  Game.cameraManager.transition(transitionCam, 60);
                  zoomed = true;
              }
          } else {
-             if (interact.risingAction(controller.getData().getButton(Java.type("Base.Controller.EnumButtonType").X) > 0)) {
+             if (interact.risingAction(controller.getData().getButton(Java.type("base.controller.EnumButtonType").X) > 0)) {
                  Game.cameraManager.lastCam(60);
                  zoomed = false;
              }

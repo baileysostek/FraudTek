@@ -2,9 +2,9 @@
 var entity;
 
 //Attributes
-var width = 13;
-var height = 5;
-var deapth = 5;
+var width = 33;
+var height = 3;
+var deapth = 4;
 
 var camera;
 
@@ -53,14 +53,13 @@ function init(reference){
     }
 
     //Outside Wall
-    EntityManager.addEntity(new EntitySprite(new Vector3f(entity.x() + (width/2) - 0.5, entity.y() + 2, entity.z() - 0.5 + deapth), "outsidetrainwall", 0, 0, 0));
+    var sprite = new EntitySprite(new Vector3f(entity.x() + (width/2) - 0.5, entity.y() + (height / 2) - 1, entity.z() - 0.5 + deapth), "outsidetrainwall_2", 0, 0, 0);
+    sprite.setNormal("outsidetrainwall_normal");
+    EntityManager.addEntity(sprite);
 
     //Lighting
-    LightingEngine.addLight(new Vector3f(entity.x() + 2, entity.y() + height, entity.z() + (deapth/2)), new Vector3f(1, 1, 1));
-    LightingEngine.addLight(new Vector3f(entity.x() + (width - 2), entity.y() + height, entity.z() + (deapth/2)), new Vector3f(1, 1, 1));
-
-    LightingEngine.addLight(new Vector3f(entity.x() + 2, entity.y() + height, entity.z() + (deapth)), new Vector3f(1, 1, 1));
-    LightingEngine.addLight(new Vector3f(entity.x() + (width - 2), entity.y() + height, entity.z() + (deapth)), new Vector3f(1, 1, 1));
+    // LightingEngine.addLight(new Vector3f(entity.x() + 2, entity.y() + height, entity.z() + (deapth/2)), new Vector3f(1, 1, 1));
+    // LightingEngine.addLight(new Vector3f(entity.x() + (width - 2), entity.y() + height, entity.z() + (deapth/2)), new Vector3f(1, 1, 1));
 
     //Painting
     EntityManager.addEntity(new EntitySprite(new Vector3f(entity.x(), entity.y() + 2, entity.z() - 0.5 + (1 /16)), "painting", 0, 0, 0));

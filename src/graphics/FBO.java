@@ -1,12 +1,10 @@
 package graphics;
 
-import Base.engine.Game;
+import base.engine.Game;
 import camera.Camera;
 import org.lwjgl.opengl.*;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 
@@ -26,10 +24,10 @@ public class FBO {
         if(GL.getCapabilities().GL_EXT_framebuffer_object){
             id = GL30.glGenFramebuffers();
             GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, id);
+            GL11.glDrawBuffer(GL11.GL_NONE);
 
             createTextureAttachment();
-            createDepthTextureAttachment();
-            createDeapthBufferAttachment();
+            createDepthBufferAttachment();
         }
     }
 
@@ -37,7 +35,7 @@ public class FBO {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, id);
         GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        GL11.glClear(GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glClear(GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
 
     public void unbindFrameBuffer(){
@@ -55,24 +53,19 @@ public class FBO {
         return textureID;
     }
 
-    private int createDepthTextureAttachment(){
+    private int createDepthBufferAttachment(){
         depthTexture = Game.textureManager.genTexture();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, depthTexture);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT32, Game.WIDTH, Game.HEIGHT, 0, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, (ByteBuffer) null);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT16, Game.WIDTH, Game.HEIGHT, 0, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, (ByteBuffer) null);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
         GL32.glFramebufferTexture(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, depthTexture, 0);
 
         return depthTexture;
     }
 
-    private int createDeapthBufferAttachment(){
-        depthBuffer = GL30.glGenRenderbuffers();
-        GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, depthBuffer);
-        GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL11.GL_DEPTH_COMPONENT, Game.WIDTH, Game.HEIGHT);
-        GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, depthBuffer);
-        return depthBuffer;
-    }
 
     public void cleanUp(){
         GL30.glDeleteFramebuffers(id);
@@ -92,7 +85,7 @@ public class FBO {
     }
 
     public int getDepthTexture(){
-        return this.depthBuffer;
+        return this.depthTexture;
     }
 
 

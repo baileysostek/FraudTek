@@ -3,25 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Base.engine;
+package base.engine;
 
-import Base.Controller.ControllerManager;
+import base.controller.ControllerManager;
 import editor.IntellisenseEngine;
 import entity.*;
-import Base.util.Debouncer;
-import Base.util.DynamicCollection;
-import Base.util.Engine;
-import Base.util.IncludeFolder;
-import Base.util.StringUtils;
+import base.util.Debouncer;
+import base.util.DynamicCollection;
+import base.util.IncludeFolder;
+import base.util.StringUtils;
 import ScriptingEngine.ScriptingEngine;
 import graphics.*;
 import graphics.gui.GuiRenderer;
 import graphics.gui.Gui;
-import models.ModelLoader;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.EXTFramebufferObject;
-import org.lwjgl.opengl.GL11;
 import steam.SteamManager;
 import camera.CameraManager;
 import com.google.gson.Gson;
@@ -234,6 +229,7 @@ public class Game {
         scriptingEngine.addRefrence("Camera", cameraManager.getCam());
         scriptingEngine.addRefrence("Renderer", renderer);
         scriptingEngine.addRefrence("GameShader", shader);
+        scriptingEngine.addRefrence("MaterialManager", materialManager);
 
 
         //Last addition
@@ -247,9 +243,13 @@ public class Game {
 
 //        guis.add(new Gui(spriteBinder.loadSprite("DRENCHED").textureID, new Vector2f(0.0f, 0.0f), new Vector2f(1f, 1f)));
 
+//        player = new EntityPlayer(new Vector3f(0, 0, 0));
+//        entityManager.addEntity(player);
 
-//        IntellisenseEngine.cacheFile(EntityManager.class);
         renderer.getFBO().unbindFrameBuffer();
+
+//        IntellisenseEngine.generateHTML();
+
     }
     private static void run(){
         //Game Loop
@@ -302,15 +302,9 @@ public class Game {
     
     private static void render(){
         renderer.prepare();
-        shader.start();
-        shader.loadViewMatrix(cameraManager.getCam());
 
         scriptingEngine.render();
 
-        entityManager.render(renderer, shader);
-        renderer.render(shader);
-
-        shader.stop();
         uiRenderer.render(guis);
         glfwSwapBuffers(window);
     }
@@ -331,6 +325,10 @@ public class Game {
     
     public static long getWindowPointer(){
         return window;
+    }
+
+    public static IncludeFolder getFolder(String name){
+        return srcFolders.get(name);
     }
     
     public static void addDir(String s) throws IOException {

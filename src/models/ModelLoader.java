@@ -5,8 +5,8 @@
  */
 package models;
 
-import Base.engine.Game;
-import Base.util.OBJLoader;
+import base.engine.Game;
+import base.util.OBJLoader;
 import org.joml.Vector3f;
 
 /**

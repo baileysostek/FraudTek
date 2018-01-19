@@ -5,21 +5,29 @@
  */
 package ScriptingEngine;
 
-import Base.engine.Game;
-import Base.util.Debouncer;
-import Base.util.DynamicCollection;
-import Base.util.Engine;
+import base.engine.Game;
+import base.util.Debouncer;
+import base.util.DistanceCalculator;
+import base.util.DynamicCollection;
+import base.engine.Engine;
 import camera.DynamicCamera;
 import camera.FPSCamera;
+import editor.IntellisenseEngine;
 import entity.EntityModel;
 import entity.EntityPlayer;
 import entity.EntitySprite;
 import graphics.gui.Gui;
 import input.EnumMouseButton;
+import math.Maths;
 import models.ModelLoader;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 import shaders.Shader;
+import textures.MaterialManager;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -66,8 +74,10 @@ public class ScriptingEngine {
         addClass(System.class);
         addClass(Vector2f.class);
         addClass(Vector3f.class);
+        addClass(Vector4f.class);
         addClass(Gui.class);
         addClass(Debouncer.class);
+        addClass(DistanceCalculator.class);
         addClass(EnumMouseButton.class);
         addClass(EntityModel.class);
         addClass(EntityPlayer.class);
@@ -77,6 +87,14 @@ public class ScriptingEngine {
             //Camera classes
             addClass(FPSCamera.class);
             addClass(DynamicCamera.class);
+
+            //Utility classes
+            addClass(Maths.class);
+
+            //GL classes
+            addClass(GL11.class);
+            addClass(GL20.class);
+            addClass(GL30.class);
     }
 
     public void put(String name, Object object){
@@ -147,6 +165,7 @@ public class ScriptingEngine {
     public void addClass(Class className){
         System.out.println("Adding class:"+className.getSimpleName()+" class:"+className);
         classes.put(className.getSimpleName(), className);
+        IntellisenseEngine.cacheFile(className);
     }
 
     public void runFunction(Script script, String name, Object... args){
@@ -158,7 +177,11 @@ public class ScriptingEngine {
             e.printStackTrace();
         }
     }
-    
+
+    public HashMap<String, Object> getRefrences(){
+        return this.refrences;
+    }
+
     public Script[] getScripts(){
         return scripts.getCollection(Script.class);
     }

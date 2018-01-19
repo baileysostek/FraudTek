@@ -5,18 +5,17 @@
  */
 package entity.component;
 
-import Base.Controller.EnumButtonType;
-import Base.Controller.JavaController;
-import Base.engine.Game;
+import base.controller.EnumButtonType;
+import base.controller.JavaController;
+import base.engine.Game;
 import camera.Camera;
 import camera.DynamicCamera;
-import camera.FPSCamera;
 import entity.Attribute;
 import entity.Entity;
 import graphics.Renderer;
 import input.Keyboard;
 import java.awt.event.KeyEvent;
-import lighting.Light;
+
 import math.Maths;
 import org.joml.Vector3f;
 import shaders.StaticShader;
@@ -55,7 +54,7 @@ public class ComponentFPSController extends Component{
     @Override
     public void tick() {
         if(controller.getData()!=null){
-            camera.getRotation().set((Maths.inverseVector(new Vector3f(controller.getData().getRightThumbStick())).mul(45, 45, 0)).add(new Vector3f(0, 45, 0)));
+            camera.getRotation().add(Maths.inverseVector(new Vector3f(controller.getData().getRightThumbStick())));
             float travelSpeed = walkSpeed.getData();
             if(controller.getData().getLeftThumbStick().z>0){
                 travelSpeed = runSpeed.getData();

@@ -5,18 +5,11 @@
  */
 package camera;
 
-import Base.engine.Game;
 import graphics.Renderer;
 import org.joml.Vector3f;
-import org.lwjgl.BufferUtils;
 import shaders.StaticShader;
 
-import java.nio.DoubleBuffer;
-
-import static Base.engine.Game.HEIGHT;
-import static Base.engine.Game.WIDTH;
 import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
-import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
 
 /**
  *

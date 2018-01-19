@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Base.Controller;
+package base.controller;
 
-import Base.util.DynamicCollection;
-import Base.util.Engine;
+import base.util.DynamicCollection;
+import base.engine.Engine;
 import graphics.Renderer;
 import javax.script.ScriptEngine;
 import net.java.games.input.Controller;

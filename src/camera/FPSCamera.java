@@ -12,10 +12,10 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
 import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
-import Base.engine.Game;
-import static Base.engine.Game.HEIGHT;
-import static Base.engine.Game.WIDTH;
-import Base.util.Debouncer;
+import base.engine.Game;
+import static base.engine.Game.HEIGHT;
+import static base.engine.Game.WIDTH;
+import base.util.Debouncer;
 import graphics.Renderer;
 import shaders.StaticShader;
 

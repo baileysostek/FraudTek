@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Base.Controller;
+package base.controller;
 
 import net.java.games.input.Controller;
 import org.joml.Vector3f;
@@ -30,7 +30,7 @@ public class JavaController {
         EnumButtonType[] mapping = EnumButtonType.values();
         
         if(controller.getName().toLowerCase().contains("xbox")){
-            System.out.println("Xbox Controller Recognised.");
+            System.out.println("Xbox controller Recognised.");
             mapping = new EnumButtonType[]{
                 EnumButtonType.LEFT_STICK_Y,
                 EnumButtonType.LEFT_STICK_X,

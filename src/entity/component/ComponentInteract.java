@@ -1,7 +1,7 @@
 package entity.component;
 
-import Base.engine.Game;
-import Base.util.DistanceCalculator;
+import base.engine.Game;
+import base.util.DistanceCalculator;
 import com.google.gson.JsonObject;
 import entity.Attribute;
 import entity.Entity;

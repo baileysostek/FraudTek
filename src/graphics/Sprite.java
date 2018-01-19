@@ -5,7 +5,7 @@
  */
 package graphics;
 
-import Base.engine.Game;
+import base.engine.Game;
 import java.awt.Color;
 import java.nio.ByteBuffer;
 import org.lwjgl.BufferUtils;

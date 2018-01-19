@@ -1,6 +1,6 @@
 package entity.component;
 
-import Base.engine.Game;
+import base.engine.Game;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import entity.Attribute;

@@ -1,6 +1,5 @@
 package graphics.gui;
 
-import Base.engine.Game;
 import org.joml.Vector2f;
 
 /**

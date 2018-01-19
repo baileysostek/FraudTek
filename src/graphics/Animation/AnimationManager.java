@@ -1,6 +1,6 @@
 package graphics.Animation;
 
-import Base.util.Engine;
+import base.engine.Engine;
 import graphics.Renderer;
 import shaders.StaticShader;
 

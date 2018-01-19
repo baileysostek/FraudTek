@@ -1,6 +1,6 @@
 package world;
 
-import Base.engine.Game;
+import base.engine.Game;
 import entity.EntityModel;
 import entity.component.ComponentCollision;
 import entity.component.ComponentMesh;
@@ -8,7 +8,6 @@ import entity.component.EnumComponentType;
 import graphics.Renderer;
 import models.ModelLoader;
 import org.joml.Vector3f;
-import org.joml.Vector3i;
 import shaders.StaticShader;
 
 /**
@@ -32,7 +31,7 @@ public class Tile {
     }
 
     public void render(Renderer r, StaticShader s){
-        r.render(Game.modelManager.getModel(model), Game.materialManager.getMaterial(materialID), position,rotation, 1, s);
+
     }
 
     public void setModel(String model){

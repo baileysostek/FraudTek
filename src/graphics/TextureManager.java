@@ -5,8 +5,8 @@
  */
 package graphics;
 
-import Base.util.DynamicCollection;
-import Base.util.Engine;
+import base.util.DynamicCollection;
+import base.engine.Engine;
 import javax.script.ScriptEngine;
 import org.lwjgl.opengl.GL11;
 import shaders.StaticShader;

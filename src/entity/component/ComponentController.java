@@ -5,8 +5,8 @@
  */
 package entity.component;
 
-import Base.Controller.JavaController;
-import Base.engine.Game;
+import base.controller.JavaController;
+import base.engine.Game;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import entity.Attribute;

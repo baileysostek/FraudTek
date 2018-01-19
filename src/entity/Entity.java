@@ -5,20 +5,15 @@
  */
 package entity;
 
-import Base.engine.Game;
-import Base.util.DistanceCalculator;
-import Base.util.DynamicCollection;
+import base.engine.Game;
+import base.util.DynamicCollection;
 import ScriptingEngine.Script;
-import com.google.gson.JsonObject;
 import entity.component.Component;
 import entity.component.EnumComponentType;
 import entity.component.Function;
 import org.joml.Vector3f;
 import graphics.Renderer;
-import graphics.Sprite;
 import math.Maths;
-import models.ModelLoader;
-import org.joml.Intersectionf;
 import org.joml.Matrix4f;
 import shaders.StaticShader;
 import textures.Material;
@@ -45,7 +40,11 @@ public class Entity{
     
     private String materialID = "";
     private int textureID = 0;
-    
+    public int normalID = 0;
+//    private int heightID = 0;
+    private int specularID = 0;
+    private int roughnessID = 0;
+
     protected DynamicCollection<Attribute> attributes = new DynamicCollection<Attribute>() {
         @Override
         public void onAdd(Attribute object) {
@@ -217,6 +216,10 @@ public class Entity{
     }
     
     public Material getMaterial(){
+        if(normalID > 0 || specularID > 0 || roughnessID > 0){
+            return Game.materialManager.getMaterial(this.materialID, normalID, specularID, roughnessID);
+        }else
+
         return Game.materialManager.getMaterial(this.materialID);
     }
 

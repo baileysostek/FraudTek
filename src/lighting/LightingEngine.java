@@ -5,8 +5,8 @@
  */
 package lighting;
 
-import Base.util.DynamicCollection;
-import Base.util.Engine;
+import base.util.DynamicCollection;
+import base.engine.Engine;
 import javax.script.ScriptEngine;
 import graphics.Renderer;
 import org.joml.Vector3f;
@@ -65,6 +65,10 @@ public class LightingEngine extends Engine{
 
     public void addLight(Vector3f pos, Vector3f color){
         this.lights.add(new Light(pos, color, new Vector3f(0.1f, 0.1f, 0.1f)));
+    }
+
+    public void addWorldLight(Vector3f pos, Vector3f color){
+        this.lights.add(new Light(pos, color));
     }
     
     public void removeLight(Light light){

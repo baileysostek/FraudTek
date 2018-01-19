@@ -1,6 +1,6 @@
 package entity.component;
 
-import Base.engine.Game;
+import base.engine.Game;
 import ScriptingEngine.Script;
 
 /**

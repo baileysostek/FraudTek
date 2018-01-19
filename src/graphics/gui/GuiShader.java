@@ -1,6 +1,6 @@
 package graphics.gui;
 
-import Base.engine.Game;
+import base.engine.Game;
 import org.joml.Matrix4f;
 import shaders.ShaderProgram;
 

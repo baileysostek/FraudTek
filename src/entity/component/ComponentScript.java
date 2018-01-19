@@ -1,17 +1,14 @@
 package entity.component;
 
-import Base.engine.Game;
-import Base.util.StringUtils;
+import base.engine.Game;
+import base.util.StringUtils;
 import ScriptingEngine.Script;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import entity.Attribute;
 import entity.Entity;
 import graphics.Renderer;
 import shaders.StaticShader;
 
-import java.nio.file.NoSuchFileException;
 import java.util.LinkedList;
 
 /**

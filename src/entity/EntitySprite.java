@@ -5,17 +5,14 @@
  */
 package entity;
 
-import Base.engine.Game;
+import base.engine.Game;
 import entity.component.ComponentCollision;
 import entity.component.ComponentMesh;
 import entity.component.ComponentRender;
-import entity.component.EnumComponentType;
 import graphics.*;
 import models.ModelLoader;
 import org.joml.Vector3f;
 import shaders.StaticShader;
-import textures.Material;
-import textures.MaterialManager;
 
 /**
  *
@@ -23,6 +20,8 @@ import textures.MaterialManager;
  */
 public class EntitySprite extends Entity {
     Sprite sprite;
+
+    public float width = 0;
 
     public EntitySprite(Vector3f position, String spritePath, float rotx, float roty, float rotz) {
         super(EnumEntityType.SPRITE, "", position, rotx, roty, rotz, 1);
@@ -33,19 +32,23 @@ public class EntitySprite extends Entity {
         //Link the entity material to a dynamic material instance of this newly loaded sprite.
         super.setMaterial(sprite.getID()+"");
 
-        SpriteUtils.flipSpriteVertical(sprite);
-        sprite.synchBuffer();
 
         ComponentMesh mesh = new ComponentMesh(this, ModelLoader.generateQuad(0.0625f * sprite.width, 0.0625f * sprite.height));
 
         super.addComponent(mesh);
         super.addComponent(new ComponentCollision(this, mesh));
         super.addComponent(new ComponentRender(this, null));
+
+        width = 0.0625f * sprite.width;
     }
 
     @Override
     public void render(Renderer r, StaticShader shader) {
 
+    }
+
+    public void setNormal(String path){
+        super.normalID = Game.spriteBinder.loadSprite(path).getID();
     }
 
     public void synchSprite(){

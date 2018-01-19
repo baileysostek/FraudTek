@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Base.util;
+package base.util;
 
-import Base.engine.Game;
+import base.engine.Game;
 import java.io.File;
 
 /**

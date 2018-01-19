@@ -5,14 +5,13 @@
  */
 package entity.component;
 
-import Base.engine.Game;
+import base.engine.Game;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import entity.Attribute;
 import entity.Entity;
 import graphics.Renderer;
 import lighting.Light;
-import models.ModelLoader;
 import org.joml.Vector3f;
 import shaders.StaticShader;
 

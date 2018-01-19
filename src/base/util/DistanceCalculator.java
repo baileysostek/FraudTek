@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Base.util;
+package base.util;
 
 import org.joml.Vector3f;
 

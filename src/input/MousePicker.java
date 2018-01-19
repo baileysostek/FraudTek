@@ -5,8 +5,7 @@
  */
 package input;
 
-import Base.engine.Game;
-import camera.Camera;
+import base.engine.Game;
 import math.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;

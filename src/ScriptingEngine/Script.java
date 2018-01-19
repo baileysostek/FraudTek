@@ -27,6 +27,9 @@ public class Script {
     
     public Script(String filePath) throws ScriptException, IOException{
         this.filePath = filePath;
+        if(!filePath.endsWith(".js")){
+            filePath += ".js";
+        }
         engine.eval(Files.newBufferedReader(Paths.get(filePath.replaceFirst("/", "")), StandardCharsets.UTF_8));
     }
     
@@ -46,8 +49,8 @@ public class Script {
         inv.invokeFunction("render");
     }
 
-    public void run(String method, Object... args) throws ScriptException, NoSuchMethodException{
-        inv.invokeFunction(method, args);
+    public jdk.nashorn.api.scripting.ScriptObjectMirror run(String method, Object... args) throws ScriptException, NoSuchMethodException{
+        return (jdk.nashorn.api.scripting.ScriptObjectMirror)inv.invokeFunction(method, args);
     }
 
     public void put(String name, Object object){

@@ -5,14 +5,12 @@
  */
 package entity;
 
-import Base.engine.Game;
-import Base.util.DynamicCollection;
-import Base.util.Engine;
-import Base.util.IncludeFolder;
-import Base.util.StringUtils;
+import base.engine.Game;
+import base.util.DynamicCollection;
+import base.engine.Engine;
+import base.util.StringUtils;
 import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
-import java.awt.Graphics;
+
 import javax.script.ScriptEngine;
 
 import entity.component.*;
@@ -22,8 +20,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-import lighting.Light;
-import models.ModelLoader;
 import org.joml.Vector3f;
 import shaders.StaticShader;
 

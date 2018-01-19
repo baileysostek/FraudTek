@@ -1,12 +1,9 @@
 package entity;
 
-import Base.engine.Game;
-import Base.util.DistanceCalculator;
+import base.engine.Game;
 import entity.component.*;
 import graphics.Renderer;
 import models.ModelLoader;
-import models.ModelManager;
-import models.RawModel;
 import org.joml.Vector3f;
 import shaders.StaticShader;
 
@@ -54,6 +51,6 @@ public class EntityItem extends Entity{
 
     @Override
     public void render(Renderer r, StaticShader shader) {
-        r.render(Game.modelManager.getModel(quad), sprite.getData(), getPosition(), new Vector3f(getRotX(), getRotY(), getRotZ()), getScale(), shader);
+
     }
 }

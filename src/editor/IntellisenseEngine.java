@@ -1,9 +1,10 @@
 package editor;
 
-import Base.util.Debouncer;
-import Base.util.Engine;
+import base.engine.Game;
+import base.util.Debouncer;
+import base.engine.Engine;
+import base.util.StringUtils;
 import graphics.Renderer;
-import input.Keyboard;
 import shaders.StaticShader;
 
 import javax.script.ScriptEngine;
@@ -39,17 +40,56 @@ public class IntellisenseEngine extends Engine {
         int index = 0;
         for(Method s : methods){
             out[index] = s;
-            System.out.println(refrence.getCanonicalName()+"."+out[index]);
             index++;
         }
+
+        cache.put(refrence, out);
 
         return out;
     }
 
-    private static void registerClass(Class name){
-        cache.put(name, cacheFile(name));
-    }
+    //This method generates and HTML web page for your project in the web folder.
+    public static void generateHTML(){
+        LinkedList<String> outData = new LinkedList<String>();
 
+        HashMap<String, Object> refrences = Game.scriptingEngine.getRefrences();
+        for(String s : refrences.keySet()){
+            outData.add("<h1>"+s+"</h1>");
+            for(Method m: refrences.get(s).getClass().getMethods()){
+                String MethodData = m.getName()+"(";
+                for(Parameter p : m.getParameters()){
+                    MethodData+= p.getType().getSimpleName()+" "+p.getName()+",";
+                }
+                if(MethodData.endsWith(",")){
+                    MethodData = MethodData.substring(0, MethodData.length()-1);
+                }
+                outData.add(MethodData+")<br>");
+            }
+            outData.add("");
+        }
+
+        for(Class c: cache.keySet()){
+            outData.add("<h1>"+c.getSimpleName()+"</h1>");
+            for(Method m: cache.get(c)){
+                String MethodData = m.getName()+"(";
+                for(Parameter p : m.getParameters()){
+                    MethodData+= p.getType().getSimpleName()+" "+p.getName()+",";
+                }
+                if(MethodData.endsWith(",")){
+                    MethodData = MethodData.substring(0, MethodData.length()-1);
+                }
+                outData.add(MethodData+")<br>");
+            }
+            outData.add("");
+        }
+
+        String[] out = new String[outData.size()];
+        for(int i = 0; i < outData.size(); i++){
+            out[i] = outData.get(i);
+        }
+
+        StringUtils.saveData(Game.getFolder("Documentation").getName()+"/index.html", out);
+    }
 
     @Override
     public void init() {
@@ -58,9 +98,7 @@ public class IntellisenseEngine extends Engine {
 
     @Override
     public void tick() {
-        if(intellisenseKeyDebouncer.risingAction(Keyboard.isKeyDown(key))){
-            System.out.println("Test");
-        }
+
     }
 
     @Override

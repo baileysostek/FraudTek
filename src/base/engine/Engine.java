@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Base.util;
+package base.engine;
 
-import java.awt.Graphics;
 import javax.script.ScriptEngine;
 import graphics.Renderer;
 import shaders.StaticShader;

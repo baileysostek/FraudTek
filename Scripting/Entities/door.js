@@ -9,8 +9,8 @@ var distance_to_interact;
 var controllerIndex;
 var controller;
 
-var Debouncer = Java.type("Base.util.Debouncer");
-var EnumButtonType = Java.type("Base.Controller.EnumButtonType");
+var Debouncer = Java.type("base.util.Debouncer");
+var EnumButtonType = Java.type("base.controller.EnumButtonType");
 var Vector3f = Java.type("org.joml.Vector3f");
 
 var open;

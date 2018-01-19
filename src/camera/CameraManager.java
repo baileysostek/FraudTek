@@ -5,18 +5,13 @@
  */
 package camera;
 
-import Base.engine.Game;
-import Base.util.Engine;
+import base.engine.Game;
+import base.engine.Engine;
 import graphics.Renderer;
-import input.Keyboard;
-import java.awt.event.KeyEvent;
+
 import javax.script.ScriptEngine;
-import lighting.Light;
-import math.Maths;
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
+
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import shaders.StaticShader;
 
 /**

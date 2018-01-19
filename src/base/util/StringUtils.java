@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Base.util;
+package base.util;
 
-import Base.engine.Game;
+import base.engine.Game;
 import java.io.File;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
@@ -41,6 +40,24 @@ public class StringUtils {
             Scanner in = new Scanner(script);
             do{
                 data.add(in.nextLine());
+            }while(in.hasNext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String[] outData = new String[data.size()];
+        for(int i=0; i<outData.length; i++){
+            outData[i] = data.get(i);
+        }
+        return outData;
+    }
+
+    public static String[] loadData(String path, String delimiter){
+        LinkedList<String> data = new LinkedList<String>();
+        try {
+            File script = new File(path);
+            Scanner in = new Scanner(script);
+            do{
+                data.add(in.nextLine() + delimiter);
             }while(in.hasNext());
         } catch (Exception e) {
             e.printStackTrace();

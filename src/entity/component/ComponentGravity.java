@@ -5,14 +5,11 @@
  */
 package entity.component;
 
-import Base.engine.Game;
-import Base.util.DistanceCalculator;
+import base.engine.Game;
 import com.google.gson.JsonObject;
 import entity.Attribute;
 import entity.Entity;
 import graphics.Renderer;
-import graphics.Sprite;
-import java.awt.Color;
 import math.Maths;
 import org.joml.Vector3f;
 import shaders.StaticShader;
