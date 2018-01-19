@@ -7,12 +7,10 @@ package camera;
 
 import base.engine.Game;
 import base.engine.Engine;
-import graphics.Renderer;
 
 import javax.script.ScriptEngine;
 
 import org.joml.Vector3f;
-import shaders.StaticShader;
 
 /**
  *
@@ -62,11 +60,6 @@ public class CameraManager extends Engine{
     public void lastCam(int time){
         transition(lastCam, time);
         lastCam.setPosition(Game.player.getPosition());
-    }
-
-    @Override
-    public void render(Renderer renderer, StaticShader shader) {
-    
     }
 
     @Override

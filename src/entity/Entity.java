@@ -15,7 +15,7 @@ import org.joml.Vector3f;
 import graphics.Renderer;
 import math.Maths;
 import org.joml.Matrix4f;
-import shaders.StaticShader;
+import shaders.Shader;
 import textures.Material;
 
 /**
@@ -125,11 +125,11 @@ public class Entity{
         this.offset = offset;
     }
 
-    public void render(Renderer r, StaticShader shader){
+    public void render(Shader shader) {
         for(Component c : components.getCollection(Component.class)){
-            c.render(r, shader);
+            c.render(shader);
         }
-    };
+    }
     
     public void onAdded(){
         return;

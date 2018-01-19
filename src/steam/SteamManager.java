@@ -8,8 +8,6 @@ package steam;
 import base.engine.Engine;
 import com.codedisaster.steamworks.SteamAPI;
 import javax.script.ScriptEngine;
-import graphics.Renderer;
-import shaders.StaticShader;
 
 /**
  *
@@ -35,11 +33,6 @@ public class SteamManager extends Engine{
     @Override
     public void tick() {
         SteamAPI.runCallbacks();
-    }
-
-    @Override
-    public void render(Renderer renderer, StaticShader shader) {
-      
     }
 
     @Override

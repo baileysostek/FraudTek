@@ -4,9 +4,7 @@ var shader;
 
 function init(){
     shader = new Shader("bloom");
-    shader.start();
-    shader.loadData("projectionMatrix", Renderer.getProjectionMatrix());
-    shader.stop();
+
 
     CameraManager.setCamera(new FPSCamera());
 
@@ -37,9 +35,9 @@ function render(){
     shader.start();
 
     shader.loadData("viewMatrix", Maths.createViewMatrix(CameraManager.getCam()));
+    shader.loadData("textureSampler", 6);
 
     for(var i = 0; i < deapthObjects.length; i++){
-        shader.loadData("textureSampler", Math.random() * 12);
         shader.bindVAO(deapthObjects[i]);
         shader.render(deapthObjects[i]);
         shader.unBindVAO();

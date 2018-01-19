@@ -7,11 +7,9 @@ package base.controller;
 
 import base.util.DynamicCollection;
 import base.engine.Engine;
-import graphics.Renderer;
 import javax.script.ScriptEngine;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
-import shaders.StaticShader;
 
 /**
  *
@@ -117,10 +115,4 @@ public class ControllerManager extends Engine{
         }
         return null;
     }
-
-    @Override
-    public void render(Renderer renderer, StaticShader shader) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

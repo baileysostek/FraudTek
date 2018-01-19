@@ -5,6 +5,7 @@
  */
 package math;
 
+import base.engine.Game;
 import camera.Camera;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -15,6 +16,11 @@ import org.joml.Vector3f;
  * @author Bailey
  */
 public class Maths {
+    private static final float FOV = 70;
+    private static final float  NEAR_PLANE = 0.1f;
+    private static final float  FAR_PLANE = 1000;
+
+    private static Matrix4f projectionMatrix;
 
     public static Matrix4f createTransformationMatrix(Vector2f translation, float ry, Vector2f scale) {
         Matrix4f matrix = new Matrix4f();
@@ -68,5 +74,26 @@ public class Maths {
         
         return false;
     }
-    
+
+    public static void createProjectionMatrix(){
+        float aspectRatio = (float) Game.WIDTH / (float) Game.HEIGHT;
+        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))));
+        float x_scale = y_scale / aspectRatio;
+        float frustum_length = FAR_PLANE - NEAR_PLANE;
+
+        projectionMatrix = new Matrix4f();
+        projectionMatrix.set(
+                x_scale, 0, 0, 0,
+                0, y_scale, 0, 0,
+                0, 0, -((FAR_PLANE + NEAR_PLANE) / frustum_length), -1,
+                0, 0, -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length), 0
+        );
+    }
+
+    public static Matrix4f getProjectionMatrix(){
+        if(projectionMatrix == null){
+            createProjectionMatrix();
+        }
+        return projectionMatrix;
+    }
 }

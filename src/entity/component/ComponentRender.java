@@ -3,8 +3,7 @@ package entity.component;
 import com.google.gson.JsonObject;
 import entity.Attribute;
 import entity.Entity;
-import graphics.Renderer;
-import shaders.StaticShader;
+import shaders.Shader;
 
 /**
  * Created by Bailey on 9/1/2017.
@@ -24,7 +23,7 @@ public class ComponentRender extends Component{
     }
 
     @Override
-    public void render(Renderer r, StaticShader shader) {
+    public void render(Shader shader) {
 
     }
 }

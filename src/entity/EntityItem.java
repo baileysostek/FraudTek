@@ -1,11 +1,10 @@
 package entity;
 
-import base.engine.Game;
 import entity.component.*;
 import graphics.Renderer;
 import models.ModelLoader;
 import org.joml.Vector3f;
-import shaders.StaticShader;
+import shaders.Shader;
 
 /**
  * Created by Bailey on 9/18/2017.
@@ -50,7 +49,7 @@ public class EntityItem extends Entity{
     }
 
     @Override
-    public void render(Renderer r, StaticShader shader) {
+    public void render(Shader shader) {
 
     }
 }

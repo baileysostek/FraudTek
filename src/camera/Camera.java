@@ -6,8 +6,6 @@
 package camera;
 
 import org.joml.Vector3f;
-import graphics.Renderer;
-import shaders.StaticShader;
 
 /**
  *
@@ -46,5 +44,4 @@ public abstract class Camera {
     }
     
     public abstract void tick();
-    public abstract void render(Renderer renderer, StaticShader shader);
 }

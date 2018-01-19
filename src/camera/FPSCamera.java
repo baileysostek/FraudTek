@@ -17,7 +17,6 @@ import static base.engine.Game.HEIGHT;
 import static base.engine.Game.WIDTH;
 import base.util.Debouncer;
 import graphics.Renderer;
-import shaders.StaticShader;
 
 /**
  *
@@ -86,10 +85,4 @@ public class FPSCamera extends Camera{
             super.position.y-=speed;
         }
     }
-
-    @Override
-    public void render(Renderer renderer, StaticShader shader) {
-        
-    }
-    
 }

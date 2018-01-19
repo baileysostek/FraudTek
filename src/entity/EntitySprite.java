@@ -12,7 +12,7 @@ import entity.component.ComponentRender;
 import graphics.*;
 import models.ModelLoader;
 import org.joml.Vector3f;
-import shaders.StaticShader;
+import shaders.Shader;
 
 /**
  *
@@ -43,10 +43,9 @@ public class EntitySprite extends Entity {
     }
 
     @Override
-    public void render(Renderer r, StaticShader shader) {
+    public void render(Shader shader) {
 
     }
-
     public void setNormal(String path){
         super.normalID = Game.spriteBinder.loadSprite(path).getID();
     }

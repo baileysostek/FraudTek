@@ -8,7 +8,7 @@ package entity.component;
 import entity.Attribute;
 import entity.Entity;
 import graphics.Renderer;
-import shaders.StaticShader;
+import shaders.Shader;
 
 import java.util.LinkedList;
 
@@ -40,8 +40,8 @@ public abstract class Component {
     }
     
     public abstract void tick();
-    public abstract void render(Renderer r, StaticShader shader);
-    
+    public abstract void render(Shader shader);
+
     public String getSaveData(){
         return"";
     }

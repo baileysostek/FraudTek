@@ -14,14 +14,13 @@ import com.google.gson.*;
 import javax.script.ScriptEngine;
 
 import entity.component.*;
-import graphics.Renderer;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
 import org.joml.Vector3f;
-import shaders.StaticShader;
+import shaders.Shader;
 
 /**
  *
@@ -85,10 +84,10 @@ public class EntityManager extends Engine{
         }
     }
 
-    @Override
-    public void render(Renderer r, StaticShader shader) {
+
+    public void render(Shader shader) {
         for(Entity e : this.entities.getCollection(Entity.class)){
-            e.render(r, shader);
+            e.render(shader);
         }
     }
 

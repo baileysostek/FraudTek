@@ -105,8 +105,10 @@ public class Shader{
             e.printStackTrace();
         }
 
-
-
+        //Init the Projection Matrix
+        start();
+        loadData("projectionMatrix", Maths.getProjectionMatrix());
+        stop();
 
         this.data = data;
         try {

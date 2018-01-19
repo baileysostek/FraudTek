@@ -11,12 +11,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import entity.Attribute;
 import entity.Entity;
-import graphics.Renderer;
+
 import math.Maths;
 import org.joml.Intersectionf;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import shaders.StaticShader;
+import shaders.Shader;
 
 /**
  *
@@ -58,11 +58,11 @@ public class ComponentCollision extends Component{
 
     }
 
+
     @Override
-    public void render(Renderer r, StaticShader shader) {
+    public void render(Shader shader) {
 
     }
-
     public boolean collides(Entity other){
         if(!other.hasComponent(EnumComponentType.COLLIDER)){
             return false;

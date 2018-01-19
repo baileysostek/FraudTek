@@ -6,8 +6,6 @@
 package base.engine;
 
 import javax.script.ScriptEngine;
-import graphics.Renderer;
-import shaders.StaticShader;
 
 /**
  *
@@ -45,7 +43,6 @@ public abstract class Engine {
 
     public abstract void init();
     public abstract void tick();
-    public abstract void render(Renderer renderer, StaticShader shader);
     public abstract void registerForScripting(ScriptEngine engine);
     public abstract void onShutdown();
 //    public abstract Engine getInstance();

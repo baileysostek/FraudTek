@@ -6,10 +6,8 @@
 package models;
 
 import base.engine.Engine;
-import graphics.Renderer;
 import java.util.HashMap;
 import javax.script.ScriptEngine;
-import shaders.StaticShader;
 
 /**
  *
@@ -30,11 +28,6 @@ public class ModelManager extends Engine{
 
     @Override
     public void tick() {
-    
-    }
-
-    @Override
-    public void render(Renderer renderer, StaticShader shader) {
     
     }
 

@@ -3,7 +3,7 @@ package entity.component;
 import entity.Entity;
 import graphics.Animation.Animation;
 import graphics.Renderer;
-import shaders.StaticShader;
+import shaders.Shader;
 
 /**
  * Created by Bailey on 8/31/2017.
@@ -20,7 +20,7 @@ public class ComponentAnimation extends Component{
     }
 
     @Override
-    public void render(Renderer r, StaticShader shader) {
+    public void render(Shader shader) {
 
     }
 }

@@ -10,7 +10,6 @@ import base.engine.Engine;
 import javax.script.ScriptEngine;
 import graphics.Renderer;
 import org.joml.Vector3f;
-import shaders.StaticShader;
 
 /**
  *
@@ -44,10 +43,6 @@ public class LightingEngine extends Engine{
         lights.synch();
     }
 
-    @Override
-    public void render(Renderer renderer, StaticShader shader) {
-        
-    }
 
     @Override
     public void registerForScripting(ScriptEngine engine) {
@@ -75,10 +70,6 @@ public class LightingEngine extends Engine{
         this.lights.remove(light);
     }
 
-    public void loadLights(StaticShader shader) {
-        shader.loadLights(lights.getCollection(Light.class));
-    }
-    
     public Light[] getLights(){
         return this.lights.getCollection(Light.class);
     }

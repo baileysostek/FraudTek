@@ -9,7 +9,6 @@ import base.util.DynamicCollection;
 import base.engine.Engine;
 import javax.script.ScriptEngine;
 import org.lwjgl.opengl.GL11;
-import shaders.StaticShader;
 
 /**
  *
@@ -40,11 +39,6 @@ public class TextureManager extends Engine{
 
     @Override
     public void tick() {
-        
-    }
-
-    @Override
-    public void render(Renderer renderer, StaticShader shader) {
         
     }
 

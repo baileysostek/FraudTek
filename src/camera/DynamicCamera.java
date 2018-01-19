@@ -5,11 +5,7 @@
  */
 package camera;
 
-import graphics.Renderer;
 import org.joml.Vector3f;
-import shaders.StaticShader;
-
-import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
 
 /**
  *
@@ -28,11 +24,6 @@ public class DynamicCamera extends Camera{
 
     @Override
     public void tick() {
-
-    }
-
-    @Override
-    public void render(Renderer renderer, StaticShader shader) {
 
     }
 }

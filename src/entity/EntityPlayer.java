@@ -7,11 +7,10 @@ package entity;
 
 import base.engine.Game;
 import entity.component.*;
-import graphics.Renderer;
 import models.ModelLoader;
 import models.RawModel;
 import org.joml.Vector3f;
-import shaders.StaticShader;
+import shaders.Shader;
 
 /**
  *
@@ -35,8 +34,8 @@ public class EntityPlayer extends Entity{
     }
 
     @Override
-    public void render(Renderer r, StaticShader shader) {
-//   r.render(Game.modelManager.getModel(ModelLoader.generateCube(0.66f, 1, 0.66f)), Game.materialManager.getMaterial("front"), super.getPosition(), new Vector3f(super.getRotX(), super.getRotY(), super.getRotZ()), super.getScale(), shader);
+    public void render(Shader shader) {
+
     }
     
 }

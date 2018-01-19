@@ -18,7 +18,7 @@ import java.awt.event.KeyEvent;
 
 import math.Maths;
 import org.joml.Vector3f;
-import shaders.StaticShader;
+import shaders.Shader;
 
 /**
  *
@@ -85,8 +85,9 @@ public class ComponentFPSController extends Component{
         camera.setPosition(Maths.newInstance(e.getPosition()).add(e.getVelocity()).add(cameraOffset).sub(new Vector3f(Game.mouse.getCurrentRay()).mul(3 * 1)));
     }
 
+
     @Override
-    public void render(Renderer r, StaticShader shader) {
+    public void render(Shader shader) {
 
     }
     

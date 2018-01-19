@@ -2,7 +2,6 @@ package graphics.Animation;
 
 import base.engine.Engine;
 import graphics.Renderer;
-import shaders.StaticShader;
 
 import javax.script.ScriptEngine;
 
@@ -22,11 +21,6 @@ public class AnimationManager extends Engine{
 
     @Override
     public void tick() {
-
-    }
-
-    @Override
-    public void render(Renderer renderer, StaticShader shader) {
 
     }
 

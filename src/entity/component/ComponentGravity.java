@@ -12,8 +12,7 @@ import entity.Entity;
 import graphics.Renderer;
 import math.Maths;
 import org.joml.Vector3f;
-import shaders.StaticShader;
-import world.GravityManager;
+import shaders.Shader;
 
 /**
  *
@@ -21,7 +20,7 @@ import world.GravityManager;
  */
 public class ComponentGravity extends Component{
 
-    private Attribute<Float> gravity = new Attribute<Float>("gravity", GravityManager.GRAVITY/1200.0f);
+    private Attribute<Float> gravity = new Attribute<Float>("gravity", -9.8f/1200.0f);
     private Attribute<Boolean> onGround = new Attribute<Boolean>("onGround", false);
     
     public ComponentGravity(Entity e) {
@@ -69,8 +68,8 @@ public class ComponentGravity extends Component{
     }
 
     @Override
-    public void render(Renderer r, StaticShader shader) {
-        
+    public void render(Shader shader) {
+
     }
     
 }

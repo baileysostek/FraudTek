@@ -8,10 +8,8 @@ package entity;
 import entity.component.ComponentCollision;
 import entity.component.ComponentMesh;
 import entity.component.ComponentRender;
-import entity.component.EnumComponentType;
-import graphics.Renderer;
 import org.joml.Vector3f;
-import shaders.StaticShader;
+import shaders.Shader;
 
 /**
  *
@@ -28,7 +26,7 @@ public class EntityModel extends Entity {
     }
 
     @Override
-    public void render(Renderer r, StaticShader shader) {
+    public void render(Shader shader) {
 
     }
     

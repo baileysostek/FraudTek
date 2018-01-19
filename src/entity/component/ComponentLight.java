@@ -13,7 +13,7 @@ import entity.Entity;
 import graphics.Renderer;
 import lighting.Light;
 import org.joml.Vector3f;
-import shaders.StaticShader;
+import shaders.Shader;
 
 /**
  *
@@ -91,8 +91,8 @@ public class ComponentLight extends Component{
     }
 
     @Override
-    public void render(Renderer r, StaticShader shader) {
-        
+    public void render(Shader shader) {
+
     }
     
 }

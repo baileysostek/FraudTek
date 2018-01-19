@@ -7,10 +7,8 @@ package textures;
 
 import base.engine.Game;
 import base.engine.Engine;
-import graphics.Renderer;
 import java.util.HashMap;
 import javax.script.ScriptEngine;
-import shaders.StaticShader;
 
 /**
  *
@@ -35,11 +33,6 @@ public class MaterialManager extends Engine{
 
     @Override
     public void tick() {
-    
-    }
-
-    @Override
-    public void render(Renderer renderer, StaticShader shader) {
     
     }
 

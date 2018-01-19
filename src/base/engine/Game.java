@@ -16,6 +16,7 @@ import ScriptingEngine.ScriptingEngine;
 import graphics.*;
 import graphics.gui.GuiRenderer;
 import graphics.gui.Gui;
+import math.Maths;
 import org.joml.Vector3f;
 import steam.SteamManager;
 import camera.CameraManager;
@@ -46,9 +47,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import static org.lwjgl.opengl.GL11.*;
 
-import shaders.StaticShader;
 import textures.MaterialManager;
-import world.World;
 
 public class Game {
     
@@ -69,7 +68,6 @@ public class Game {
     
     private static long window;
     public static Loader loader;
-    private static StaticShader shader;
     private static Renderer renderer;
 
     public static CameraManager cameraManager;
@@ -110,7 +108,6 @@ public class Game {
     static LinkedList<Gui> guis = new LinkedList<Gui>();
 
     public static Entity player;
-    public static World worldManager;
 
     public static void main(String[] args){
         init();
@@ -197,15 +194,14 @@ public class Game {
         }
         System.out.println("Done");
         loader = new Loader();
-        shader = new StaticShader(Path);
         textureManager = new TextureManager();
         engines.add(textureManager);
-        renderer = new Renderer(shader);
+        renderer = new Renderer();
         lightingEngine = new LightingEngine();
         engines.add(lightingEngine);
         cameraManager = new CameraManager();
         engines.add(cameraManager);
-        mouse = new MousePicker(renderer.getProjectionMatrix());
+        mouse = new MousePicker(Maths.getProjectionMatrix());
         entityManager = new EntityManager();
         engines.add(entityManager);
         steamManager = new SteamManager();
@@ -227,8 +223,6 @@ public class Game {
         scriptingEngine.addRefrence("guis", guis);
         scriptingEngine.addRefrence("Mouse", mouse);
         scriptingEngine.addRefrence("Camera", cameraManager.getCam());
-        scriptingEngine.addRefrence("Renderer", renderer);
-        scriptingEngine.addRefrence("GameShader", shader);
         scriptingEngine.addRefrence("MaterialManager", materialManager);
 
 
@@ -246,7 +240,6 @@ public class Game {
 //        player = new EntityPlayer(new Vector3f(0, 0, 0));
 //        entityManager.addEntity(player);
 
-        renderer.getFBO().unbindFrameBuffer();
 
 //        IntellisenseEngine.generateHTML();
 
@@ -273,12 +266,8 @@ public class Game {
         engines.synch();
         mouse.tick();
 
-//        worldManager.tick();
-
         scriptingEngine.tick();
-        
-//        rotate.rotate(0.0f, 0.3f, 0.0f);
-        
+
         for(Engine e : engines.getCollection(Engine.class)){
             e.tick();
         }
@@ -302,9 +291,7 @@ public class Game {
     
     private static void render(){
         renderer.prepare();
-
         scriptingEngine.render();
-
         uiRenderer.render(guis);
         glfwSwapBuffers(window);
     }
@@ -313,12 +300,9 @@ public class Game {
         for(Engine e : engines.getCollection(Engine.class)){
             e.onShutdown();
         }
-//        worldManager.save("editor");
     }
     
     private static void cleanUp(){
-        renderer.getFBO().cleanUp();
-        shader.cleanUp();
         uiRenderer.cleanUp();
         loader.cleanUp();
     }

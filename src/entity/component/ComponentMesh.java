@@ -5,10 +5,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import entity.Attribute;
 import entity.Entity;
-import graphics.Renderer;
 import models.ModelLoader;
 import models.RawModel;
-import shaders.StaticShader;
+import shaders.Shader;
 
 /**
  * Created by Bailey on 9/1/2017.
@@ -79,8 +78,9 @@ public class ComponentMesh extends Component{
 
     }
 
+
     @Override
-    public void render(Renderer r, StaticShader shader) {
+    public void render(Shader shader) {
 
     }
 }

@@ -14,8 +14,6 @@ import java.util.HashMap;
 import javax.script.ScriptEngine;
 import javax.swing.ImageIcon;
 
-import shaders.StaticShader;
-
 /**
  *
  * @author Bailey
@@ -35,11 +33,6 @@ public class SpriteBinder extends Engine{
 
     @Override
     public void tick() {
-
-    }
-
-    @Override
-    public void render(Renderer renderer, StaticShader shader) {
 
     }
 
