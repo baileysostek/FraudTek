@@ -58,8 +58,10 @@ public class LightingEngine extends Engine{
         this.lights.add(light);
     }
 
-    public void addLight(Vector3f pos, Vector3f color){
-        this.lights.add(new Light(pos, color, new Vector3f(0.1f, 0.1f, 0.1f)));
+    public Light addLight(Vector3f pos, Vector3f color){
+        Light light = new Light(pos, color, new Vector3f(0.1f, 0.1f, 0.1f));
+        this.lights.add(light);
+        return light;
     }
 
     public void addWorldLight(Vector3f pos, Vector3f color){

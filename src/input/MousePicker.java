@@ -30,6 +30,7 @@ public class MousePicker {
     public MousePicker(Matrix4f projection){
         this.projectionMatrix = projection;
         this.viewMatrix = Maths.createViewMatrix(Game.cameraManager.getCam());
+        currentRay = calculateMouseRay();
     }
     
     public Vector3f getCurrentRay(){

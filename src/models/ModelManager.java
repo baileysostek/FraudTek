@@ -6,6 +6,8 @@
 package models;
 
 import base.engine.Engine;
+import base.engine.Game;
+
 import java.util.HashMap;
 import javax.script.ScriptEngine;
 
@@ -15,7 +17,7 @@ import javax.script.ScriptEngine;
  */
 public class ModelManager extends Engine{
 
-    private HashMap<String, RawModel> loadedModels = new HashMap<String, RawModel>();
+    private HashMap<String, Model> loadedModels = new HashMap<String, Model>();
     
     public ModelManager() {
         super("ModelManager");
@@ -41,7 +43,7 @@ public class ModelManager extends Engine{
         
     }
     
-    public void addModel(String key, RawModel model){
+    public void addModel(String key, Model model){
         this.loadedModels.put(key, model);
     }
     
@@ -49,7 +51,7 @@ public class ModelManager extends Engine{
         return this.loadedModels.containsKey(id);
     }
     
-    public RawModel getModel(String id){
+    public Model getModel(String id){
         return this.loadedModels.get(id);
     }
     

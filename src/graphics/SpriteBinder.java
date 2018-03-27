@@ -55,6 +55,8 @@ public class SpriteBinder extends Engine{
         Image img = imgcon.getImage();
         if(img.getWidth(null) <= 0 || img.getHeight(null) <= 0){
             System.err.println("Image:"+Game.Path+"/res/Images/"+image+".png"+" dose not exist.");
+            imgcon = new ImageIcon(Game.Path+"/res/Images/engine/fileNotFound.png");
+            img = imgcon.getImage();
         }
         // Create a buffered image with transparency
         BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);

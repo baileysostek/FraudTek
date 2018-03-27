@@ -5,6 +5,7 @@
  */
 package camera;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 /**
@@ -41,6 +42,14 @@ public abstract class Camera {
 
     public void setRotation(Vector3f rotation) {
         this.rotation = rotation;
+    }
+
+    public Vector3f getLookingDirection(){
+        Matrix4f rotationMatrix = new Matrix4f();
+        rotationMatrix.rotateY((float) Math.toRadians(-rotation.x()));
+        rotationMatrix.rotateX((float) Math.toRadians(-rotation.y()));
+//        rotationMatrix.rotateZ((float) Math.toRadians(rotation.z()));
+        return new Vector3f(0, 0, -1).mulDirection(rotationMatrix);
     }
     
     public abstract void tick();

@@ -2,61 +2,77 @@ package shaders;
 
 import ScriptingEngine.Script;
 import base.engine.Game;
+import base.util.EnumErrorLevel;
+import base.util.IncludeFolder;
+import base.util.LogManager;
 import base.util.StringUtils;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import entity.Attribute;
 import entity.Entity;
 import entity.component.ComponentMesh;
 import entity.component.EnumComponentType;
-import jdk.nashorn.api.scripting.ScriptUtils;
+import graphics.VAO;
 import math.Maths;
-import models.RawModel;
 import org.joml.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
+import textures.Material;
+import textures.MaterialManager;
 
-import java.io.BufferedReader;
+import javax.script.ScriptException;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 /**
  * Created by Bailey on 12/2/2017.
  */
 public class Shader{
-    private JsonObject data;
-
     private HashMap<String, String> attributeTypes = new HashMap<>();
     private HashMap<String, Integer> uniformPointers = new HashMap<>();
     private HashMap<String, String> uniformTypes = new HashMap<>();
+    private HashMap<String, String> uniformLocations = new HashMap<>();
+    private HashMap<String, String> passAttributes = new HashMap<>();
 
     private int programID;
     private int vertexShaderID;
     private int fragmentShaderID;
 
+    private int cachedVAOID = 0;
+
+    private int renderType = GL11.GL_TRIANGLES;
+
     private int textureCache = 0;
 
     private Script script;
 
-    private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
+    private String shaderName = "";
+
+    private FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
     public Shader(String name){
+        //Check that the directory exists
+        IncludeFolder folder = new IncludeFolder("Shaders/"+name+"/");
+        if(!folder.exists()){
+            folder.generateFolder();
+        }
+
         //First thing that is done, the javascript file is loaded.
         try {
             script = new Script(Game.Path+"/Shaders/"+name+"/"+name+".js");
         } catch (Exception e) {
-            e.printStackTrace();
+            StringUtils.saveData("/Shaders/"+name+"/"+name+".js", ShaderUtils.buildJS());
+            try {
+                script = new Script(Game.Path+"/Shaders/"+name+"/"+name+".js");
+            } catch (Exception e1){
+                e1.printStackTrace();
+            }
         }
 
         //Shader files are compiled
-        vertexShaderID = loadShaderFile(Game.Path+"/Shaders/"+name+"/"+name+"VertexShader.glsl", GL20.GL_VERTEX_SHADER);
-        fragmentShaderID = loadShaderFile(Game.Path+"/Shaders/"+name+"/"+name+"FragmentShader.glsl",GL20.GL_FRAGMENT_SHADER);
+        vertexShaderID = compileShaderFile(Game.Path+"/Shaders/"+name+"/"+name+"VertexShader.glsl", GL20.GL_VERTEX_SHADER);
+        fragmentShaderID = compileShaderFile(Game.Path+"/Shaders/"+name+"/"+name+"FragmentShader.glsl",GL20.GL_FRAGMENT_SHADER);
 
         //Program id is generated for this shader program
         programID = GL20.glCreateProgram();
@@ -90,14 +106,38 @@ public class Shader{
                 JsonObject data = gson.fromJson(gson.toJson(uniforms[i]), JsonObject.class);
                 String uniformName = gson.fromJson(data.get("name"), String.class);
                 String uniformType = gson.fromJson(data.get("type"), String.class);
+                String uniformLocation = gson.fromJson(data.get("location"), String.class);
                 if(!data.has("array")) {
                     uniformPointers.put(uniformName, GL20.glGetUniformLocation(programID, uniformName));
                     uniformTypes.put(uniformName, uniformType);
+                    uniformLocations.put(uniformName, uniformLocation);
                 }else{
                     int size = gson.fromJson(data.get("array"), Integer.class);
                     for(int j = 0; j < size; j++){
-                        uniformPointers.put(uniformName+"["+i+"]", GL20.glGetUniformLocation(programID, uniformName+"["+i+"]"));
-                        uniformTypes.put(uniformName+"["+i+"]", uniformType);
+                        uniformPointers.put(uniformName+"["+j+"]", GL20.glGetUniformLocation(programID, uniformName+"["+j+"]"));
+                        uniformTypes.put(uniformName+"["+j+"]", uniformType);
+                        uniformLocations.put(uniformName+"["+j+"]", uniformLocation);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Determine the pass attributes, for building shaders
+        try {
+            //need to cast from script object to the expected data type
+            Object[] uniforms = (script.run("getPassAttributes").values()).toArray();
+            for (int i = 0; i < uniforms.length; i++){
+                JsonObject data = gson.fromJson(gson.toJson(uniforms[i]), JsonObject.class);
+                String passName = gson.fromJson(data.get("name"), String.class);
+                String passType = gson.fromJson(data.get("type"), String.class);
+                if(!data.has("array")) {
+                    passAttributes.put(passName, passType);
+                }else{
+                    int size = gson.fromJson(data.get("array"), Integer.class);
+                    for(int j = 0; j < size; j++){
+                        passAttributes.put(passName+"["+j+"]", passType);
                     }
                 }
             }
@@ -109,17 +149,6 @@ public class Shader{
         start();
         loadData("projectionMatrix", Maths.getProjectionMatrix());
         stop();
-
-        this.data = data;
-        try {
-            script.run("init");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        //Load the json data and test for the existance of the shader
-        data = gson.fromJson(StringUtils.unify(StringUtils.loadData(Game.Path+"/Shaders/"+name+"/"+name+".json")), JsonObject.class);
 
         //Test if files exist
         boolean isValid = true;
@@ -133,24 +162,56 @@ public class Shader{
         }else{
             //Auto Generate the file
             if(!vertex.exists()){
-                StringUtils.saveData("/Shaders/"+name+"/"+name+"VertexShader.glsl", buildVertex());
+                StringUtils.saveData("/Shaders/"+name+"/"+name+"VertexShader.glsl", ShaderUtils.buildVertex("400 core", attributeTypes, passAttributes, uniformTypes, uniformLocations));
             }
             if(!fragment.exists()){
-                StringUtils.saveData("/Shaders/"+name+"/"+name+"FragmentShader.glsl", buildFragment());
+                StringUtils.saveData("/Shaders/"+name+"/"+name+"FragmentShader.glsl", ShaderUtils.buildFragment("400 core", passAttributes, uniformTypes, uniformLocations));
             }
         }
+
+        try {
+            //Add properties to this script
+            script.addClass(GL11.class);
+            script.addClass(Vector3f.class);
+            script.put("Log", Game.logManager);
+            script.addClass(Material.class);
+            script.put("MaterialManager", Game.materialManager);
+            script.init(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        shaderName = name;
+
     }
 
     public void start(){
         GL20.glUseProgram(programID);
     }
 
-    public void bindVAO(Entity entity){
+    public void bindVAOFromEntity(Entity entity){
         if(entity.hasComponent(EnumComponentType.MESH)) {
-            GL30.glBindVertexArray(((ComponentMesh)(entity.getComponent(EnumComponentType.MESH))).getModel().getVaoID());
+            cachedVAOID = ((ComponentMesh)(entity.getComponent(EnumComponentType.MESH))).getModel().getVaoID();
+            GL30.glBindVertexArray(cachedVAOID);
             for (int i = 0; i < attributeTypes.size(); i++) {
                 GL20.glEnableVertexAttribArray(i);
             }
+        }
+    }
+
+    public void bindVAO(VAO vao){
+        cachedVAOID = vao.getID();
+        GL30.glBindVertexArray(cachedVAOID);
+        for (int i = 0; i < attributeTypes.size(); i++) {
+            GL20.glEnableVertexAttribArray(i);
+        }
+    }
+
+    public void bindVAOFromID(int vaoID){
+        cachedVAOID = vaoID;
+        GL30.glBindVertexArray(cachedVAOID);
+        for (int i = 0; i < attributeTypes.size(); i++) {
+            GL20.glEnableVertexAttribArray(i);
         }
     }
 
@@ -160,18 +221,35 @@ public class Shader{
             textureCache = 0;
             //Load transform
             Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
-
             loadData("transformationMatrix", transformationMatrix);
-
             //actual render
-            GL11.glDrawElements(GL11.GL_TRIANGLES, ((ComponentMesh)(entity.getComponent(EnumComponentType.MESH))).getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+            GL11.glDrawElements(renderType, ((ComponentMesh)(entity.getComponent(EnumComponentType.MESH))).getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+        }else{
+            Game.logManager.println("Entity:"+entity+" dose not have a Mesh component.", EnumErrorLevel.WARNING);
         }
+    }
+
+    public void render(Vector3f position, int size, float x, float y, float z){
+        //reset cache
+        textureCache = 0;
+        Matrix4f transformationMatrix = Maths.createTransformationMatrix(position, x, y, z, 1);
+        loadData("transformationMatrix", transformationMatrix);
+        GL11.glDrawElements(renderType, size, GL11.GL_UNSIGNED_INT, 0);
+    }
+
+    public void render(Vector3f position, int size, float x, float y, float z, float scale){
+        //reset cache
+        textureCache = 0;
+        Matrix4f transformationMatrix = Maths.createTransformationMatrix(position, x, y, z, scale);
+        loadData("transformationMatrix", transformationMatrix);
+        GL11.glDrawElements(renderType, size, GL11.GL_UNSIGNED_INT, 0);
     }
 
     public void unBindVAO(){
         for(int i = 0; i < attributeTypes.size(); i++){
-            GL20.glEnableVertexAttribArray(i);
+            GL20.glDisableVertexAttribArray(i);
         }
+
     }
 
     public void stop(){
@@ -180,31 +258,35 @@ public class Shader{
 
     public void loadData(String location, Object data){
         //Get the type
-        if(uniformTypes.containsKey(location)) {
+        if (uniformTypes.containsKey(location)) {
             String type = uniformTypes.get(location);
-            if(type.equals("float")){
-                GL20.glUniform1f(uniformPointers.get(location), (float)data);
+            if (type.equals("float")) {
+                GL20.glUniform1f(uniformPointers.get(location), (float) data);
+                return;
             }
-            if(type.equals("sampler2D")){
+            if (type.equals("sampler2D")) {
                 GL13.glActiveTexture(GL13.GL_TEXTURE0 + textureCache);
-                GL11.glBindTexture(GL11.GL_TEXTURE_2D, (int)(Float.parseFloat(data+"")));
+                GL11.glBindTexture(GL11.GL_TEXTURE_2D, (int) (Float.parseFloat(data + "")));
                 GL20.glUniform1i(uniformPointers.get(location), textureCache);
                 GL33.glBindSampler(textureCache, uniformPointers.get(location));
-                textureCache+=2;
+                textureCache += 2;
+                return;
             }
-            if(type.equals("vec3")){
-                Vector3f parsedData = (Vector3f)data;
+            if (type.equals("vec3")) {
+                Vector3f parsedData = (Vector3f) data;
                 GL20.glUniform3f(uniformPointers.get(location), parsedData.x, parsedData.y, parsedData.z);
+                return;
             }
-            if(type.equals("mat4")){
-                Matrix4f matrix = (Matrix4f)data;
+            if (type.equals("mat4")) {
+                Matrix4f matrix = (Matrix4f) data;
                 matrixBuffer = matrix.get(matrixBuffer);
                 GL20.glUniformMatrix4fv(uniformPointers.get(location), false, matrixBuffer);
+                return;
             }
         }
     }
 
-    private static int loadShaderFile(String file, int type){
+    private int compileShaderFile(String file, int type){
         String[] shaderData = StringUtils.loadData(file, "\n");
         String shaderDataCompressed = StringUtils.unify(shaderData);
 
@@ -220,120 +302,29 @@ public class Shader{
         return shaderID;
     }
 
-    //TODO premote to shaderUtils class
-    public String[] buildVertex(){
-        //Get Correct Data level
-        JsonObject vertexData = data.getAsJsonObject("vertex");
-        //Put version data in the out file
-        Gson gson = new Gson();
-        String[] out = new String[]{"#version "+gson.fromJson(data.get("version"), String.class)};
-        LinkedList<String> lines = new LinkedList<String>();
-        //Link this components entity to the attribute entity.
-        lines.addLast("");
-        //load 'in' data
-        JsonArray inData = vertexData.getAsJsonArray("in");
-        for(JsonElement element : inData){
-            String array = "";
-            if(element.getAsJsonObject().has("array")){
-                array = "["+gson.fromJson(element.getAsJsonObject().get("array"), Integer.class)+"]";
-            }
-            lines.addLast("in "+gson.fromJson(element.getAsJsonObject().get("type"), String.class)+" "+gson.fromJson(element.getAsJsonObject().get("name"), String.class)+array+";");
-        }
-        lines.addLast("");
-        //load 'out' data
-        JsonArray outData = vertexData.getAsJsonArray("out");
-        for(JsonElement element : outData){
-            String array = "";
-            if(element.getAsJsonObject().has("array")){
-                array = "["+gson.fromJson(element.getAsJsonObject().get("array"), Integer.class)+"]";
-            }
-            lines.addLast("out "+gson.fromJson(element.getAsJsonObject().get("type"), String.class)+" "+gson.fromJson(element.getAsJsonObject().get("name"), String.class)+array+";");
-        }
-        lines.addLast("");
-        //load 'uniform' data
-        JsonArray uniformData = vertexData.getAsJsonArray("uniform");
-        for(JsonElement element : uniformData){
-            String array = "";
-            if(element.getAsJsonObject().has("array")){
-                array = "["+gson.fromJson(element.getAsJsonObject().get("array"), Integer.class)+"]";
-            }
-            lines.addLast("uniform "+gson.fromJson(element.getAsJsonObject().get("type"), String.class)+" "+gson.fromJson(element.getAsJsonObject().get("name"), String.class)+array+";");
-        }
-        lines.addLast("");
-        lines.addLast("void main(void){");
-        lines.addLast("");
-        lines.addLast("}");
-
-        //Synch the lines to out
-        int index = 0;
-        for(String s : lines){
-            out = StringUtils.addLine(out, lines.get(index));
-            index++;
-        }
-        return out;
+    private void generateShaderFiles(){
+        StringUtils.saveData("/Shaders/"+shaderName+"/"+shaderName+"VertexShader.glsl", ShaderUtils.buildVertex("400 core", attributeTypes, passAttributes, uniformTypes, uniformLocations));
+        StringUtils.saveData("/Shaders/" + shaderName + "/" + shaderName + "FragmentShader.glsl", ShaderUtils.buildFragment("400 core", passAttributes, uniformTypes, uniformLocations));
     }
 
-    public String[] buildFragment(){
-        //Get Correct Data level
-        JsonObject fragmentData = data.getAsJsonObject("fragment");
-        //Put version data in the out file
-        Gson gson = new Gson();
-        String[] out = new String[]{"#version "+gson.fromJson(data.get("version"), String.class)};
-        LinkedList<String> lines = new LinkedList<String>();
-        //Link this components entity to the attribute entity.
-        lines.addLast("");
-        //load 'in' data
+    //This getter allows for functions defined within a shader to be addressed through references to that shader.
+    public void run(String method, Object... args){
         try {
-            JsonArray inData = fragmentData.getAsJsonArray("in");
-            for(JsonElement element : inData){
-                String array = "";
-                if(element.getAsJsonObject().has("array")){
-                    array = "["+gson.fromJson(element.getAsJsonObject().get("array"), Integer.class)+"]";
-                }
-                lines.addLast("in "+gson.fromJson(element.getAsJsonObject().get("type"), String.class)+" "+gson.fromJson(element.getAsJsonObject().get("name"), String.class)+array+";");
-            }
-        }catch(ClassCastException e){
-            JsonObject vertexData = data.getAsJsonObject("vertex");
-            JsonArray outData = vertexData.getAsJsonArray("out");
-            for(JsonElement element : outData){
-                String array = "";
-                if(element.getAsJsonObject().has("array")){
-                    array = "["+gson.fromJson(element.getAsJsonObject().get("array"), Integer.class)+"]";
-                }
-                lines.addLast("in "+gson.fromJson(element.getAsJsonObject().get("type"), String.class)+" "+gson.fromJson(element.getAsJsonObject().get("name"), String.class)+array+";");
-            }
+            this.script.run(method, args, this.script);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+            Game.logManager.println(e.getMessage().replaceAll("<eval>", this.script.getFilePath()), EnumErrorLevel.ERROR);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
-        lines.addLast("");
-        //load 'out' data
-        JsonArray outData = fragmentData.getAsJsonArray("out");
-        for(JsonElement element : outData){
-            String array = "";
-            if(element.getAsJsonObject().has("array")){
-                array = "["+gson.fromJson(element.getAsJsonObject().get("array"), Integer.class)+"]";
-            }
-            lines.addLast("out "+gson.fromJson(element.getAsJsonObject().get("type"), String.class)+" "+gson.fromJson(element.getAsJsonObject().get("name"), String.class)+array+";");
-        }
-        lines.addLast("");
-        //load 'uniform' data
-        JsonArray uniformData = fragmentData.getAsJsonArray("uniform");
-        for(JsonElement element : uniformData){
-            String array = "";
-            if(element.getAsJsonObject().has("array")){
-                array = "["+gson.fromJson(element.getAsJsonObject().get("array"), Integer.class)+"]";
-            }
-            lines.addLast("uniform "+gson.fromJson(element.getAsJsonObject().get("type"), String.class)+" "+gson.fromJson(element.getAsJsonObject().get("name"), String.class)+array+";");
-        }
-        lines.addLast("");
-        lines.addLast("void main(void){");
-        lines.addLast("");
-        lines.addLast("}");
-
-        //Sync the lines to out
-        int index = 0;
-        for(String s : lines){
-            out = StringUtils.addLine(out, lines.get(index));
-            index++;
-        }
-        return out;
     }
+
+    public Object var(String varName){
+        return script.var(varName);
+    }
+
+    public void setRenderType(int type){
+        renderType = type;
+    }
+
 }

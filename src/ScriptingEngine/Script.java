@@ -64,4 +64,13 @@ public class Script {
             e.printStackTrace();
         }
     }
+
+    public Object var(String varName){
+        try {
+            return engine.get(varName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

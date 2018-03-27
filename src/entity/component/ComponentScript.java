@@ -29,14 +29,14 @@ public class ComponentScript extends Component{
         }
 
         try {
-            script = Game.scriptingEngine.add(name.getData(), e);
+            script = Game.scriptingEngine.addScript(name.getData(), e);
             if(script == null){
                 StringUtils.saveData("/Scripting/"+name.getData(), buildScript());
-                script = Game.scriptingEngine.add(name.getData(), e);
+                script = Game.scriptingEngine.addScript(name.getData(), e);
             }
         }catch(Exception ex){
             StringUtils.saveData("/Scripting/"+name.getData(), buildScript());
-            script = Game.scriptingEngine.add(name.getData(), e);
+            script = Game.scriptingEngine.addScript(name.getData(), e);
         }
         e.setScript(script);
     }
@@ -49,10 +49,10 @@ public class ComponentScript extends Component{
             name.setData(data + ".js");
         }
 
-        script = Game.scriptingEngine.add(name.getData(), e);
+        script = Game.scriptingEngine.addScript(name.getData(), e);
         if(script == null){
             StringUtils.saveData("/Scripting/"+name.getData(), buildScript());
-            script = Game.scriptingEngine.add(name.getData(), e);
+            script = Game.scriptingEngine.addScript(name.getData(), e);
         }
     }
 
@@ -70,6 +70,10 @@ public class ComponentScript extends Component{
     @Override
     public void render(Shader shader) {
 
+    }
+
+    public Script getScript(){
+        return this.script;
     }
 
     public String[] buildScript(){

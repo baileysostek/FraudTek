@@ -29,25 +29,44 @@ public class Loader {
     
     //Vertex Array Object
     public RawModel loadToVAO(float[] positions, float[] textureCoords, float[] normals,  int[] indicies){
-        int vaoID = createVAO();
-        RawModel out = new RawModel(vaoID, indicies.length, positions, textureCoords, normals, indicies);
+        VAO vao = new VAO();
+        RawModel out = new RawModel(vao.getID(), indicies.length, positions, textureCoords, normals, indicies);
         bindIndiciesBuffer(indicies);
 
-        storeDataInAttributeList(0, 3, positions);
-        storeDataInAttributeList(1, 2, textureCoords);
-        storeDataInAttributeList(2, 3, normals);
-        storeDataInAttributeList(3, 3, out.getTangents());
-        storeDataInAttributeList(4, 3, out.getBitangents());
+
+        vao.addVBO(3, positions);
+        vao.addVBO(2, textureCoords);
+        vao.addVBO(3, out.getNormals());
+        vao.addVBO(3, out.getTangents());
+        vao.addVBO(3, out.getBitangents());
+
         unbindVAO();
         return out;
     }
 
+    //Vertex Array Object
+    public RawModel loadToVAO(float[] positions, int[] indicies){
+        VAO vao = new VAO();
+        RawModel out = new RawModel(vao.getID(), indicies.length, positions, indicies);
+        bindIndiciesBuffer(indicies);
+
+        vao.addVBO(3, positions);
+        vao.addVBO(3, positions);
+        vao.addVBO(3, out.getNormals());
+        vao.addVBO(3, out.getTangents());
+        vao.addVBO(3, out.getBitangents());
+
+        unbindVAO();
+        return out;
+    }
+
+
     //UI
     public RawModel loadToVAO(float[] positions){
         int vaoID = createVAO();
-        this.storeDataInAttributeList(0, 2, positions);
+        this.storeDataInAttributeList(0, 3, positions);
         unbindVAO();
-        return new RawModel(vaoID, positions.length/2);
+        return new RawModel(vaoID, positions.length/3);
     }
     
     public int createVAO(){

@@ -6,12 +6,9 @@
 package base.engine;
 
 import base.controller.ControllerManager;
+import base.util.*;
 import editor.IntellisenseEngine;
 import entity.*;
-import base.util.Debouncer;
-import base.util.DynamicCollection;
-import base.util.IncludeFolder;
-import base.util.StringUtils;
 import ScriptingEngine.ScriptingEngine;
 import graphics.*;
 import graphics.gui.GuiRenderer;
@@ -55,7 +52,9 @@ public class Game {
     public static int HEIGHT = 1080;    
     private static String NAME = "Game";
     private static boolean FULLSCREEN = false;
-    
+
+    private static final String version = "1.0";
+
     public static float MouseX = 0;
     public static float MouseY = 0;
     
@@ -92,7 +91,8 @@ public class Game {
     };
     
     private static HashMap<String, IncludeFolder> srcFolders = new HashMap<String, IncludeFolder>();
-    
+
+    public static LogManager logManager;
     public static EntityManager entityManager;
     public static LightingEngine lightingEngine;
     private static SteamManager steamManager;
@@ -101,6 +101,7 @@ public class Game {
     public static ModelManager modelManager;
     public static MaterialManager materialManager;
     public static ControllerManager controllerManager;
+    public static VAOManager vaoManager;
     //VR Headsets
 
     //tmp
@@ -112,12 +113,30 @@ public class Game {
     public static void main(String[] args){
         init();
         run();
+        logManager.println();
+        logManager.println("Shutting down Engine.");
+        logManager.println();
         shutdown();
+        logManager.println();
+        logManager.println("Cleaning up Engine.");
+        logManager.println();
         cleanUp();
+        logManager.println();
+        logManager.println("Terminating Window.");
+        logManager.println();
+        logManager.tick();
+        logManager.onShutdown();
         glfwTerminate();
     }
     
     private static void init(){
+        //Very first thing initialized
+        logManager = new LogManager();
+        logManager.println();
+        logManager.println("Engine Initialization");
+        logManager.println();
+        logManager.println("FraudTek version:"+version);
+        engines.add(logManager);
         if(!glfwInit()){
             throw new IllegalStateException("Failed to initialize GLFW");
         }
@@ -134,17 +153,21 @@ public class Game {
         
         Gson gson = new Gson();
         JsonObject launchOptions = gson.fromJson(StringUtils.unify(StringUtils.loadData(Game.Path+"/Scripting/launch.json")), JsonObject.class);
+        if(launchOptions.has("name")){
+            NAME = gson.fromJson(launchOptions.get("name"), String.class);
+            logManager.println("Game Name:"+NAME);
+        }
         if(launchOptions.has("width")){
             WIDTH = gson.fromJson(launchOptions.get("width"), Integer.class);
+            logManager.println("Target Width:"+WIDTH);
         }
         if(launchOptions.has("height")){
             HEIGHT = gson.fromJson(launchOptions.get("height"), Integer.class);
-        }
-        if(launchOptions.has("name")){
-            NAME = gson.fromJson(launchOptions.get("name"), String.class);
+            logManager.println("Target Height:"+HEIGHT);
         }
         if(launchOptions.has("fullscreen")){
             FULLSCREEN = gson.fromJson(launchOptions.get("fullscreen"), Boolean.class);
+            logManager.println("Window is Fullscreen:"+FULLSCREEN);
         }
         
         if(!FULLSCREEN){
@@ -157,6 +180,7 @@ public class Game {
             window = glfwCreateWindow(WIDTH, HEIGHT, NAME, glfwGetPrimaryMonitor(), 0);
         }
         if(window == 0){
+            logManager.println("Failed to create Window");
             throw new IllegalStateException("Failed to create Window");
         }
         
@@ -179,9 +203,11 @@ public class Game {
 
         //Initialize OpenGL
         GL.createCapabilities();
-        
+
+        logManager.println();
+        logManager.println("Looking for Source Folders...");
+        logManager.println();
         //init folder
-        System.out.println("Looking for Source Folders...");
         JsonArray jsonArray = gson.fromJson(StringUtils.unify(StringUtils.loadData(Game.Path+"/Scripting/managedFolders.json")), JsonArray.class);
         for(JsonElement element : jsonArray){
             JsonObject object = element.getAsJsonObject();
@@ -192,7 +218,9 @@ public class Game {
                 srcFolders.put(name, src);
             }
         }
-        System.out.println("Done");
+        logManager.println();
+        logManager.println("Initializing all engines associated with the game.");
+        logManager.println();
         loader = new Loader();
         textureManager = new TextureManager();
         engines.add(textureManager);
@@ -214,22 +242,25 @@ public class Game {
         engines.add(materialManager);
         controllerManager = new ControllerManager();
         engines.add(controllerManager);
+        vaoManager = new VAOManager();
+        engines.add(vaoManager);
         uiRenderer = new GuiRenderer(loader);
         engines.synch();
 
+        logManager.println();
+        logManager.println("Adding refrences to the scripting engine.");
         scriptingEngine = new ScriptingEngine(engines);
         //Register for scripting
-
         scriptingEngine.addRefrence("guis", guis);
-        scriptingEngine.addRefrence("Mouse", mouse);
+        scriptingEngine.addRefrence("MouseRay", mouse);
         scriptingEngine.addRefrence("Camera", cameraManager.getCam());
         scriptingEngine.addRefrence("MaterialManager", materialManager);
+        scriptingEngine.addRefrence("ControllerManager", controllerManager);
 
 
         //Last addition
         scriptingEngine.addRefrence("ScriptingEngine", scriptingEngine);
-
-        scriptingEngine.add(gson.fromJson(launchOptions.get("mainScript"), String.class));
+        scriptingEngine.addScript(gson.fromJson(launchOptions.get("mainScript"), String.class));
 
 
 //        entityManager.addEntity(new EntityModel(ModelLoader.loadModel("dragon"), "white", new Vector3f(0, 1, 0), 0, 0, 0, 1f));
@@ -252,10 +283,19 @@ public class Game {
         
         while(!glfwWindowShouldClose(window)){
             long now = System.currentTimeMillis();
+            long targetTime = (long) (1000000.0f / 60.0f);
             delta+=(now-last);
             glfwPollEvents();
             tick();
             render();
+
+//            try {
+//                long sleepTime = targetTime - (now - System.currentTimeMillis());
+//                Thread.sleep(sleepTime / 1000);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+
             if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GL_TRUE){
                 glfwSetWindowShouldClose(window, true);
             }
@@ -297,6 +337,8 @@ public class Game {
     }
     
     private static void shutdown(){
+        //Remove Log manager
+        engines.remove(logManager);
         for(Engine e : engines.getCollection(Engine.class)){
             e.onShutdown();
         }
@@ -306,7 +348,7 @@ public class Game {
         uiRenderer.cleanUp();
         loader.cleanUp();
     }
-    
+
     public static long getWindowPointer(){
         return window;
     }

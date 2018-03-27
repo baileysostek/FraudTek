@@ -6,12 +6,13 @@
 package base.util;
 
 import base.engine.Game;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 
 /**
@@ -34,21 +35,21 @@ public class StringUtils {
     }
 
     public static String[] loadData(String path){
-        LinkedList<String> data = new LinkedList<String>();
-        try {
-            File script = new File(path);
-            Scanner in = new Scanner(script);
-            do{
-                data.add(in.nextLine());
-            }while(in.hasNext());
-        } catch (Exception e) {
-            e.printStackTrace();
+        //https://stackoverflow.com/questions/285712/java-reading-a-file-into-an-array
+        try{
+            FileReader fileReader = new FileReader(path);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            List<String> lines = new ArrayList<String>();
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                lines.add(line);
+            }
+            bufferedReader.close();
+            return lines.toArray(new String[lines.size()]);
+        }catch (Exception e){
+            Game.logManager.printStackTrace(e);
         }
-        String[] outData = new String[data.size()];
-        for(int i=0; i<outData.length; i++){
-            outData[i] = data.get(i);
-        }
-        return outData;
+        return new String[]{};
     }
 
     public static String[] loadData(String path, String delimiter){
@@ -94,7 +95,7 @@ public class StringUtils {
         String absPath = "";
         try {
             absPath = refrence.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-            System.out.println(absPath);
+            Game.logManager.println(absPath);
             absPath = absPath.replace("/build/classes/", "");
             //IntelliJ
             absPath = absPath.replace("/out/production/Edaxerum/", "");
@@ -169,7 +170,7 @@ public class StringUtils {
                 tmp = tmp+(char)((int)data[i].charAt(j) + (rand.nextInt(1024)-512))+"";
             }
             out = StringUtils.addLine(out, tmp);
-            System.out.println(tmp);
+            Game.logManager.println(tmp);
         }
         return out;
     }
@@ -183,7 +184,7 @@ public class StringUtils {
                 tmp = tmp+(char)((int)data[i].charAt(j) - (rand.nextInt(1024)-512))+"";
             }
             out = StringUtils.addLine(out, tmp);
-            System.out.println(tmp);
+            Game.logManager.println(tmp);
         }
         return out;
     }

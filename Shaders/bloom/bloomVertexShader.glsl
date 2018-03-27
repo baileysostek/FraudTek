@@ -1,10 +1,10 @@
 #version 400 core
 
-in vec3 position;       //0
-in vec2 textureCoords;  //1
-in vec3 normal;         //2
-in vec3 tangent;        //3
-in vec3 bitangent;      //4
+in vec3 position;
+in vec2 textureCoords;
+in vec3 normal;
+in vec3 tangent;
+in vec3 bitangent;
 
 out vec2 pass_textureCoords;
 

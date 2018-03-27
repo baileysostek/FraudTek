@@ -53,7 +53,18 @@ public class IntellisenseEngine extends Engine {
 
         HashMap<String, Object> refrences = Game.scriptingEngine.getRefrences();
         for(String s : refrences.keySet()){
-            outData.add("<h1>"+s+"</h1>");
+            String inputParams = "";
+            try{
+                refrences.get(s).getClass().getConstructor();
+                inputParams = "(";
+                for(int i = 0; i < refrences.get(s).getClass().getConstructor().getParameterCount(); i++){
+                    inputParams+=refrences.get(s).getClass().getConstructor().getParameterTypes()[i].getCanonicalName()+",";
+                }
+                inputParams += ")";
+            }catch(Exception e){
+
+            }
+            outData.add("<h1>"+s+inputParams+"</h1>");
             for(Method m: refrences.get(s).getClass().getMethods()){
                 String MethodData = m.getName()+"(";
                 for(Parameter p : m.getParameters()){

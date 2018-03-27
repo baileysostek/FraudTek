@@ -1,5 +1,5 @@
 {
-  "type":"Door",
+  "type":"Tile",
   "positionOffset":{
     "x":0,
     "y":0,
@@ -14,20 +14,14 @@
   "Components": {
     "ComponentMesh": {
       "link": "mesh1",
-      "model":"dragon",
-      "x":1,
-      "y":2
+      "model":"hex"
     },
     "ComponentCollision": {
       "link":"mesh1"
     },
     "ComponentRender": {},
-    "ComponentInteract": {},
-    "ComponentController": {
-      "controllerIndex": 0
-    },
-    "ComponentScript": {
-      "filename": "Entities/door.js"
+    "ComponentScript":{
+      "filename":"tile.js"
     }
   }
 }

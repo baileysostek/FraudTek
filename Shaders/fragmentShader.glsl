@@ -39,7 +39,7 @@ void main(void){
 		float attFactor = attenuation[i].x + (attenuation[i].y * distance) + (attenuation[i].z * distance * distance);
 		
 		vec3 unitLightVector = normalize(toLightVector[i]);
-        float nDot = dot(unitNormal , unitLightVector);	
+        float nDot = dot(unitVectorToCamera , unitNormal * unitLightVector);
 		
         float brightness = max(nDot * (roughnessColor.r + roughnessColor.g + roughnessColor.b)/3.0f, 0.3);
         totalDiffuse = totalDiffuse + (((brightness) * lightColor[i])/attFactor);

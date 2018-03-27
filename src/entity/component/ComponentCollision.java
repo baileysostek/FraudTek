@@ -158,8 +158,8 @@ public class ComponentCollision extends Component{
         return t;
     }
 
-    public boolean rayHitsMesh(Vector3f ray, Vector3f origin, Vector3f pos){
-        float[] positions = Game.modelManager.getModel(mesh.getModelID()).getPositions();
+    public boolean rayHitsMesh(Vector3f origin, Vector3f ray, Vector3f pos){
+        float[] positions = Game.modelManager.getModel(mesh.getModelID()).getVerticies();
         float[] tangents = Game.modelManager.getModel(mesh.getModelID()).getTangents();
         float[] bitangnets = Game.modelManager.getModel(mesh.getModelID()).getBitangents();
         float[] normals = Game.modelManager.getModel(mesh.getModelID()).getNormals();
@@ -185,11 +185,11 @@ public class ComponentCollision extends Component{
                 p2.add(translation);
                 p3.add(translation);
 
-                buffer_tangent   = new Vector3f((tangents[(i * 3) + 0]), (tangents[(i * 3) + 1]), (tangents[(i * 3) + 2]));
-                buffer_bitangent = new Vector3f((bitangnets[(i * 3) + 0]), (bitangnets[(i * 3) + 1]), (bitangnets[(i * 3) + 2]));
-                buffer_normal    = new Vector3f((normals[(i * 3) + 0]), (normals[(i * 3) + 1]), (normals[(i * 3) + 2]));
+//                buffer_tangent   = new Vector3f((tangents[(i * 3) + 0]), (tangents[(i * 3) + 1]), (tangents[(i * 3) + 2]));
+//                buffer_bitangent = new Vector3f((bitangnets[(i * 3) + 0]), (bitangnets[(i * 3) + 1]), (bitangnets[(i * 3) + 2]));
+//                buffer_normal    = new Vector3f((normals[(i * 3) + 0]), (normals[(i * 3) + 1]), (normals[(i * 3) + 2]));
 
-                if(Intersectionf.intersectLineSegmentTriangle(origin, new Vector3f(origin).add(ray), p1, p2, p3, 0.000001f, pos)){
+                if(Intersectionf.intersectLineSegmentTriangle(origin, ray, p1, p2, p3, 0.000001f, pos)){
                     return true;
                 }
 
@@ -202,7 +202,7 @@ public class ComponentCollision extends Component{
         Vector3f min = new Vector3f(Float.MAX_VALUE,Float.MAX_VALUE,Float.MAX_VALUE);
         Vector3f max = new Vector3f(Float.MIN_VALUE,Float.MIN_VALUE,Float.MIN_VALUE);
 
-        float[] positions = Game.modelManager.getModel(mesh.getModelID()).getPositions();
+        float[] positions = Game.modelManager.getModel(mesh.getModelID()).getVerticies();
 
         Matrix4f projections = Maths.createTransformationMatrix(new Vector3f(0,0,0), e.getRotX(), e.getRotY(), e.getRotZ(), e.getScale());
 

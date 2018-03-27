@@ -17,8 +17,6 @@ public class FBO {
     int depthTexture;
     int depthBuffer;
 
-    Camera view = null;
-
     public FBO(){
         //Check that FBO's are enabled on this system
         if(GL.getCapabilities().GL_EXT_framebuffer_object){
@@ -70,10 +68,6 @@ public class FBO {
     public void cleanUp(){
         GL30.glDeleteFramebuffers(id);
         GL30.glDeleteRenderbuffers(depthBuffer);
-    }
-
-    public void setView(Camera cam){
-        this.view = cam;
     }
 
     public int getFBOID(){

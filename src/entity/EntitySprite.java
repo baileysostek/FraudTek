@@ -23,8 +23,8 @@ public class EntitySprite extends Entity {
 
     public float width = 0;
 
-    public EntitySprite(Vector3f position, String spritePath, float rotx, float roty, float rotz) {
-        super(EnumEntityType.SPRITE, "", position, rotx, roty, rotz, 1);
+    public EntitySprite(Vector3f position, String spritePath, float rotx, float roty, float rotz, float scale) {
+        super(EnumEntityType.SPRITE, "", position, rotx, roty, rotz, scale);
 
         //Load the sprite
         sprite = Game.spriteBinder.loadSprite(spritePath);

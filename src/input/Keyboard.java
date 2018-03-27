@@ -1,5 +1,7 @@
 package input;
 
+import base.engine.Game;
+import base.util.LogManager;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -14,6 +16,7 @@ public class Keyboard extends GLFWKeyCallback{
   public void invoke(long window, int key, int scancode, int action, int mods) {
     // TODO Auto-generated method stub
     keys[key] = action != GLFW_RELEASE;
+//    Game.logManager.println(key+":"+action);
   }
 
   // boolean method that returns true if a given key

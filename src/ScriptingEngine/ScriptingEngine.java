@@ -6,18 +6,23 @@
 package ScriptingEngine;
 
 import base.engine.Game;
-import base.util.Debouncer;
-import base.util.DistanceCalculator;
-import base.util.DynamicCollection;
+import base.util.*;
 import base.engine.Engine;
 import camera.DynamicCamera;
 import camera.FPSCamera;
 import editor.IntellisenseEngine;
+import entity.Entity;
 import entity.EntityModel;
 import entity.EntityPlayer;
 import entity.EntitySprite;
+import entity.component.EnumComponentType;
+import graphics.FBO;
+import graphics.VAO;
 import graphics.gui.Gui;
 import input.EnumMouseButton;
+import input.Keyboard;
+import input.Mouse;
+import input.MousePicker;
 import math.Maths;
 import models.ModelLoader;
 import org.joml.Vector2f;
@@ -29,6 +34,7 @@ import org.lwjgl.opengl.GL30;
 import shaders.Shader;
 import textures.MaterialManager;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import javax.script.ScriptException;
@@ -70,8 +76,9 @@ public class ScriptingEngine {
         refrences.put("WIDTH", Game.WIDTH);
         refrences.put("HEIGHT", Game.HEIGHT);
 
+        refrences.put("Log", Game.logManager);
+
         //Class
-        addClass(System.class);
         addClass(Vector2f.class);
         addClass(Vector3f.class);
         addClass(Vector4f.class);
@@ -83,13 +90,26 @@ public class ScriptingEngine {
         addClass(EntityPlayer.class);
         addClass(EntitySprite.class);
         addClass(ModelLoader.class);
+        addClass(Entity.class);
+
+        //Input classes
+        addClass(Keyboard.class);
+        addClass(KeyEvent.class);
+        addClass(Mouse.class);
+        addClass(EnumMouseButton.class);
+
+        //Rendering classes
         addClass(Shader.class);
+        addClass(FBO.class);
+        addClass(VAO.class);
+
             //Camera classes
             addClass(FPSCamera.class);
             addClass(DynamicCamera.class);
 
             //Utility classes
             addClass(Maths.class);
+            addClass(EnumComponentType.class);
 
             //GL classes
             addClass(GL11.class);
@@ -108,6 +128,7 @@ public class ScriptingEngine {
             try {
                 script.tick();
             } catch (ScriptException | NoSuchMethodException ex) {
+
                 ex.printStackTrace();
                 remove(script);
             }
@@ -118,7 +139,10 @@ public class ScriptingEngine {
         for(Script script : scripts.getCollection(Script.class)){
             try {
                 script.render();
-            } catch (ScriptException | NoSuchMethodException ex) {
+            } catch (ScriptException | NoSuchMethodException | NullPointerException ex) {
+                if(ex instanceof NullPointerException){
+                    Game.logManager.println("NULL was returned from Script:"+script.getFilePath()+" Line:"+((NullPointerException) ex).getLocalizedMessage(), EnumErrorLevel.ERROR);
+                }
                 System.err.println("Script:"+script.getFilePath()+" has no member 'render()'");
                 ex.printStackTrace();
                 remove(script);
@@ -132,27 +156,25 @@ public class ScriptingEngine {
         scripts.synch();
     }
     
-    public void add(Script object){
-        if(object!=null){
-            object.put("self", object);
-            scripts.add(object);
-            scripts.synch();
-        }
-    }
+//    public void add(Script object){
+//        if(object!=null){
+//            object.put("self", object);
+//            scripts.add(object);
+//            scripts.synch();
+//        }
+//    }
     
-    public Script add(String name, Object... pars){
+    public Script addScript(String name, Object... pars){
         Script script;
         try {
             script = new Script(Game.Path+"/Scripting/"+name);
             script.put("self", script);
             scripts.add(script);
-            if(pars.length > 0) {
-                System.out.println(script + " " + pars[0]);
-            }
             scripts.synch();
             script.init(pars);
         } catch (ScriptException | IOException | NoSuchMethodException ex) {
             ex.printStackTrace();
+            Game.logManager.println("[ERROR}"+(ex.getLocalizedMessage().replace("<eval>", "Script:"+name)));
             return null;
         }
         return script;
@@ -163,7 +185,7 @@ public class ScriptingEngine {
     }
 
     public void addClass(Class className){
-        System.out.println("Adding class:"+className.getSimpleName()+" class:"+className);
+        Game.logManager.println("Adding class:"+className.getSimpleName()+" class:"+className);
         classes.put(className.getSimpleName(), className);
         IntellisenseEngine.cacheFile(className);
     }

@@ -6,214 +6,89 @@
 package models;
 
 import base.engine.Game;
-import base.util.OBJLoader;
+import base.util.EnumErrorLevel;
+import base.util.StringUtils;
+import entity.Attribute;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Bailey
  */
 public class ModelLoader {
+
+    private static final String[] SUPPORTED_FILE_FORMATS = new String[]{".ply", ".obj"};
     
     public static String loadModel(String file){
         String id = file;
+        String fileFormat = "";
+
         if(Game.modelManager.hasModel(id)){
             return id;
         }
-        RawModel model = OBJLoader.loadObjModel(file, Game.loader);
-        Game.modelManager.addModel(id, model);        
+
+        for(String extension : SUPPORTED_FILE_FORMATS){
+            File test = new File(Game.Path+"/Models/" + file + extension);
+            if(test.exists()){
+                fileFormat = extension;
+                Game.logManager.println("File Extension:"+file+fileFormat);
+            }
+        }
+
+        Model model = null;
+        loop:{
+            switch (fileFormat) {
+                case ".ply": {
+                    model = loadPLYModel(file);
+                    break;
+                }
+                case ".obj": {
+                    model = loadObj(file);
+                    break;
+                }
+            }
+        }
+
+        Game.modelManager.addModel(id, model);
         return id;
     }
     
     public static String generateQuad(float width, float height){
-        RawModel model;
+        Model model;
         
         String id = "quad"+width+","+height;
         
         if(Game.modelManager.hasModel(id)){
             return id;
         }
-        
-        model = Game.loader.loadToVAO(
-        new float[]{
-            -width/2, -height/2, 0,
-            width/2, -height/2, 0,
-            -width/2, height/2, 0,
-            width/2, height/2, 0,
-            -width/2, -height/2,0,
-            width/2, -height/2, 0,
-            -width/2, height/2, 0,
-            width/2, height/2, 0,
-        }, new float[]{
-            0,1,
-            1,1,
-            0,0,
-            1,0,
-            0,1,
-            1,1,
-            0,0,
-            1,0,
-        },
-        new float[]{
-            0,0,-1,
-            0,0,-1,
-            0,0,-1,
-            0,0,-1,
-            0,0,1,
-            0,0,1,
-            0,0,1,
-            0,0,1,
-        },
-        new int[]{
-            2,1,0,
-            3,1,2,
-            4,5,6,
-            6,5,7,
-        });
 
-        Game.modelManager.addModel(id, model);        
-        return id;
-    }
-
-    public static String generateLine(Vector3f end){
-        RawModel model;
-
-        String id = "line"+""+end.hashCode();
-
-        if(Game.modelManager.hasModel(id)){
-            return id;
-        }
-
-        model = Game.loader.loadToVAO(
-                new float[]{
-                        0, 0, 0,
-                        end.x(), end.y(), end.z()
-
-                }, new float[]{
-                        0,0,
-                        1,1
-                },
-                new float[]{
-                        0,0,-1,
-                        0,0,-1
-                },
-                new int[]{
-                        0,1
-                });
+        model = new Model(new Attribute("verticies", new float[]{
+                -width/2, -height/2, 0,
+                width/2, -height/2, 0,
+                -width/2, height/2, 0,
+                width/2, height/2, 0,
+                -width/2, -height/2, 0,
+                width/2, -height/2, 0,
+                -width/2, height/2, 0,
+                width/2, height/2, 0,
+        }), new Attribute("indicies", new int[]{
+                2,1,0,
+                3,1,2,
+                4,5,6,
+                5,7,6
+        }), new Attribute("textureCoords", new float[]{
+                0,0,
+                1,0,
+                0,1,
+                1,1
+        }));
 
         Game.modelManager.addModel(id, model);
-        return id;
-    }
-
-    public static String generateQuad45(float width, float height){
-        RawModel model;
-
-        String id = "quad45"+width+","+height;
-
-        if(Game.modelManager.hasModel(id)){
-            return id;
-        }
-
-        model = Game.loader.loadToVAO(
-                new float[]{
-                        -width/2, -height/2, width/2,
-                        width/2, -height/2,-width/2,
-                        -width/2, height/2, width/2,
-                        width/2, height/2, -width/2,
-                        -width/2, -height/2,width/2,
-                        width/2, -height/2, -width/2,
-                        -width/2, height/2, width/2,
-                        width/2, height/2, -width/2,
-                }, new float[]{
-                        0,1,
-                        1,1,
-                        0,0,
-                        1,0,
-                        1,1,
-                        0,1,
-                        1,0,
-                        0,0,
-                },
-                new float[]{
-                        0,0,-1,
-                        0,0,-1,
-                        0,0,-1,
-                        0,0,-1,
-                        0,0,1,
-                        0,0,1,
-                        0,0,1,
-                        0,0,1,
-                },
-                new int[]{
-                        2,1,0,
-                        3,1,2,
-                        4,5,6,
-                        6,5,7,
-                });
-
-        Game.modelManager.addModel(id, model);
-        return id;
-    }
-    public static String generateTerrain(float width, float height, int subDivisions){
-        RawModel model;
-        
-        String id = "terrain"+width+","+height;
-        
-        if(Game.modelManager.hasModel(id)){
-            return id;
-        }
-        
-        float[] verticies = new float[((subDivisions + 1) * (subDivisions + 1)) * 3];
-        for(int j = 0; j < (subDivisions+1); j++){
-            for(int i = 0; i < (subDivisions+1); i++){
-                verticies[((i+(j * (subDivisions + 1))) * 3) + 0] = (-width/2) + (i * (width/(float)subDivisions)); 
-                verticies[((i+(j * (subDivisions + 1))) * 3) + 1] =  -1 * ((float) Math.pow((((float)i/(float)(subDivisions+1))-0.5f) * 6, 2) + (float) Math.pow((((float)j/(float)(subDivisions+1))-0.5f) * 6, 2));
-//                verticies[((i+(j * (subDivisions + 1))) * 3) + 1] = 0;
-                verticies[((i+(j * (subDivisions + 1))) * 3) + 2] = (-height/2) + (j * (height/(float)subDivisions));
-            }  
-        }
-        
-        int[] indicies = new int[((subDivisions + 1) * (subDivisions + 1)) * 6];
-        int index = 0;
-        for(int j = 0; j < (subDivisions); j++){
-            for(int i = 0; i < (subDivisions); i++){
-                indicies[index + 0] = (i+((j + 1) * (subDivisions+1)));
-                indicies[index + 1] = ((i + 1)+(j * (subDivisions+1)));
-                indicies[index + 2] = (i+(j * (subDivisions+1)));
-                indicies[index + 3] = ((i + 1)+(j * (subDivisions+1)));
-                indicies[index + 4] = (i+((j + 1) * (subDivisions+1)));
-                indicies[index + 5] = ((i + 1)+((j + 1) * (subDivisions+1)));
-                index+=6;
-            }  
-        }
-        
-        float[] textures = new float[(((subDivisions + 1) * (subDivisions + 1)) * 8)];
-        for(int j = 0; j < (subDivisions); j++){
-            for(int i = 0; i < (subDivisions); i++){
-                textures[((i+(j * (subDivisions+1))) * 8)+ 0] = ((float)(i + 0))/((float)(subDivisions+1));
-                textures[((i+(j * (subDivisions+1))) * 8)+ 1] = ((float)(j + 1))/((float)(subDivisions+1));
-                textures[((i+(j * (subDivisions+1))) * 8)+ 2] = ((float)(i + 1))/((float)(subDivisions+1));
-                textures[((i+(j * (subDivisions+1))) * 8)+ 3] = ((float)(j + 1))/((float)(subDivisions+1));
-                textures[((i+(j * (subDivisions+1))) * 8)+ 4] = ((float)(i + 0))/((float)(subDivisions+1));
-                textures[((i+(j * (subDivisions+1))) * 8)+ 5] = ((float)(j + 0))/((float)(subDivisions+1));
-                textures[((i+(j * (subDivisions+1))) * 8)+ 6] = ((float)(i + 1))/((float)(subDivisions+1));
-                textures[((i+(j * (subDivisions+1))) * 8)+ 7] = ((float)(j + 0))/((float)(subDivisions+1));
-            }  
-        }
-
-        
-        model = Game.loader.loadToVAO(
-        verticies
-        ,textures,
-        new float[]{
-            0,0,-1,
-            0,0,-1,
-            0,0,-1,
-            0,0,-1,
-        },
-        indicies);
-
-        Game.modelManager.addModel(id, model);        
         return id;
     }
     
@@ -327,7 +202,157 @@ public class ModelLoader {
             22,20,23
         });
 
-        Game.modelManager.addModel(id, model);
+//        Game.modelManager.addModel(id, model);
         return id;
+    }
+
+    public static Model loadObj(String fileName) {
+        String[] data = StringUtils.loadData(Game.Path+"/Models/" + fileName + ".obj");
+
+        List<Vector3f> vertices = new ArrayList<Vector3f>();
+        List<Vector2f> textures = new ArrayList<Vector2f>();
+        List<Vector3f> normals = new ArrayList<Vector3f>();
+        List<Integer> indices = new ArrayList<Integer>();
+
+        float[] verticesArray = null;
+        float[] normalsArray = null;
+        float[] textureArray = null;
+        int[] indicesArray = null;
+        try {
+            int faceDataIndex = 0;
+            for(int i = 0; i < data.length; i++) {
+                String line = data[i];
+                String[] currentLine = line.split(" ");
+                if (line.startsWith("v ")) {
+                    Vector3f vertex = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]),
+                            Float.parseFloat(currentLine[3]));
+                    vertices.add(vertex);
+                } else if (line.startsWith("vt ")) {
+                    Vector2f texture = new Vector2f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]));
+                    textures.add(texture);
+                } else if (line.startsWith("vn ")) {
+                    Vector3f normal = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]),
+                            Float.parseFloat(currentLine[3]));
+                    normals.add(normal);
+                } else if (line.startsWith("f ")) {
+                    faceDataIndex = i;
+                    Game.logManager.println(faceDataIndex+"");
+                    textureArray = new float[vertices.size() * 2];
+                    normalsArray = new float[vertices.size() * 3];
+                    break;
+                }
+            }
+            for(int i = faceDataIndex; i < data.length; i++) {
+                String line = data[i];
+                if (!line.startsWith("f ")) {
+                    continue;
+                }
+                String[] currentLine = line.split(" ");
+                for(int j = 0; j < (currentLine.length-3); j++) {
+                    String[] vertex1 = currentLine[j+1].split("/");
+                    String[] vertex2 = currentLine[j+2].split("/");
+                    String[] vertex3 = currentLine[j+3].split("/");
+
+                    processVertex(vertex1, indices, textures, normals, textureArray, normalsArray);
+                    processVertex(vertex2, indices, textures, normals, textureArray, normalsArray);
+                    processVertex(vertex3, indices, textures, normals, textureArray, normalsArray);
+                }
+            }
+        } catch (Exception e) {
+            Game.logManager.println("Error loading model:"+fileName+" at path:"+Game.Path+"/Models/" + fileName + ".obj", EnumErrorLevel.ERROR);
+            Game.logManager.printStackTrace(e);
+        }
+
+        verticesArray = new float[vertices.size() * 3];
+        indicesArray = new int[indices.size()];
+        textureArray = new float[textures.size() * 2];
+
+        int vertexPointer = 0;
+        for (Vector3f vertex : vertices) {
+            verticesArray[vertexPointer++] = vertex.x;
+            verticesArray[vertexPointer++] = vertex.y;
+            verticesArray[vertexPointer++] = vertex.z;
+        }
+        for (int i = 0; i < indices.size(); i++) {
+            indicesArray[i] = indices.get(i);
+        }
+        vertexPointer = 0;
+        for (Vector2f texture : textures) {
+            textureArray[vertexPointer++] = texture.x;
+            textureArray[vertexPointer++] = texture.y;
+        }
+
+        return new Model(new Attribute<float[]>("verticies", verticesArray), new Attribute<float[]>("normals", normalsArray), new Attribute<int[]>("indicies", indicesArray), new Attribute<float[]>("textureCoords", textureArray));
+    }
+
+    private static void processVertex(String[] vertexData, List<Integer> indices, List<Vector2f> textures, List<Vector3f> normals, float[] textureArray, float[] normalsArray) {
+        int currentVertexPointer = Integer.parseInt(vertexData[0]) - 1;
+        indices.add(currentVertexPointer);
+        //check for texture
+        if(!vertexData[1].isEmpty()){
+            Vector2f currentTex = textures.get(Integer.parseInt(vertexData[1]) - 1);
+            textureArray[currentVertexPointer * 2] = currentTex.x;
+            textureArray[currentVertexPointer * 2 + 1] = 1 - currentTex.y;
+        }
+        Vector3f currentNorm = normals.get(Integer.parseInt(vertexData[2]) - 1);
+        normalsArray[currentVertexPointer * 3 + 0] = currentNorm.x;
+        normalsArray[currentVertexPointer * 3 + 1] = currentNorm.y;
+        normalsArray[currentVertexPointer * 3 + 2] = currentNorm.z;
+    }
+
+    public static Model loadPLYModel(String fileName){
+        String path = Game.Path+"/Models/" + fileName + ".ply";
+        String[] data = StringUtils.loadData(path);
+
+        float[] verticies = new float[]{};
+        int[] indicies = new int[]{};
+        float[] textureCoords = new float[]{};
+
+        int vLength = 0;
+        int fLength = 0;
+        int startIndex = 0;
+
+        for(int i = 0; i < data.length; i++){
+            String line = data[i];
+            if(line.startsWith("element vertex")){
+                vLength = Integer.parseInt(line.replace("element vertex ", ""));
+                verticies = new float[vLength * 3];
+            }
+            if(line.startsWith("element face")){
+                fLength = Integer.parseInt(line.replace("element face ", ""));
+                indicies = new int[fLength * 3];
+            }
+            if(line.startsWith("end_header")){
+                startIndex = i+1;
+                break;
+            }
+        }
+
+        int index = startIndex;
+        for(int i = 0; i < vLength; i++){
+            String[] splitLine = data[index].split(" ");
+            verticies[i * 3 + 0] = Float.parseFloat(splitLine[0]);
+            verticies[i * 3 + 1] = Float.parseFloat(splitLine[1]);
+            verticies[i * 3 + 2] = Float.parseFloat(splitLine[2]);
+            index++;
+        }
+
+        index = startIndex + vLength;
+        for(int i = 0; i < fLength; i++){
+            String[] splitLine = data[index].split(" ");
+            indicies[i * 3 + 0] = Integer.parseInt(splitLine[1]);
+            indicies[i * 3 + 1] = Integer.parseInt(splitLine[2]);
+            indicies[i * 3 + 2] = Integer.parseInt(splitLine[3]);
+            index++;
+        }
+
+        textureCoords = new float[(verticies.length/3) * 2];
+        for(int i = 0; i < textureCoords.length/2; i++){
+            float distance = (float)((float)i/(float)textureCoords.length/2.0);
+            textureCoords[i+0] = distance;
+            textureCoords[i+1] = distance;
+        }
+
+        return new Model(new Attribute<float[]>("verticies", verticies), new Attribute<int[]>("indicies", indicies), new Attribute<float[]>("textureCoords", textureCoords));
     }
 }

@@ -8,6 +8,7 @@ package entity;
 import base.engine.Game;
 import base.util.DynamicCollection;
 import base.engine.Engine;
+import base.util.LogManager;
 import base.util.StringUtils;
 import com.google.gson.*;
 
@@ -137,7 +138,7 @@ public class EntityManager extends Engine{
             }
             return add;
         }
-        System.err.println("Entity:"+e+" is not a defined entity type. Check index.json for a list of entities.");
+        Game.logManager.println("[ERROR] Entity:"+e+" is not a defined entity type. Check index.json for a list of entities.");
         return null;
     }
 

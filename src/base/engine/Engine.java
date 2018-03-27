@@ -5,6 +5,8 @@
  */
 package base.engine;
 
+import base.util.LogManager;
+
 import javax.script.ScriptEngine;
 
 /**
@@ -14,8 +16,10 @@ import javax.script.ScriptEngine;
 public abstract class Engine {
 
     private final String engineName;
-    private boolean initialized = false;
-    
+    private static boolean initialized = false;
+
+    private static Engine self;
+
     public Engine(String engine){
         engineName = engine;
         Initialize();
@@ -24,12 +28,18 @@ public abstract class Engine {
     
     public void Initialize(){
         try{
-            System.out.print("Initializing Engine:"+engineName+"...");
+            if(!engineName.equals("LogManager")) {
+                Game.logManager.print("Initializing Engine:" + engineName + "...");
+            }
             init();
-            System.out.println("Success.");
+            if(!engineName.equals("LogManager")){
+                Game.logManager.println("Success.");
+            }
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("Failure.");
+            if(!engineName.equals("LogManager")) {
+                Game.logManager.println("Failure.");
+            }
         }
     }
 
@@ -45,5 +55,15 @@ public abstract class Engine {
     public abstract void tick();
     public abstract void registerForScripting(ScriptEngine engine);
     public abstract void onShutdown();
-//    public abstract Engine getInstance();
+//    protected static Engine getSelf(){
+//
+//        return null;
+//    }
+//
+//    public static Engine getInstance(){
+//        if(!initialized){
+//            self = getSelf();
+//        }
+//        return self;
+//    }
 }

@@ -5,6 +5,7 @@
  */
 package base.controller;
 
+import base.engine.Game;
 import base.util.DynamicCollection;
 import base.engine.Engine;
 import javax.script.ScriptEngine;
@@ -20,7 +21,7 @@ public class ControllerManager extends Engine{
     private DynamicCollection<JavaController> controllers;
     
     private final int maxTicks = 5*60;
-        private int currentTicks = maxTicks;
+    private int currentTicks = maxTicks;
     
     public ControllerManager() {
         super("Controllers");
@@ -41,8 +42,8 @@ public class ControllerManager extends Engine{
         };
         
         pollControllers();
-        
-        System.out.println("Connected Controllers:"+controllers.getLength());
+
+        Game.logManager.println("Connected Controllers:"+controllers.getLength());
     }
 
     @Override
@@ -114,5 +115,9 @@ public class ControllerManager extends Engine{
             }
         }
         return null;
+    }
+
+    public int getControllerCount(){
+        return this.controllers.getLength();
     }
 }

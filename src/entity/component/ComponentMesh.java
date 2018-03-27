@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import entity.Attribute;
 import entity.Entity;
+import models.Model;
 import models.ModelLoader;
 import models.RawModel;
 import shaders.Shader;
@@ -61,7 +62,7 @@ public class ComponentMesh extends Component{
         meshID = mesh;
     }
 
-    public RawModel getModel(){
+    public Model getModel(){
         return Game.modelManager.getModel(meshID);
     }
 

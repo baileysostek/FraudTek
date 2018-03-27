@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package textures;
 
 import base.engine.Game;
@@ -49,13 +44,13 @@ public class MaterialManager extends Engine{
     public void addMaterial(Material material){
         this.loadedMaterials.put(material.getName(), material);
     }
-    
+
     public Material getMaterial(String id, int... params){
         if(loadedMaterials.containsKey(id)) {
             return this.loadedMaterials.get(id);
         }else{
             int[] outData = {
-                    Game.spriteBinder.loadSprite("white_normal").getID(),
+                    Game.spriteBinder.loadSprite("white_normal").getID(), //Albedo
                     Game.spriteBinder.loadSprite("white").getID(),
                     Game.spriteBinder.loadSprite("white").getID()
             };

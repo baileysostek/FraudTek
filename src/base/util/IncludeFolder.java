@@ -22,21 +22,21 @@ public class IncludeFolder {
     
     public void generateFolder(){
         File directoryName = new File(Game.Path+this.name);
-        System.out.println("Looking for "+ this.name + " Folder:"+Game.Path+this.name);
+        Game.logManager.println("Looking for "+ this.name + " Folder:"+Game.Path+this.name);
         
         if(!directoryName.exists()){
             boolean result = false;
-                System.err.println("Cannot find "+ this.name + " folder... Creating:"+Game.Path+this.name);
+                Game.logManager.println("Cannot find "+ this.name + " folder... Creating:"+Game.Path+this.name);
             try{
                 directoryName.mkdir();
                 result = true;
             } 
             catch(SecurityException se){
-                System.err.println("Failure...");
-                System.err.println("File Permissions do not allow the directory:"+Game.Path+this.name+" to be created."); 
+                Game.logManager.println("Failure...");
+                Game.logManager.println("File Permissions do not allow the directory:"+Game.Path+this.name+" to be created."); 
             }        
             if(result) {    
-                System.out.println("Success...");
+                Game.logManager.println("Success...");
             }
         }
     }

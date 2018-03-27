@@ -7,6 +7,7 @@ package math;
 
 import base.engine.Game;
 import camera.Camera;
+import entity.Entity;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -48,7 +49,24 @@ public class Maths {
         out.translate(inverseVector(camera.getPosition()));
         return out;
     }
-    
+
+    public static Matrix4f getCameraRot(Camera camera){
+        Matrix4f out = new Matrix4f();
+        out.rotate((float) Math.toRadians(camera.getRotation().y), 1f, 0f, 0f); //Pitch rotated first
+        out.rotate((float) Math.toRadians(camera.getRotation().x), 0f, 1f, 0f); //Yaw
+        out.rotate((float) Math.toRadians(camera.getRotation().z), 0f, 0f, 1f); //Roll
+        return out;
+    }
+
+    public static Matrix4f getEntityRot(Entity entity){
+        Matrix4f out = new Matrix4f();
+        out.rotate((float) Math.toRadians(entity.getRotY()), 1f, 0f, 0f); //Pitch rotated first
+        out.rotate((float) Math.toRadians(entity.getRotX()), 0f, 1f, 0f); //Yaw
+        out.rotate((float) Math.toRadians(entity.getRotZ()), 0f, 0f, 1f); //Roll
+        return out;
+    }
+
+
     public static Vector3f inverseVector(Vector3f in){
         return new Vector3f(-in.x, -in.y, -in.z);
     }

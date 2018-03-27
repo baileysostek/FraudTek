@@ -21,13 +21,13 @@ void main(void){
     vec4 worldPosition = transformationMatrix * vec4(position, 1.0);
     gl_Position =  projectionMatrix * viewMatrix * worldPosition;
     pass_textureCoords = textureCoords;
-    
+
 	vec3 surfaceTangent = (transformationMatrix * vec4(tangent, 0.0)).xyz;
 	vec3 surfaceBitangnet = (transformationMatrix * vec4(bitangent, 0.0)).xyz;
     vec3 surfaceNormal = (transformationMatrix * vec4(normal, 0.0)).xyz;
-	
+
 	TBN = transpose(mat3(surfaceTangent, surfaceBitangnet, surfaceNormal));
-	
+
     for(int i = 0; i < 4; i++){
             toLightVector[i] = lightPosition[i] - worldPosition.xyz;
     }

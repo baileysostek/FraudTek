@@ -11,6 +11,7 @@ import ScriptingEngine.Script;
 import entity.component.Component;
 import entity.component.EnumComponentType;
 import entity.component.Function;
+import graphics.SpriteBinder;
 import org.joml.Vector3f;
 import graphics.Renderer;
 import math.Maths;
@@ -27,7 +28,7 @@ public class Entity{
     private Vector3f position;
     private Vector3f velocity = new Vector3f(0,0,0);;
     private Vector3f acceleration = new Vector3f(0,0,0);
-    private float rotX, rotY, rotZ;
+    private float rotX = 0, rotY = 0, rotZ = 0;
     private float scale;
     private EnumEntityType type;
     
@@ -62,10 +63,8 @@ public class Entity{
     public Entity(EnumEntityType type, String material, Vector3f position, float rotX, float rotY, float rotZ, float scale){
         this.type = type;
         this.materialID = material;
+        this.textureID = Game.spriteBinder.loadSprite(material).getID();
         this.position = position;
-        this.rotX = rotX;
-        this.rotY = rotY;
-        this.rotZ = rotZ;
         this.scale = scale;
         this.id = "id:"+Math.random();
 
@@ -80,6 +79,8 @@ public class Entity{
                 object.onRemove();
             }
         };
+
+        rotate(rotX, rotY, rotZ);
     }
     
     public void tick(){
@@ -153,6 +154,12 @@ public class Entity{
         this.position.y+=dy;
         this.position.z+=dz;
     }
+
+    public void translate(Vector3f offset){
+        this.position.x+=offset.x();
+        this.position.y+=offset.y();
+        this.position.z+=offset.z();
+    }
     
     public void rotate(float dx, float dy, float dz){
         this.rotX+=dx;
@@ -162,6 +169,13 @@ public class Entity{
 
     public Vector3f getPosition() {
         return position;
+    }
+    public Vector3f getRotation() {
+        return new Vector3f(rotX, rotY, rotZ);
+    }
+
+    public void setPosition(float x, float y, float z){
+        this.position = new Vector3f(x, y, z);
     }
 
     public void setPosition(Vector3f position) {
@@ -255,10 +269,10 @@ public class Entity{
             for(Function f : c.getFunctions()){
                 index ++;
                 f.setScript(script);
-                System.out.println("Function Pointer on Set."+f);
+//                System.out.println("Function Pointer on Set."+f);
             }
         }
-        System.out.println("entity "+this+" has "+index+" function(s).");
+//        System.out.println("entity "+this+" has "+index+" function(s).");
     }
     
     public void addAttribute(Attribute attribute){

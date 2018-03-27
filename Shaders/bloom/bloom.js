@@ -1,11 +1,17 @@
 /**
  * Created by Bailey on 1/18/2018.
  */
+var VERSION = "400 core";
 var MAX_LIGHTS = 4;
 
 //This function is called when a shader is initialized for the first time
 function init() {
-    
+
+}
+
+//This is the GL version that the Shaders will be using
+function getVersion() {
+    return "VERSION";
 }
 
 function getAttributes() {

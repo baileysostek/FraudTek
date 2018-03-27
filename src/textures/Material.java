@@ -12,7 +12,14 @@ package textures;
 public class Material {
     
     private String name;
-    
+
+    //Addressable texture properties, maybe in a hashMap?
+//    private int albedoID;
+//    private int heightID;
+//    private int nomralID;
+//    private int roughnessID;
+//    private int ambientID;
+
     private int textureID;
     private int normalID;
     private int heightID;
