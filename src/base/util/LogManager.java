@@ -22,7 +22,7 @@ public class LogManager extends Engine {
     private LinkedList<String> logData = new LinkedList<>();
     private boolean includeTimestamp = true;
     private String fileName = "log.txt";
-    private boolean doOutput = false;
+    private boolean doOutput = true;
 
     private boolean lastWasPrintLn = false;
 
@@ -51,7 +51,7 @@ public class LogManager extends Engine {
     }
 
     public void println(){
-        String line = "---------------------------------------------";
+        String line = "------------------------------------------------------------------------------------------";
         logData.add(line);
         if(doOutput) {
             System.out.println(line);

@@ -60,8 +60,8 @@ public class Maths {
 
     public static Matrix4f getEntityRot(Entity entity){
         Matrix4f out = new Matrix4f();
-        out.rotate((float) Math.toRadians(entity.getRotY()), 1f, 0f, 0f); //Pitch rotated first
-        out.rotate((float) Math.toRadians(entity.getRotX()), 0f, 1f, 0f); //Yaw
+        out.rotate((float) Math.toRadians(entity.getRotX()), 1f, 0f, 0f); //Yaw
+        out.rotate((float) Math.toRadians(entity.getRotY()), 0f, 1f, 0f); //Pitch rotated first
         out.rotate((float) Math.toRadians(entity.getRotZ()), 0f, 0f, 1f); //Roll
         return out;
     }

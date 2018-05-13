@@ -5,22 +5,22 @@
  */
 package textures;
 
-/**
+ import base.engine.Game;
+
+ /**
  *
  * @author Bailey
  */
 public class Material {
-    
     private String name;
 
-    //Addressable texture properties, maybe in a hashMap?
 //    private int albedoID;
 //    private int heightID;
 //    private int nomralID;
 //    private int roughnessID;
 //    private int ambientID;
 
-    private int textureID;
+    private int albedoID;
     private int normalID;
     private int heightID;
     private int specularID;
@@ -28,36 +28,13 @@ public class Material {
    
     private boolean hasTransparency = false;
     
-    public Material(String name, int textureID, int normalID, int specularID, int roughnessID){
+    public Material(String name){
         this.name = name;
-        this.textureID = textureID;
-        this.normalID = normalID;
-        this.specularID = specularID;
-        this.roughnessID = roughnessID;
-    }
-    
-    public void setHasTransparency(boolean transparency){
-        this.hasTransparency = transparency;
-    }
-    
-    public boolean hasTransparecny(){
-        return this.hasTransparency;
+        this.albedoID = Game.spriteBinder.loadSprite("Materials/"+name+"/albedo").getID();
     }
     
     public int getTextureID(){
-        return this.textureID;
-    }
-    
-    public int getNormalID(){
-        return this.normalID;
-    }
-    
-    public int getSpecularID(){
-        return this.specularID;
-    }
-    
-    public int getRougnessID(){
-        return this.roughnessID;
+        return this.albedoID;
     }
     
     public String getName(){

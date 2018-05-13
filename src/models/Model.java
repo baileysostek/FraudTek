@@ -22,7 +22,7 @@ public class Model {
     float[] pointData;
 
     float[] normals;
-    float[] loadedNormals;
+    float[] loadedNormals = new float[]{};
     float[] tangents;
     float[] bitangents;
 
@@ -58,7 +58,13 @@ public class Model {
 
         vao.addVBO(3, verticies);
         vao.addVBO(2, textureCoords);
-        vao.addVBO(3, loadedNormals);
+        if(loadedNormals.length > 0) {
+            //If normals are pre-computed
+            vao.addVBO(3, loadedNormals);
+        }else{
+            //Compute the normals
+            vao.addVBO(3, normals  );
+        }
 
 
         Game.vaoManager.unbindVAO();

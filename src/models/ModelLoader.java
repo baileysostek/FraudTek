@@ -11,6 +11,7 @@ import base.util.StringUtils;
 import entity.Attribute;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -86,6 +87,15 @@ public class ModelLoader {
                 1,0,
                 0,1,
                 1,1
+        }), new Attribute("normals", new float[]{
+                0,0,-1,
+                0,0,-1,
+                0,0,-1,
+                0,0,-1,
+                0,0,1,
+                0,0,1,
+                0,0,1,
+                0,0,1,
         }));
 
         Game.modelManager.addModel(id, model);
@@ -216,88 +226,100 @@ public class ModelLoader {
 
         float[] verticesArray = null;
         float[] normalsArray = null;
-        float[] textureArray = null;
+        float[] textureArray = new float[]{};
         int[] indicesArray = null;
-        try {
-            int faceDataIndex = 0;
-            for(int i = 0; i < data.length; i++) {
-                String line = data[i];
-                String[] currentLine = line.split(" ");
-                if (line.startsWith("v ")) {
-                    Vector3f vertex = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]),
-                            Float.parseFloat(currentLine[3]));
-                    vertices.add(vertex);
-                } else if (line.startsWith("vt ")) {
-                    Vector2f texture = new Vector2f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]));
-                    textures.add(texture);
-                } else if (line.startsWith("vn ")) {
-                    Vector3f normal = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]),
-                            Float.parseFloat(currentLine[3]));
-                    normals.add(normal);
-                } else if (line.startsWith("f ")) {
-                    faceDataIndex = i;
-                    Game.logManager.println(faceDataIndex+"");
-                    textureArray = new float[vertices.size() * 2];
+
+        for(int i = 0; i < data.length; i++){
+            String line = data[i];
+            if(line.startsWith("v ")){
+                String[] lineData = line.split(" ");
+                if(lineData.length!=4){
+                    //TODO set flag to failed and return the cube model
+                    Game.logManager.println("This line is wrong:"+line, EnumErrorLevel.ERROR);
+                }
+                Vector3f vector = new Vector3f(Float.parseFloat(lineData[1]),Float.parseFloat(lineData[2]),Float.parseFloat(lineData[3]));
+                vertices.add(vector);
+            }
+            if(line.startsWith("vn ")){
+                String[] lineData = line.split(" ");
+                if(lineData.length!=4){
+                    //TODO set flag to failed and return the cube model
+                    Game.logManager.println("This line is wrong:"+line, EnumErrorLevel.ERROR);
+                }
+                Vector3f vector = new Vector3f(Float.parseFloat(lineData[1]),Float.parseFloat(lineData[2]),Float.parseFloat(lineData[3]));
+                normals.add(vector);
+            }
+            if(line.startsWith("f ")){
+                if(normalsArray == null){
                     normalsArray = new float[vertices.size() * 3];
-                    break;
                 }
-            }
-            for(int i = faceDataIndex; i < data.length; i++) {
-                String line = data[i];
-                if (!line.startsWith("f ")) {
-                    continue;
+                String[] lineData = line.split(" ");
+                if(lineData.length!=4){
+                    //TODO set flag to failed and return the cube model
+                    Game.logManager.println("This is a non-triangulatedOBJ file:"+line, EnumErrorLevel.ERROR);
                 }
-                String[] currentLine = line.split(" ");
-                for(int j = 0; j < (currentLine.length-3); j++) {
-                    String[] vertex1 = currentLine[j+1].split("/");
-                    String[] vertex2 = currentLine[j+2].split("/");
-                    String[] vertex3 = currentLine[j+3].split("/");
+                String[] vertex1 = lineData[1].split("/");
+                String[] vertex2 = lineData[2].split("/");
+                String[] vertex3 = lineData[3].split("/");
 
-                    processVertex(vertex1, indices, textures, normals, textureArray, normalsArray);
-                    processVertex(vertex2, indices, textures, normals, textureArray, normalsArray);
-                    processVertex(vertex3, indices, textures, normals, textureArray, normalsArray);
+                int vertex1Pointer = Integer.parseInt(vertex1[0])-1;
+                int vertex2Pointer = Integer.parseInt(vertex2[0])-1;
+                int vertex3Pointer = Integer.parseInt(vertex3[0])-1;
+//                //DUMMY for now
+                textures.add(new Vector2f(0, 0));
+
+                {
+                    indices.add(vertex1Pointer);
+                    Vector3f currentNorm = normals.get(Integer.parseInt(vertex1[2]) - 1);
+                    normalsArray[vertex1Pointer * 3 + 0] = currentNorm.x;
+                    normalsArray[vertex1Pointer * 3 + 1] = currentNorm.y;
+                    normalsArray[vertex1Pointer * 3 + 2] = currentNorm.z;
+                }
+                {
+                    indices.add(vertex2Pointer);
+                    Vector3f currentNorm = normals.get(Integer.parseInt(vertex2[2]) - 1);
+                    normalsArray[vertex2Pointer * 3 + 0] = currentNorm.x;
+                    normalsArray[vertex2Pointer * 3 + 1] = currentNorm.y;
+                    normalsArray[vertex2Pointer * 3 + 2] = currentNorm.z;
+                }
+                {
+                    indices.add(vertex3Pointer);
+                    Vector3f currentNorm = normals.get(Integer.parseInt(vertex3[2]) - 1);
+                    normalsArray[vertex3Pointer * 3 + 0] = currentNorm.x;
+                    normalsArray[vertex3Pointer * 3 + 1] = currentNorm.y;
+                    normalsArray[vertex3Pointer * 3 + 2] = currentNorm.z;
                 }
             }
-        } catch (Exception e) {
-            Game.logManager.println("Error loading model:"+fileName+" at path:"+Game.Path+"/Models/" + fileName + ".obj", EnumErrorLevel.ERROR);
-            Game.logManager.printStackTrace(e);
         }
 
-        verticesArray = new float[vertices.size() * 3];
+        //Flush indices to array.
         indicesArray = new int[indices.size()];
-        textureArray = new float[textures.size() * 2];
-
-        int vertexPointer = 0;
-        for (Vector3f vertex : vertices) {
-            verticesArray[vertexPointer++] = vertex.x;
-            verticesArray[vertexPointer++] = vertex.y;
-            verticesArray[vertexPointer++] = vertex.z;
-        }
-        for (int i = 0; i < indices.size(); i++) {
+        for(int i = 0; i < indices.size(); i++){
             indicesArray[i] = indices.get(i);
         }
-        vertexPointer = 0;
-        for (Vector2f texture : textures) {
-            textureArray[vertexPointer++] = texture.x;
-            textureArray[vertexPointer++] = texture.y;
+
+        //Flush vertices to array.
+        verticesArray = new float[vertices.size() * 3];
+        for(int i = 0; i < vertices.size(); i++){
+            verticesArray[i * 3 + 0] = vertices.get(i).x();
+            verticesArray[i * 3 + 1] = vertices.get(i).y();
+            verticesArray[i * 3 + 2] = vertices.get(i).z();
+        }
+
+        //Flush textureCoords to array.
+        textureArray = new float[textures.size() * 2];
+        for(int i = 0; i < textures.size(); i++){
+            textureArray[i * 2 + 0] = textures.get(i).x();
+            textureArray[i * 2 + 1] = textures.get(i).y();
+        }
+
+        //Throw an error and return the cube model
+        if(verticesArray == null){
+            Game.logManager.println("Error loading model file:"+Game.Path+"/Models/" + fileName + ".obj", EnumErrorLevel.ERROR);
+            return Game.modelManager.getModel(ModelLoader.loadModel("cube"));
         }
 
         return new Model(new Attribute<float[]>("verticies", verticesArray), new Attribute<float[]>("normals", normalsArray), new Attribute<int[]>("indicies", indicesArray), new Attribute<float[]>("textureCoords", textureArray));
-    }
-
-    private static void processVertex(String[] vertexData, List<Integer> indices, List<Vector2f> textures, List<Vector3f> normals, float[] textureArray, float[] normalsArray) {
-        int currentVertexPointer = Integer.parseInt(vertexData[0]) - 1;
-        indices.add(currentVertexPointer);
-        //check for texture
-        if(!vertexData[1].isEmpty()){
-            Vector2f currentTex = textures.get(Integer.parseInt(vertexData[1]) - 1);
-            textureArray[currentVertexPointer * 2] = currentTex.x;
-            textureArray[currentVertexPointer * 2 + 1] = 1 - currentTex.y;
-        }
-        Vector3f currentNorm = normals.get(Integer.parseInt(vertexData[2]) - 1);
-        normalsArray[currentVertexPointer * 3 + 0] = currentNorm.x;
-        normalsArray[currentVertexPointer * 3 + 1] = currentNorm.y;
-        normalsArray[currentVertexPointer * 3 + 2] = currentNorm.z;
     }
 
     public static Model loadPLYModel(String fileName){

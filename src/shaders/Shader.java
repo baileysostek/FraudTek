@@ -12,12 +12,11 @@ import entity.Entity;
 import entity.component.ComponentMesh;
 import entity.component.EnumComponentType;
 import graphics.VAO;
+import graphics.gui.Gui;
 import math.Maths;
 import org.joml.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
-import textures.Material;
-import textures.MaterialManager;
 
 import javax.script.ScriptException;
 import java.io.File;
@@ -172,13 +171,11 @@ public class Shader{
         try {
             //Add properties to this script
             script.addClass(GL11.class);
-            script.addClass(Vector3f.class);
-            script.put("Log", Game.logManager);
-            script.addClass(Material.class);
-            script.put("MaterialManager", Game.materialManager);
+            Game.scriptingEngine.IncludeFilesToScript(script);
             script.init(this);
         } catch (Exception e) {
             e.printStackTrace();
+            Game.logManager.println("Exception on line", EnumErrorLevel.ERROR);
         }
 
         shaderName = name;
@@ -257,6 +254,9 @@ public class Shader{
     }
 
     public void loadData(String location, Object data){
+        if(programID != GL20.GL_CURRENT_PROGRAM){
+//            Game.logManager.println("Loading data into inactive Uniform:"+location+" in the Shader:"+shaderName, EnumErrorLevel.ERROR);
+        }
         //Get the type
         if (uniformTypes.containsKey(location)) {
             String type = uniformTypes.get(location);
@@ -277,12 +277,18 @@ public class Shader{
                 GL20.glUniform3f(uniformPointers.get(location), parsedData.x, parsedData.y, parsedData.z);
                 return;
             }
+            if (type.equals("vec4")) {
+                Vector4f parsedData = (Vector4f) data;
+                GL20.glUniform4f(uniformPointers.get(location), parsedData.x, parsedData.y, parsedData.z, parsedData.w);
+                return;
+            }
             if (type.equals("mat4")) {
                 Matrix4f matrix = (Matrix4f) data;
                 matrixBuffer = matrix.get(matrixBuffer);
                 GL20.glUniformMatrix4fv(uniformPointers.get(location), false, matrixBuffer);
                 return;
             }
+            Game.logManager.println("Undefined Uniform Type:"+type+" @Location:"+location+" in the Shader:"+shaderName, EnumErrorLevel.ERROR);
         }
     }
 

@@ -5,6 +5,7 @@
  */
 package ScriptingEngine;
 
+import base.controller.EnumButtonType;
 import base.engine.Game;
 import base.util.*;
 import base.engine.Engine;
@@ -32,7 +33,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import shaders.Shader;
-import textures.MaterialManager;
+import textures.Material;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -97,24 +98,26 @@ public class ScriptingEngine {
         addClass(KeyEvent.class);
         addClass(Mouse.class);
         addClass(EnumMouseButton.class);
+        addClass(EnumButtonType.class);
 
         //Rendering classes
         addClass(Shader.class);
         addClass(FBO.class);
         addClass(VAO.class);
+        addClass(Material.class);
 
-            //Camera classes
-            addClass(FPSCamera.class);
-            addClass(DynamicCamera.class);
+        //Camera classes
+        addClass(FPSCamera.class);
+        addClass(DynamicCamera.class);
 
-            //Utility classes
-            addClass(Maths.class);
-            addClass(EnumComponentType.class);
+        //Utility classes
+        addClass(Maths.class);
+        addClass(EnumComponentType.class);
 
-            //GL classes
-            addClass(GL11.class);
-            addClass(GL20.class);
-            addClass(GL30.class);
+        //GL classes
+        addClass(GL11.class);
+        addClass(GL20.class);
+        addClass(GL30.class);
     }
 
     public void put(String name, Object object){
@@ -143,7 +146,7 @@ public class ScriptingEngine {
                 if(ex instanceof NullPointerException){
                     Game.logManager.println("NULL was returned from Script:"+script.getFilePath()+" Line:"+((NullPointerException) ex).getLocalizedMessage(), EnumErrorLevel.ERROR);
                 }
-                System.err.println("Script:"+script.getFilePath()+" has no member 'render()'");
+                Game.logManager.println(ex.getLocalizedMessage().replace("<eval>", script.getFilePath()), EnumErrorLevel.ERROR);
                 ex.printStackTrace();
                 remove(script);
             }
@@ -207,4 +210,16 @@ public class ScriptingEngine {
     public Script[] getScripts(){
         return scripts.getCollection(Script.class);
     }
+
+    public void IncludeFilesToScript(Script script){
+        //Add all references
+        for(String s : refrences.keySet()){
+            script.put(s, refrences.get(s));
+        }
+        //Add all classes
+        for (Class c:classes.values()){
+            script.addClass(c);
+        }
+    }
+
 }

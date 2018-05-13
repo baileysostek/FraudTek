@@ -14,7 +14,11 @@ import graphics.*;
 import graphics.gui.GuiRenderer;
 import graphics.gui.Gui;
 import math.Maths;
+import networking.ServerManager;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 import steam.SteamManager;
 import camera.CameraManager;
 import com.google.gson.Gson;
@@ -43,8 +47,6 @@ import models.ModelManager;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import static org.lwjgl.opengl.GL11.*;
-
-import textures.MaterialManager;
 
 public class Game {
     
@@ -99,19 +101,19 @@ public class Game {
     public static SpriteBinder spriteBinder;
     public static TextureManager textureManager;
     public static ModelManager modelManager;
-    public static MaterialManager materialManager;
     public static ControllerManager controllerManager;
     public static VAOManager vaoManager;
+    public static ServerManager serverManager;
     //VR Headsets
 
     //tmp
     static GuiRenderer uiRenderer;
-    static LinkedList<Gui> guis = new LinkedList<Gui>();
+    public static LinkedList<Gui> guis = new LinkedList<Gui>();
 
     public static Entity player;
 
     public static void main(String[] args){
-        init();
+        init(args);
         run();
         logManager.println();
         logManager.println("Shutting down Engine.");
@@ -129,7 +131,7 @@ public class Game {
         glfwTerminate();
     }
     
-    private static void init(){
+    private static void init(String[] args){
         //Very first thing initialized
         logManager = new LogManager();
         logManager.println();
@@ -157,17 +159,37 @@ public class Game {
             NAME = gson.fromJson(launchOptions.get("name"), String.class);
             logManager.println("Game Name:"+NAME);
         }
-        if(launchOptions.has("width")){
-            WIDTH = gson.fromJson(launchOptions.get("width"), Integer.class);
-            logManager.println("Target Width:"+WIDTH);
+        //Take args in OR read from launch
+        //WIDTH
+        if(args.length < 1){
+            if (launchOptions.has("width")) {
+                WIDTH = gson.fromJson(launchOptions.get("width"), Integer.class);
+                logManager.println("Target Width:" + WIDTH);
+            }
+        }else{
+            WIDTH = Integer.parseInt(args[0]);
+            logManager.println("ARGS Width:" + WIDTH);
         }
-        if(launchOptions.has("height")){
-            HEIGHT = gson.fromJson(launchOptions.get("height"), Integer.class);
-            logManager.println("Target Height:"+HEIGHT);
+        //HEIGHT
+        if(args.length < 2) {
+            if (launchOptions.has("height")) {
+                HEIGHT = gson.fromJson(launchOptions.get("height"), Integer.class);
+                logManager.println("Target Height:" + HEIGHT);
+            }
+        }else{
+            HEIGHT = Integer.parseInt(args[1]);
+            logManager.println("ARGS Height:" + HEIGHT);
         }
-        if(launchOptions.has("fullscreen")){
-            FULLSCREEN = gson.fromJson(launchOptions.get("fullscreen"), Boolean.class);
-            logManager.println("Window is Fullscreen:"+FULLSCREEN);
+
+        //FULLSCREEN
+        if(args.length < 3) {
+            if (launchOptions.has("fullscreen")) {
+                FULLSCREEN = gson.fromJson(launchOptions.get("fullscreen"), Boolean.class);
+                logManager.println("Window is Fullscreen:" + FULLSCREEN);
+            }
+        }else{
+            FULLSCREEN = Boolean.parseBoolean(args[2]);
+            logManager.println("ARGS Fullscreen:" + FULLSCREEN);
         }
         
         if(!FULLSCREEN){
@@ -238,23 +260,22 @@ public class Game {
         engines.add(spriteBinder);
         modelManager = new ModelManager();
         engines.add(modelManager);
-        materialManager = new MaterialManager();
-        engines.add(materialManager);
         controllerManager = new ControllerManager();
         engines.add(controllerManager);
         vaoManager = new VAOManager();
         engines.add(vaoManager);
-        uiRenderer = new GuiRenderer(loader);
+        serverManager = new ServerManager();
+        engines.add(serverManager);
         engines.synch();
 
         logManager.println();
         logManager.println("Adding refrences to the scripting engine.");
         scriptingEngine = new ScriptingEngine(engines);
+        uiRenderer = new GuiRenderer(loader);
         //Register for scripting
         scriptingEngine.addRefrence("guis", guis);
         scriptingEngine.addRefrence("MouseRay", mouse);
         scriptingEngine.addRefrence("Camera", cameraManager.getCam());
-        scriptingEngine.addRefrence("MaterialManager", materialManager);
         scriptingEngine.addRefrence("ControllerManager", controllerManager);
 
 
@@ -274,6 +295,7 @@ public class Game {
 
 //        IntellisenseEngine.generateHTML();
 
+        GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
     }
     private static void run(){
         //Game Loop

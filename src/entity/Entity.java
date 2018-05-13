@@ -39,7 +39,7 @@ public class Entity{
     
     private String id;
     
-    private String materialID = "";
+    private Material material;
     private int textureID = 0;
     public int normalID = 0;
 //    private int heightID = 0;
@@ -62,7 +62,7 @@ public class Entity{
     
     public Entity(EnumEntityType type, String material, Vector3f position, float rotX, float rotY, float rotZ, float scale){
         this.type = type;
-        this.materialID = material;
+        this.material = new Material(material);
         this.textureID = Game.spriteBinder.loadSprite(material).getID();
         this.position = position;
         this.scale = scale;
@@ -221,24 +221,15 @@ public class Entity{
     }
     
     public void setMaterial(String materialID){
-        this.materialID = materialID;
+        this.material = new Material(materialID);
     }
 
     public void setTexture(int textureID){
-        this.materialID = "null";
         this.textureID = textureID;
     }
     
     public Material getMaterial(){
-        if(normalID > 0 || specularID > 0 || roughnessID > 0){
-            return Game.materialManager.getMaterial(this.materialID, normalID, specularID, roughnessID);
-        }else
-
-        return Game.materialManager.getMaterial(this.materialID);
-    }
-
-    public boolean hasMaterial(){
-        return Game.materialManager.getMaterial(this.materialID)!=null;
+        return this.material;
     }
     
     public boolean hasAttribute(String id){
