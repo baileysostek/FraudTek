@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="base.Controller">
+   <children>
+      <ImageView fx:id="backgroundIMG" fitHeight="140.0" fitWidth="480.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
+      <ChoiceBox fx:id="resolutions" layoutX="292.0" layoutY="21.0" prefHeight="39.0" prefWidth="174.0" />
+      <Button fx:id="launch" layoutX="380.0" layoutY="78.0" mnemonicParsing="false" onAction="#launchGame" text="Launch!" />
+      <Label layoutX="202.0" layoutY="27.0" prefHeight="27.0" prefWidth="86.0" text="Resolution" />
+      <CheckBox fx:id="fullscreen" layoutX="200.0" layoutY="84.0" mnemonicParsing="false" onAction="#setFullScreen" text="Full Screen" />
+   </children>
+</AnchorPane>
