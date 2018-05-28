@@ -50,7 +50,7 @@ public class SpriteBinder extends Engine{
         if(sprites.containsKey(image)){
             return sprites.get(image);
         }
-        
+
         ImageIcon imgcon = new ImageIcon(Game.Path+"/res/Images/"+image+".png");
         Image img = imgcon.getImage();
         if(img.getWidth(null) <= 0 || img.getHeight(null) <= 0){
@@ -64,7 +64,7 @@ public class SpriteBinder extends Engine{
         Graphics2D bGr = bimage.createGraphics();
         bGr.drawImage(img, 0, 0, null);
         bGr.dispose();
-        
+
         Pixel[] pixels = new Pixel[bimage.getWidth() * bimage.getHeight()];
         int[] alpha = new int[bimage.getWidth() * bimage.getHeight()];
         for(int j = 0; j<bimage.getHeight(); j++){
@@ -72,7 +72,7 @@ public class SpriteBinder extends Engine{
                 pixels[(i + (j * bimage.getWidth()))] = new Pixel(bimage.getRGB(i, j));
             }
         }
-        
+
         Sprite out = new Sprite(bimage.getWidth(), bimage.getHeight(), pixels);
         sprites.put(image, out);
         return out;

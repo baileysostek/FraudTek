@@ -17,6 +17,7 @@ import math.Maths;
 import org.joml.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
+import textures.Material;
 
 import javax.script.ScriptException;
 import java.io.File;
@@ -170,7 +171,6 @@ public class Shader{
 
         try {
             //Add properties to this script
-            script.addClass(GL11.class);
             Game.scriptingEngine.IncludeFilesToScript(script);
             script.init(this);
         } catch (Exception e) {
@@ -272,6 +272,11 @@ public class Shader{
                 textureCache += 2;
                 return;
             }
+            if (type.equals("vec2")) {
+                Vector2f parsedData = (Vector2f) data;
+                GL20.glUniform2f(uniformPointers.get(location), parsedData.x, parsedData.y);
+                return;
+            }
             if (type.equals("vec3")) {
                 Vector3f parsedData = (Vector3f) data;
                 GL20.glUniform3f(uniformPointers.get(location), parsedData.x, parsedData.y, parsedData.z);
@@ -288,7 +293,7 @@ public class Shader{
                 GL20.glUniformMatrix4fv(uniformPointers.get(location), false, matrixBuffer);
                 return;
             }
-            Game.logManager.println("Undefined Uniform Type:"+type+" @Location:"+location+" in the Shader:"+shaderName, EnumErrorLevel.ERROR);
+            Game.logManager.println("Unidentified Uniform Type:"+type+" @Location:"+location+" in the Shader:"+shaderName, EnumErrorLevel.ERROR);
         }
     }
 

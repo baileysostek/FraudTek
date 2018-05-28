@@ -66,6 +66,14 @@ public class Maths {
         return out;
     }
 
+    public static Matrix4f getEntityRotWithOffset(Entity entity, Vector3f offset){
+        Matrix4f out = new Matrix4f();
+        out.rotate((float) Math.toRadians(entity.getRotX() + offset.x()), 1f, 0f, 0f); //Yaw
+        out.rotate((float) Math.toRadians(entity.getRotY() + offset.y()), 0f, 1f, 0f); //Pitch rotated first
+        out.rotate((float) Math.toRadians(entity.getRotZ() + offset.z()), 0f, 0f, 1f); //Roll
+        return out;
+    }
+
 
     public static Vector3f inverseVector(Vector3f in){
         return new Vector3f(-in.x, -in.y, -in.z);

@@ -46,11 +46,12 @@ function addVector(pos, dir){
     vectors.push(vao.getID());
 }
 
-function drawSurfaceNormals() {
+function drawSurfaceNormals(inEntities) {
     vectorShader.start();
     vectorShader.loadData("viewMatrix", Maths.createViewMatrix(CameraManager.getCam()));
-    var entities = EntityManager.getEntities();
+    var entities = [inEntities];
     for (var i = 0; i < entities.length; i++) {
+        Log.println("Rendering Normals"+entities[i]);
         //Buffer only once in the future, per model
         vao = new VAO();
         var normals = entities[i].getComponent(EnumComponentType.MESH).getModel().getNormals();
@@ -76,7 +77,6 @@ function drawSurfaceNormals() {
         VAOManager.unbindVAO();
 
         vectorShader.bindVAO(vao);
-        vectorShader.loadData("textureSampler", entities[i].getID());
         vectorShader.render(entities[i].getPosition(), vao.getVBOLength(0) / 3, entities[i].getRotX(), entities[i].getRotY(), entities[i].getRotZ());
         vectorShader.unBindVAO();
     }

@@ -19,6 +19,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+import particles.ParticleEngine;
 import steam.SteamManager;
 import camera.CameraManager;
 import com.google.gson.Gson;
@@ -46,6 +47,8 @@ import java.util.LinkedList;
 import models.ModelManager;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
+import textures.MaterialManager;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
@@ -54,6 +57,7 @@ public class Game {
     public static int HEIGHT = 1080;    
     private static String NAME = "Game";
     private static boolean FULLSCREEN = false;
+    private static boolean VSYNC = false;
 
     private static final String version = "1.0";
 
@@ -104,6 +108,8 @@ public class Game {
     public static ControllerManager controllerManager;
     public static VAOManager vaoManager;
     public static ServerManager serverManager;
+    public static MaterialManager materialManager;
+    public static ParticleEngine particleManager;
     //VR Headsets
 
     //tmp
@@ -191,7 +197,18 @@ public class Game {
             FULLSCREEN = Boolean.parseBoolean(args[2]);
             logManager.println("ARGS Fullscreen:" + FULLSCREEN);
         }
-        
+
+        //VSYNC
+        if(args.length < 4) {
+            if (launchOptions.has("vsync")) {
+                VSYNC = gson.fromJson(launchOptions.get("vsync"), Boolean.class);
+                logManager.println("Window is using vsync:" + VSYNC);
+            }
+        }else{
+            VSYNC = Boolean.parseBoolean(args[3]);
+            logManager.println("ARGS vsync:" + VSYNC);
+        }
+
         if(!FULLSCREEN){
             glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
             window = glfwCreateWindow(WIDTH, HEIGHT, NAME, 0, 0);
@@ -225,6 +242,9 @@ public class Game {
 
         //Initialize OpenGL
         GL.createCapabilities();
+
+        //Enable or disable vsync
+        glfwSwapInterval(VSYNC ? 1: 0);
 
         logManager.println();
         logManager.println("Looking for Source Folders...");
@@ -266,6 +286,10 @@ public class Game {
         engines.add(vaoManager);
         serverManager = new ServerManager();
         engines.add(serverManager);
+        materialManager = new MaterialManager();
+        engines.add(materialManager);
+        particleManager = new ParticleEngine();
+        engines.add(particleManager);
         engines.synch();
 
         logManager.println();
@@ -281,6 +305,8 @@ public class Game {
 
         //Last addition
         scriptingEngine.addRefrence("ScriptingEngine", scriptingEngine);
+        particleManager.postInit();
+
         scriptingEngine.addScript(gson.fromJson(launchOptions.get("mainScript"), String.class));
 
 
@@ -301,22 +327,22 @@ public class Game {
         //Game Loop
         long last = System.currentTimeMillis();
         long delta = 0;
-        int ticks = 0;
-        
+        int fps = 0;
+
         while(!glfwWindowShouldClose(window)){
             long now = System.currentTimeMillis();
-            long targetTime = (long) (1000000.0f / 60.0f);
             delta+=(now-last);
+            last = now;
             glfwPollEvents();
             tick();
             render();
+            fps++;
 
-//            try {
-//                long sleepTime = targetTime - (now - System.currentTimeMillis());
-//                Thread.sleep(sleepTime / 1000);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            if(delta >= 1000){
+                logManager.println("[FPS: "+fps+"]");
+                delta -= 1000;
+                fps = 0;
+            }
 
             if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GL_TRUE){
                 glfwSetWindowShouldClose(window, true);
@@ -354,6 +380,7 @@ public class Game {
     private static void render(){
         renderer.prepare();
         scriptingEngine.render();
+        particleManager.render();
         uiRenderer.render(guis);
         glfwSwapBuffers(window);
     }

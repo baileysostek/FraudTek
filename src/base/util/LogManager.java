@@ -1,5 +1,6 @@
 package base.util;
 
+import ScriptingEngine.Script;
 import base.engine.Engine;
 import base.engine.Game;
 import com.google.gson.Gson;
@@ -193,6 +194,16 @@ public class LogManager extends Engine {
         StackTraceElement[] errorMessage = e.getStackTrace();
         println();
         println("Error:"+e.getLocalizedMessage(), EnumErrorLevel.SEVERE);
+        for(int i = 0; i < errorMessage.length; i++){
+            println(errorMessage[i].getClassName()+"["+errorMessage[i].getLineNumber()+"]"+errorMessage[i].toString());
+        }
+        println();
+    }
+
+    public void printStackTrace(Exception e, Script script){
+        StackTraceElement[] errorMessage = e.getStackTrace();
+        println();
+        println("Error:"+e.getLocalizedMessage().replaceAll("<eval>", script.getFilePath()), EnumErrorLevel.SEVERE);
         for(int i = 0; i < errorMessage.length; i++){
             println(errorMessage[i].getClassName()+"["+errorMessage[i].getLineNumber()+"]"+errorMessage[i].toString());
         }

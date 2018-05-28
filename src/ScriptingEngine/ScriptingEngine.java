@@ -12,10 +12,8 @@ import base.engine.Engine;
 import camera.DynamicCamera;
 import camera.FPSCamera;
 import editor.IntellisenseEngine;
-import entity.Entity;
-import entity.EntityModel;
-import entity.EntityPlayer;
-import entity.EntitySprite;
+import entity.*;
+import entity.comparators.ComparitorVAO;
 import entity.component.EnumComponentType;
 import graphics.FBO;
 import graphics.VAO;
@@ -23,7 +21,6 @@ import graphics.gui.Gui;
 import input.EnumMouseButton;
 import input.Keyboard;
 import input.Mouse;
-import input.MousePicker;
 import math.Maths;
 import models.ModelLoader;
 import org.joml.Vector2f;
@@ -32,6 +29,7 @@ import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import particles.EntityParticleEmitter;
 import shaders.Shader;
 import textures.Material;
 
@@ -92,6 +90,7 @@ public class ScriptingEngine {
         addClass(EntitySprite.class);
         addClass(ModelLoader.class);
         addClass(Entity.class);
+        addClass(EntityParticleEmitter.class);
 
         //Input classes
         addClass(Keyboard.class);
@@ -112,7 +111,10 @@ public class ScriptingEngine {
 
         //Utility classes
         addClass(Maths.class);
+        addClass(EntityContainer.class);
         addClass(EnumComponentType.class);
+        addClass(ComparitorVAO.class);
+        addClass(Cast.class);
 
         //GL classes
         addClass(GL11.class);
@@ -132,6 +134,12 @@ public class ScriptingEngine {
                 script.tick();
             } catch (ScriptException | NoSuchMethodException ex) {
 
+                if(ex instanceof NoSuchMethodException){
+                    Game.logManager.println("No such Method.", EnumErrorLevel.ERROR);
+                }
+
+
+                Game.logManager.printStackTrace(ex, script);
                 ex.printStackTrace();
                 remove(script);
             }

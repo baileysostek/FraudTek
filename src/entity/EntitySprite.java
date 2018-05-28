@@ -11,6 +11,7 @@ import entity.component.ComponentMesh;
 import entity.component.ComponentRender;
 import graphics.*;
 import models.ModelLoader;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import shaders.Shader;
 
@@ -21,35 +22,40 @@ import shaders.Shader;
 public class EntitySprite extends Entity {
     Sprite sprite;
 
-    public float width = 0;
+    private Vector2f size;
 
     public EntitySprite(Vector3f position, String spritePath, float rotx, float roty, float rotz, float scale) {
-        super(EnumEntityType.SPRITE, "", position, rotx, roty + 180, rotz, scale);
+        super(EnumEntityType.SPRITE, "White", position, rotx, roty + 180, rotz, scale);
 
         //Load the sprite
         sprite = Game.spriteBinder.loadSprite(spritePath);
-        sprite = SpriteUtils.flipSpriteVertical(sprite);
+//        sprite = SpriteUtils.flipSpriteVertical(sprite);
+//        sprite = SpriteUtils.flipSpriteHorisontal(sprite);
 
         //Link the entity material to a dynamic material instance of this newly loaded sprite.
-        super.setMaterial(sprite.getID()+"");
-        super.setTexture(sprite.getID());
+        if(Game.materialManager.hasMaterial(spritePath)){
+            super.setMaterial(Game.materialManager.getMaterial(spritePath));
+        }else {
+            super.setMaterial(Game.materialManager.clone("White", spritePath));
+            super.getMaterial().overrideAlbedo(sprite);
+        }
 
+        size = new Vector2f(sprite.width * (1.0f / 32.0f), sprite.height * (1.0f / 32.0f));
 
-        ComponentMesh mesh = new ComponentMesh(this, ModelLoader.generateQuad(0.0625f * sprite.width, 0.0625f * sprite.height));
+        ComponentMesh mesh = new ComponentMesh(this, ModelLoader.loadModel("quad2", new Vector3f(size.x(), 1, size.y())));
 
         super.addComponent(mesh);
         super.addComponent(new ComponentCollision(this, mesh));
         super.addComponent(new ComponentRender(this, null));
-
-        width = 0.0625f * sprite.width;
     }
 
     @Override
     public void render(Shader shader) {
 
     }
-    public void setNormal(String path){
-        super.normalID = Game.spriteBinder.loadSprite(path).getID();
+
+    public Vector2f getSize(){
+        return this.size;
     }
 
     public void synchSprite(){

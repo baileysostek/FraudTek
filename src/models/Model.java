@@ -12,19 +12,16 @@ import graphics.VAO;
  */
 public class Model {
     private int vaoID;
-    private VAO normalVAO;
-    private int normalVAOID;
     private int vertexCount;
 
     private int[] indicies;
     float[] verticies;
     float[] textureCoords = new float[]{};
-    float[] pointData;
 
-    float[] normals;
+
     float[] loadedNormals = new float[]{};
-    float[] tangents;
-    float[] bitangents;
+    float[] loadedTangents = new float[]{};
+    float[] loadedBitangents = new float[]{};
 
 
     public Model(Attribute... vars){
@@ -38,10 +35,15 @@ public class Model {
             if(id.toLowerCase().equals("indicies")){
                 indicies = (int[])vars[i].getData();
                 vertexCount = indicies.length;
-                normals = new float[indicies.length/2];
             }
             if(id.toLowerCase().equals("normals")){
                 loadedNormals = (float[])vars[i].getData();
+            }
+            if(id.toLowerCase().equals("tangents")){
+                loadedTangents = (float[])vars[i].getData();
+            }
+            if(id.toLowerCase().equals("bitangents")){
+                loadedBitangents = (float[])vars[i].getData();
             }
             if(id.toLowerCase().equals("texturecoords")){
                 textureCoords = (float[])vars[i].getData();
@@ -52,9 +54,9 @@ public class Model {
         newellMethod();
         Game.vaoManager.bindIndiciesBuffer(indicies);
 
-        if(loadedNormals.length != normals.length) {
-            Game.logManager.println("LoadedNormals = " + loadedNormals.length + " Newell Normals:" + normals.length, EnumErrorLevel.WARNING);
-        }
+        Game.logManager.println("verticies:"+vertexCount);
+        Game.logManager.println("textures:"+textureCoords.length/2);
+        Game.logManager.println("normals:"+loadedNormals.length/3);
 
         vao.addVBO(3, verticies);
         vao.addVBO(2, textureCoords);
@@ -62,35 +64,21 @@ public class Model {
             //If normals are pre-computed
             vao.addVBO(3, loadedNormals);
         }else{
-            //Compute the normals
-            vao.addVBO(3, normals  );
+            Game.logManager.println("No Normals loaded with model.", EnumErrorLevel.SEVERE);
+        }
+        if(loadedTangents.length > 0) {
+            //If normals are pre-computed
+            vao.addVBO(3, loadedTangents);
+        }else{
+            Game.logManager.println("No Tangents loaded with model.", EnumErrorLevel.SEVERE);
+        }
+        if(loadedBitangents.length > 0) {
+            //If normals are pre-computed
+            vao.addVBO(3, loadedBitangents);
+        }else{
+            Game.logManager.println("No BiTangents loaded with model.", EnumErrorLevel.SEVERE);
         }
 
-
-        Game.vaoManager.unbindVAO();
-
-        //Normal VAO
-        //Buffer only once in the future, per model
-        normalVAO = new VAO();
-        normalVAOID = normalVAO.getID();
-        float[] normalList = new float[normals.length * 3];
-        for (int j = 0; j < normals.length / 3; j++) {
-            float[] faceCenter = getFaceCenterpoint(j);
-            normalList[j * 6 + 0] = faceCenter[0];
-            normalList[j * 6 + 1] = faceCenter[1];
-            normalList[j * 6 + 2] = faceCenter[2];
-            normalList[j * 6 + 3] = normals[j * 3 + 0] + faceCenter[0];
-            normalList[j * 6 + 4] = normals[j * 3 + 1] + faceCenter[1];
-            normalList[j * 6 + 5] = normals[j * 3 + 2] + faceCenter[2];
-        }
-
-        int[] indicieList = new int[normalList.length/3];
-        for (int j = 0; j < normalList.length / 3; j++) {
-            indicieList[j] = j;
-        }
-        Game.vaoManager.bindIndiciesBuffer(indicieList);
-
-        normalVAO.addVBO(3, normalList);
         Game.vaoManager.unbindVAO();
     }
 
@@ -128,15 +116,6 @@ public class Model {
         return this.vaoID;
     }
 
-
-    public int getNormalVAOID(){
-        return this.normalVAOID;
-    }
-
-    public VAO getNormalVAO(){
-        return normalVAO;
-    }
-
     public int getVertexCount(){
         return this.vertexCount;
     }
@@ -147,13 +126,13 @@ public class Model {
         return this.indicies;
     }
     public float[] getNormals(){
-        return this.normals;
+        return this.loadedNormals;
     }
     public float[] getTangents(){
-        return this.tangents;
+        return this.loadedTangents;
     }
     public float[] getBitangents(){
-        return this.bitangents;
+        return this.loadedBitangents;
     }
 
     public float[] expandData(float[] in, int size, int copy){

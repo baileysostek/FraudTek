@@ -3,11 +3,14 @@
 in vec3 position;
 in vec2 textureCoords;
 in vec3 normal;
+in vec3 tangent;
+in vec3 bitangent;
 
 out vec2 pass_textureCoords;
 out vec3 toLightVector[4];
 out vec3 toCameraVector;
 out vec3 passNormal;
+out mat3 TBN;
 
 uniform mat4 transformationMatrix;
 uniform mat4 rotationMatrix;
@@ -28,4 +31,6 @@ void main(void){
     }
     toCameraVector = (inverse(viewMatrix) * vec4(0.0,0.0,0.0,1.0)).xyz - worldPosition.xyz;
     passNormal = (rotationMatrix * vec4(normal, 1.0)).xyz;
+
+	TBN = transpose(mat3((rotationMatrix * vec4(tangent, 1.0)).xyz, (rotationMatrix * vec4(bitangent, 1.0)).xyz, passNormal));
 }

@@ -28,6 +28,14 @@ function getAttributes(){
        {
            "type":"vec3",
            "name":"normal"
+       },
+       {
+           "type":"vec3",
+           "name":"tangent"
+       },
+       {
+           "type":"vec3",
+           "name":"bitangent"
        }
    ];
    return attributes;
@@ -52,6 +60,10 @@ function getPassAttributes(){
            "type":"vec3",
            "name":"toLightVector",
            "array":MAX_LIGHTS
+       },
+       {
+        "type":"mat3",
+        "name":"TBN"
        }
    ];
    return pass;
@@ -146,15 +158,31 @@ function getUniforms(){
            "type":"sampler2D",
            "name":"roughnessMap",
            "location":"fragment"
+       },
+       {
+           "type":"sampler2D",
+           "name":"emissiveMap",
+           "location":"fragment"
+       },
+       {
+           "type":"sampler2D",
+           "name":"emissivemaskMap",
+           "location":"fragment"
        }
    ];
    return uniforms;
 }
 
 
-function loadMaterial(materialName){
-    var material = new Material(materialName);
-    SHADER.loadData("albedoMap", material.getTextureID());
+function loadMaterial(material){
+    SHADER.loadData("albedoMap",            parseInt(material[0].albedoID));
+    SHADER.loadData("ambientOcclusionMap",  parseInt(material[0].aoID));
+    SHADER.loadData("normalMap",            parseInt(material[0].normalID));
+    SHADER.loadData("displacementMap",      parseInt(material[0].displacementID));
+    SHADER.loadData("reflectionMap",        parseInt(material[0].reflectionID));
+    SHADER.loadData("roughnessMap",         parseInt(material[0].roughnessID));
+    SHADER.loadData("emissiveMap",          parseInt(material[0].emissiveID));
+    SHADER.loadData("emissivemaskMap",      parseInt(material[0].emissiveMaskID));
 }
 
 

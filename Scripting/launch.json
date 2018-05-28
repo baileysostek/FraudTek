@@ -1,11 +1,11 @@
 {
   "width":1920,
   "height":1080,
-  "fullscreen":false
-,
-  "name":"In The Deepest Cave",
+  "fullscreen":false,
+  "vsync":true,
+  "name":"West of Stardew",
   "username":"bayjose",
-  "mainScript":"SpriteTest.js",
+  "mainScript":"TerrainController.js",
   "path":"/out/artifacts/unnamed/Edaxerum.jar",
   "aspectRatios":[
     {

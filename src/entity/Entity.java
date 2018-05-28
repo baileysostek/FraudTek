@@ -31,20 +31,15 @@ public class Entity{
     private float rotX = 0, rotY = 0, rotZ = 0;
     private float scale;
     private EnumEntityType type;
-    
+
     //Linked data
     private Entity linked = null;
     private Vector3f offset = new Vector3f(0,0,0);
     private Vector3f offset_rot = new Vector3f(0,0,0);
-    
+
     private String id;
-    
+
     private Material material;
-    private int textureID = 0;
-    public int normalID = 0;
-//    private int heightID = 0;
-    private int specularID = 0;
-    private int roughnessID = 0;
 
     protected DynamicCollection<Attribute> attributes = new DynamicCollection<Attribute>() {
         @Override
@@ -57,13 +52,12 @@ public class Entity{
 
         }
     };
-    
+
     protected DynamicCollection<Component> components;
-    
+
     public Entity(EnumEntityType type, String material, Vector3f position, float rotX, float rotY, float rotZ, float scale){
         this.type = type;
-        this.material = new Material(material);
-        this.textureID = Game.spriteBinder.loadSprite(material).getID();
+        setMaterial(material);
         this.position = position;
         this.scale = scale;
         this.id = "id:"+Math.random();
@@ -82,21 +76,21 @@ public class Entity{
 
         rotate(rotX, rotY, rotZ);
     }
-    
+
     public void tick(){
         //Synches components and attributes, soon to be observer
         attributes.synch();
         components.synch();
-         
+
         for(Component c : components.getCollection(Component.class)){
             c.tick();
         }
-        
+
         //Acceleration, Velocity, Position
         this.velocity.add(this.acceleration);
         this.position.add(this.velocity);
 
-        
+
         if(linked!=null){
             this.setRotX(linked.getRotX()+offset_rot.x());
             this.setRotY(linked.getRotY()+offset_rot.y());
@@ -107,21 +101,21 @@ public class Entity{
             Vector3f p = new Vector3f(offset).mul(2/scale);
             projections.transformDirection(p);
             p.add(translation);
-            
+
             this.setPosition(p);
         }
 
-        
+
         //reset acceleration
         this.acceleration.x = 0;
         this.acceleration.y = 0;
         this.acceleration.z = 0;
     }
-    
+
     public void link(Entity link){
         this.linked = link;
     }
-    
+
     public void setOffsetToLinked(Vector3f offset){
         this.offset = offset;
     }
@@ -131,24 +125,24 @@ public class Entity{
             c.render(shader);
         }
     }
-    
+
     public void onAdded(){
         return;
     }
-    
+
     public void onRemoved(){
         return;
     }
-    
+
     public void setID(String id){
         this.id = id;
     }
-    
+
     public String getID(){
         return this.id;
     }
-    
-    
+
+
     public void translate(float dx, float dy, float dz){
         this.position.x+=dx;
         this.position.y+=dy;
@@ -160,7 +154,7 @@ public class Entity{
         this.position.y+=offset.y();
         this.position.z+=offset.z();
     }
-    
+
     public void rotate(float dx, float dy, float dz){
         this.rotX+=dx;
         this.rotY+=dy;
@@ -219,19 +213,26 @@ public class Entity{
     public void setScale(float scale) {
         this.scale = scale;
     }
-    
+
     public void setMaterial(String materialID){
-        this.material = new Material(materialID);
+        if(Game.materialManager.hasMaterial(materialID)){
+            this.material = Game.materialManager.getMaterial(materialID);
+        }else {
+            System.out.println("new Material");
+            Material material = new Material(materialID);
+            Game.materialManager.put(materialID, material);
+            this.material = material;
+        }
     }
 
-    public void setTexture(int textureID){
-        this.textureID = textureID;
+    public void setMaterial(Material material){
+        this.material = material;
     }
-    
+
     public Material getMaterial(){
         return this.material;
     }
-    
+
     public boolean hasAttribute(String id){
         for(Attribute a: this.attributes.getCollection(Attribute.class)){
             if(a.getID().equals(id)){
@@ -265,7 +266,7 @@ public class Entity{
         }
 //        System.out.println("entity "+this+" has "+index+" function(s).");
     }
-    
+
     public void addAttribute(Attribute attribute){
         this.attributes.add(attribute);
         attributes.synch();
@@ -277,7 +278,7 @@ public class Entity{
             this.attributes.synch();
         }
     }
-    
+
     public void addComponent(Component component){
         this.components.add(component);
         this.components.synch();
@@ -310,47 +311,43 @@ public class Entity{
         this.acceleration.y += y;
         this.acceleration.z += z;
     }
-    
+
     public void addAcceleration(Vector3f acceleration){
         this.acceleration.x += acceleration.x();
         this.acceleration.y += acceleration.y();
         this.acceleration.z += acceleration.z();
     }
-        
+
     public void setAcceleration(Vector3f acceleration){
         this.acceleration = acceleration;
     }
-    
+
     public void setAcceleration(float x, float y, float z){
         this.acceleration.x = x;
         this.acceleration.y = y;
         this.acceleration.z = z;
     }
-    
+
     public Vector3f getAcceleration(){
         return this.acceleration;
     }
-    
+
     public void setVelocity(Vector3f velocity){
         this.velocity = velocity;
     }
-    
+
     public void setVelocity(float x, float y, float z){
         this.velocity.x = x;
         this.velocity.y = y;
         this.velocity.z = z;
     }
-    
+
     public Vector3f getVelocity(){
         return this.velocity;
     }
 
     public Vector3f getOffsetToLinked() {
         return this.offset;
-    }
-
-    public int getTextureID() {
-        return textureID;
     }
 
     public String[] generateSaveData(){
